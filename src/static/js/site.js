@@ -80,8 +80,8 @@ document.querySelectorAll('.contact__mail').forEach(el => {
 });
 
 // Sachets de stickers. Tout se calcule dans le repère du sachet (même s'il est penché) et chaque sticker
-// reste toujours dans le sachet : le pointeur les pousse, un clic les fait remonter vers l'ouverture
-// (en haut, sous la fermeture) ; un second clic les range. Ils peuvent se chevaucher.
+// reste dans le sachet : le pointeur les pousse, un clic les fait remonter et dépasser par l'ouverture
+// (le haut, seule sortie possible) ; un second clic les range. Ils peuvent se chevaucher.
 document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   const stickers = [...pouch.querySelectorAll('.bag__sticker')];
   const tilt = () => (parseFloat(getComputedStyle(pouch.closest('.bag')).rotate) || 0) * Math.PI / 180;
@@ -92,11 +92,12 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
     return { w: w * Math.cos(a) + h * Math.sin(a), h: w * Math.sin(a) + h * Math.cos(a) };
   };
   // Centre de base (avant décalage) et limites dans lesquelles le centre peut aller
+  // Une fois sortis (après le clic), un quart du sticker peut dépasser au-dessus de l'ouverture, jamais ailleurs
   const place = st => {
-    const W = pouch.offsetWidth, H = pouch.offsetHeight, b = box(st);
+    const W = pouch.offsetWidth, H = pouch.offsetHeight, b = box(st), out = pouch.classList.contains('is-out');
     return {
       x: parseFloat(st.style.getPropertyValue('--x')) / 100 * W, y: parseFloat(st.style.getPropertyValue('--y')) / 100 * H,
-      minX: W * .04 + b.w / 2, maxX: W * .96 - b.w / 2, minY: H * .09 + b.h / 2, maxY: H * .97 - b.h / 2, b,
+      minX: W * .04 + b.w / 2, maxX: W * .96 - b.w / 2, minY: (out ? -b.h * .28 : H * .09) + b.h / 2, maxY: H * .97 - b.h / 2, b,
     };
   };
   const clamp = (v, lo, hi) => (lo > hi ? (lo + hi) / 2 : Math.max(lo, Math.min(hi, v)));
@@ -130,7 +131,7 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
     const n = stickers.length, W = pouch.offsetWidth;
     stickers.forEach((st, i) => {
       const p = place(st), s = state[i];
-      // Remontés tout en haut, répartis sur la largeur (le clamp les garde dans le sachet)
+      // Remontés jusqu'à dépasser par l'ouverture, répartis sur la largeur (le clamp gère les bords)
       s.ox = out ? (n > 1 ? p.minX + (p.maxX - p.minX) * i / (n - 1) : W / 2) - p.x : 0;
       s.oy = out ? p.minY + (i % 2) * p.b.h * .12 - p.y : 0;
       st.style.setProperty('--delay', `${i * .06}s`);
