@@ -189,9 +189,53 @@ document.querySelectorAll('[data-tilt]').forEach(stage => {
 
 // Podz : les personnages sautent au clic
 const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
-document.querySelectorAll('.pz-chars button').forEach(b => {
+document.querySelectorAll('.pz-chars__card').forEach(b => {
   b.addEventListener('click', () => replay(b, 'is-jump'));
-  b.addEventListener('animationend', () => b.classList.remove('is-jump'));
+  b.addEventListener('animationend', e => e.animationName === 'pz-jump' && b.classList.remove('is-jump'));
+});
+
+// Podz : les personnages suivent le pointeur des yeux, clignent au hasard
+// et s'endorment après quelques secondes sans mouvement
+document.querySelectorAll('[data-chars]').forEach(row => {
+  const chars = [...row.querySelectorAll('.pz-char')];
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let sleepTimer, visible = false;
+  const look = (x, y) => chars.forEach(svg => {
+    const r = svg.getBoundingClientRect();
+    const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height / 2);
+    const k = 6 / Math.max(Math.hypot(dx, dy), 60);
+    const eyes = svg.querySelector('.pz-eyes');
+    eyes.style.setProperty('--ex', `${(dx * k).toFixed(2)}px`);
+    eyes.style.setProperty('--ey', `${(dy * k).toFixed(2)}px`);
+  });
+  const wake = () => {
+    row.classList.remove('is-asleep');
+    clearTimeout(sleepTimer);
+    if (visible) sleepTimer = setTimeout(() => row.classList.add('is-asleep'), 7000);
+  };
+  addEventListener('pointermove', e => { if (visible) { look(e.clientX, e.clientY); wake(); } }, { passive: true });
+  addEventListener('scroll', () => visible && wake(), { passive: true });
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; visible ? wake() : clearTimeout(sleepTimer); }).observe(row);
+  if (calm) return;
+  chars.forEach(svg => {
+    const blink = () => {
+      if (visible && !row.classList.contains('is-asleep')) {
+        svg.classList.add('is-blink');
+        setTimeout(() => svg.classList.remove('is-blink'), 140);
+      }
+      setTimeout(blink, 2200 + Math.random() * 4000);
+    };
+    setTimeout(blink, 800 + Math.random() * 2500);
+  });
+});
+
+// Podz : onglets des états de l'app (pas de trajet, recherche, pas de favoris)
+document.querySelectorAll('[data-states]').forEach(box => {
+  const tabs = [...box.querySelectorAll('[role="tab"]')];
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(o => o.setAttribute('aria-selected', o === t));
+    box.querySelectorAll('.pz-state').forEach(st => st.classList.toggle('is-on', st.dataset.state === t.dataset.state));
+  }));
 });
 
 // Défilement des écrans à la souris (glisser)
