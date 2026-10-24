@@ -530,12 +530,17 @@ video::-webkit-media-controls { display: none !important; }
 .pz-phone__header b { font: 800 24px/26px "Darker Grotesque", var(--display); color: #000; }
 .pz-phone__header img { margin: -2px -4px -8px; width: 39.5px; height: 39.5px; }
 .pz-phone__header i { width: 31px; }
-.pz-phone__nav { position: absolute; left: 62px; top: 796px; width: 349px; height: 56px; display: flex; align-items: center; gap: 36px; padding: 0 24px; box-sizing: border-box;
+/* Barre d'onglets : structure et cotes du composant Figma « Bottom Navigation » */
+.pz-phone__nav { position: absolute; left: 62px; top: 796px; width: 349px; height: 56px; display: flex; align-items: center; box-sizing: border-box;
                  border: .5px solid #e1e1e1; border-radius: 999px; background: #fff; }
-.pz-phone__nav > img { flex: 1 0 0; width: auto; height: 22px; object-fit: contain; min-width: 0; }
-.pz-phone__me { position: relative; flex: none; display: grid; place-items: center; width: 29px; }
-.pz-phone__me::before { content: ""; position: absolute; left: -17px; top: -9px; width: 71px; height: 48px; border-radius: 100px; background: rgba(128, 128, 128, .16); }
-.pz-phone__me img { position: relative; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #000; object-fit: cover; }
+.pz-nav { position: relative; display: flex; align-items: center; gap: 36px; width: 347px; padding: 12px 24px; box-sizing: border-box; }
+.pz-nav > span { flex: 1 0 0; min-width: 1px; display: flex; justify-content: center; align-items: center; }
+.pz-nav i { position: relative; flex: none; display: block; }
+.pz-nav > span:not(.pz-nav__me) img { position: absolute; display: block; max-width: none; }
+.pz-nav__pill { position: absolute; left: 272px; top: 0; width: 71px; height: 48px; border-radius: 100px; background: rgba(128, 128, 128, .16); }
+.pz-nav > .pz-nav__me { position: relative; flex: none; width: 29px; }
+.pz-nav__me i { width: 24px; height: 24px; overflow: hidden; }
+.pz-nav__me img { position: absolute; left: 1.13px; top: 1px; width: 22px; height: 22px; max-width: none; box-sizing: border-box; border: 1px solid #000; border-radius: 999px; object-fit: cover; }
 .pz-phone__screen::after { content: ""; position: absolute; left: 0; right: 0; top: 873px; margin: 0 auto; width: 134px; height: 5px; border-radius: 100px; background: #000; z-index: 1; }
 .pz-straps { position: absolute; left: 66px; top: 131px; width: 327px; height: 607px; animation: pz-straps 5.333s linear infinite; }
 .pz-straps > img, .pz-straps > span { position: absolute; }
