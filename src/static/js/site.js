@@ -3,7 +3,7 @@
 const IMG = id => `assets/img/${id}`;
 
 // Sons du portfolio, trois rôles : « select » pour choisir (onglets, modes, carrousel, menu),
-// « pop » pour ce qu'on touche (stickers, personnages, démos), « robot » quand l'app travaille
+// « pop » pour ce qu'on touche (stickers, personnages, démos, et en plus léger chaque survol), « robot » quand l'app travaille
 // (recherche, paiement). Ils ne jouent qu'après un premier geste (règle des navigateurs) ; le bouton
 // en bas à droite les coupe et le choix est gardé.
 const sound = (() => {
@@ -81,6 +81,17 @@ const sound = (() => {
       setTimeout(() => (location.href = a.href), 140);
     } else setTimeout(() => play(hit[1], hit[2]), 0);
   });
+  // Survol : petit « pop » aigu et discret en entrant sur un élément cliquable (souris seulement).
+  // On ne rejoue pas tant qu'on reste sur le même élément ; Chess.com a déjà son propre son au survol.
+  const HOVER = 'a[href], button:not(.sound-toggle), [role="button"], [role="tab"], .card, .carousel, .pz-chars__card, .bag__pouch, .contact__mail, .stage';
+  let hovered = null;
+  addEventListener('pointerover', e => {
+    if (e.pointerType !== 'mouse') return;
+    const el = e.target.closest(HOVER);
+    if (el === hovered) return;
+    hovered = el;
+    if (el && !el.closest('.chess')) play('pop', { rate: 1.35, vol: .35, gap: 50 });
+  }, { passive: true });
   return { play };
 })();
 
