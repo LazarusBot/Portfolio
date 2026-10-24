@@ -55,10 +55,41 @@ const photos = JSON.parse(read(path.join(SRC, 'static', 'data', 'photos.json')))
 const globals = {
   lang: 'en',
   description: 'Maxence Prioux — Product Designer based in Toulouse.',
+  chessLine: '',
   photoStrip: photos.map(p => `<img src="assets/img/${p.image}" alt="">`).join(''),
   // Carrousel du profil (desktop) : la première photo est la photo de profil
   photoCarousel: photos.map((p, i) => `<img src="assets/img/${p.image}" alt="${i ? '' : 'Maxence Prioux'}"${i ? ' loading="lazy"' : ''}>`).join(''),
 };
+
+// Classement Chess.com (Rapid) affiché sur l'accueil. Relu à chaque build ; si Chess.com ne répond pas,
+// on garde la dernière valeur enregistrée dans src/static/data/chess.json. La page le met aussi à jour en direct.
+const CHESS_FILE = path.join(SRC, 'static', 'data', 'chess.json');
+async function chessData() {
+  const saved = JSON.parse(read(CHESS_FILE));
+  try {
+    const res = await fetch(`https://api.chess.com/pub/player/${saved.username}/stats`, {
+      headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)' }, signal: AbortSignal.timeout(8000),
+    });
+    const r = (await res.json()).chess_rapid;
+    if (!r?.last?.rating) throw new Error('pas de partie rapide');
+    const fresh = { ...saved, rapid: { rating: r.last.rating, best: r.best?.rating ?? null, win: r.record.win, loss: r.record.loss, draw: r.record.draw },
+      updated: new Date().toISOString().slice(0, 10) };
+    fs.writeFileSync(CHESS_FILE, JSON.stringify(fresh, null, 2) + '\n');
+    return fresh;
+  } catch (e) {
+    console.warn(`  ! Chess.com indisponible (${e.message}), dernière valeur gardée`);
+    return saved;
+  }
+}
+function chessLine(c) {
+  const r = c.rapid;
+  return `<a class="chess" href="https://www.chess.com/member/${c.username}" target="_blank" rel="noopener" data-chess="${c.username}">
+          <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.7 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
+          <span class="chess__label">Currently playing on Chess.com</span>
+          <span class="chess__elo"><small>Rapid</small> <b data-chess-rating="${r.rating}">${r.rating}</b></span>
+          <span class="chess__card" data-chess-card>Best ${r.best ?? '—'} · ${r.win} W · ${r.loss} L · ${r.draw} D</span>
+        </a>`;
+}
 
 function render(tpl, vars) {
   let html = tpl;
@@ -177,12 +208,14 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const written = [];
 
+  const chess = chessLine(await chessData());
+
   // Pages
   const template = read(path.join(SRC, 'templates', 'project.html'));
   for (const f of fs.readdirSync(path.join(SRC, 'pages')).filter(f => f.endsWith('.html'))) {
     if (PROD && TEST_ONLY_PAGES.includes(f)) continue;
     const [meta, body] = pageMeta(read(path.join(SRC, 'pages', f)));
-    fs.writeFileSync(path.join(OUT, f), clean(render(body, { ...globals, ...meta })));
+    fs.writeFileSync(path.join(OUT, f), clean(render(body, { ...globals, chessLine: meta.chess ? chess : '', ...meta })));
     written.push(f);
   }
 

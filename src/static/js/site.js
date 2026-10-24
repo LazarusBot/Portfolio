@@ -160,6 +160,33 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   addEventListener('resize', apply);
 });
 
+// Classement Chess.com : le chiffre enregistré au build défile depuis 0, puis la page demande la valeur
+// du moment à Chess.com et l'affiche si elle a changé
+document.querySelectorAll('[data-chess]').forEach(link => {
+  const num = link.querySelector('[data-chess-rating]'), card = link.querySelector('[data-chess-card]');
+  let shown = 0;
+  const countTo = to => {
+    const from = shown, t0 = performance.now(), dur = 900;
+    const step = t => {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      shown = Math.round(from + (to - from) * e);
+      num.textContent = shown;
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) shown = +num.dataset.chessRating;
+  else countTo(+num.dataset.chessRating);
+  fetch(`https://api.chess.com/pub/player/${link.dataset.chess}/stats`)
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then(({ chess_rapid: r }) => {
+      if (!r?.last?.rating) return;
+      card.textContent = `Best ${r.best?.rating ?? '—'} · ${r.record.win} W · ${r.record.loss} L · ${r.record.draw} D`;
+      if (r.last.rating !== +num.dataset.chessRating) { num.dataset.chessRating = r.last.rating; countTo(r.last.rating); }
+    })
+    .catch(() => {});
+});
+
 // Afficher / masquer les annotations de test
 const toggle = document.querySelector('[data-toggle-issues]');
 if (toggle) {
