@@ -172,17 +172,11 @@ document.querySelectorAll('[data-tilt]').forEach(stage => {
   });
 });
 
-// Podz : les personnages sautent au clic, le badge se balance quand on le tire
+// Podz : les personnages sautent au clic
 const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
 document.querySelectorAll('.pz-chars button').forEach(b => {
   b.addEventListener('click', () => replay(b, 'is-jump'));
   b.addEventListener('animationend', () => b.classList.remove('is-jump'));
-});
-document.querySelectorAll('[data-badge]').forEach(b => {
-  b.addEventListener('click', () => replay(b, 'is-swinging'));
-  b.addEventListener('animationend', () => b.classList.remove('is-swinging'));
-  // Un premier balancement quand le badge arrive à l'écran
-  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { setTimeout(() => replay(b, 'is-swinging'), 400); o.disconnect(); } }, { threshold: .6 }).observe(b);
 });
 
 // Défilement des écrans à la souris (glisser)

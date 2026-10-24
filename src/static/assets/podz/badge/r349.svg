@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="33.826" height="65.1206" viewBox="0 0 33.826 65.1206" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path id="Rectangle 349" d="M1.27139 0L33.826 0.136047L32.0186 60.6289L29.9996 65.1206L0 64.9952L3.01871 60.5077L1.27139 0Z" fill="url(#pattern0_0_12)" fill-opacity="0.1"/>
+<defs>
+<pattern id="pattern0_0_12" patternUnits="userSpaceOnUse" patternTransform="matrix(7.2656 0 0 4.11567 0.335903 1.00739)" preserveAspectRatio="none" viewBox="0.671806 2.01479 14.5312 8.23134" width="1" height="1">
+<use xlink:href="#pattern0_0_12_inner" transform="translate(0 -8.23134)"/>
+<use xlink:href="#pattern0_0_12_inner" transform="translate(7.2656 -4.11567)"/>
+<g id="pattern0_0_12_inner">
+<path id="Polygon 4" d="M3.49801 8.1134L0.67083 2.01467L6.72956 2.21895L3.49801 8.1134Z" fill="#D9D9D9"/>
+</g>
+<use xlink:href="#pattern0_0_12_inner" transform="translate(7.2656 4.11567)"/>
+</pattern></defs>
+</svg>
