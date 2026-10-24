@@ -79,28 +79,16 @@
           "id": "XjVLjSC4rkfOTosCBtyVO4xPwSw.png",
           "w": 4031,
           "h": 2520
-        },
-        {
-          "id": "HKt9yR2F3xaqIC3MPKFUja6QntE.png",
-          "w": 718,
-          "h": 703
-        },
-        {
-          "id": "mjYVsFkJJl0D6YIzJLXHy0Q1PQc.png",
-          "w": 704,
-          "h": 529
-        },
-        {
-          "id": "MPpNKmATju5O6MwUcbqWAYpvDQ.png",
-          "w": 585,
-          "h": 820
-        },
-        {
-          "id": "aaq6DEoa9Cv0JK9pbGun2Dks.png",
-          "w": 3897,
-          "h": 4993
         }
-      ]
+      ],
+      "bag": {
+        "bag": "aaq6DEoa9Cv0JK9pbGun2Dks.png",
+        "stickers": [
+          "HKt9yR2F3xaqIC3MPKFUja6QntE.png",
+          "mjYVsFkJJl0D6YIzJLXHy0Q1PQc.png",
+          "MPpNKmATju5O6MwUcbqWAYpvDQ.png"
+        ]
+      }
     },
     {
       "title": "Socials prototype",

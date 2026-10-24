@@ -437,6 +437,20 @@ video::-webkit-media-controls { display: none !important; }
 }
 
 
+/* Sachet de stickers (Aer, Peregresss, Raising) : les stickers flottent sous le plastique */
+.bag { display: grid; place-items: center; margin-top: 20px; padding: 50px 0; background: #ececec; }
+.bag__pouch { position: relative; width: min(360px, 70%); aspect-ratio: 1249 / 1600; cursor: pointer; transform-origin: 50% 8%; }
+.bag__pouch.is-shake { animation: bag-shake .9s cubic-bezier(.3, 0, .3, 1); }
+.bag__plastic { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .12)); }
+.bag__sticker { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto; translate: calc(-50% + var(--px, 0px)) calc(-50% + var(--py, 0px)); rotate: var(--r);
+                filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .15)); animation: bag-float 5s ease-in-out var(--d) infinite; transition: translate .9s cubic-bezier(.2, .8, .2, 1); }
+@keyframes bag-float { 33% { rotate: calc(var(--r) + 4deg); scale: 1.02; } 66% { rotate: calc(var(--r) - 3deg); scale: .99; } }
+@keyframes bag-shake { 15% { rotate: -5deg; } 35% { rotate: 4deg; } 55% { rotate: -2.5deg; } 75% { rotate: 1.2deg; } 100% { rotate: 0deg; } }
+.bag__pouch.is-shake .bag__sticker { animation: bag-jumble .9s cubic-bezier(.3, 0, .3, 1); }
+@keyframes bag-jumble { 30% { translate: calc(-50% + 6px) calc(-50% - 14px); } 60% { translate: calc(-50% - 4px) calc(-50% + 6px); } }
+@media (prefers-reduced-motion: reduce) { .bag__sticker, .bag__pouch.is-shake, .bag__pouch.is-shake .bag__sticker { animation: none; } }
+@media (max-width: 809px) { .bag { padding: 30px 0; } }
+
 /* Podz : étude de cas mise en scène à partir du fichier Figma, même sobriété que les autres */
 /* En-tête : l'enregistrement de la vraie app dans le téléphone, sur la photo du refuge */
 .pz-hero { --s: .6; position: relative; display: grid; place-items: center; height: calc(923px * var(--s) + 110px); overflow: hidden; background: var(--card); }

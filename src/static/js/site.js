@@ -79,6 +79,24 @@ document.querySelectorAll('.contact__mail').forEach(el => {
   });
 });
 
+// Sachets de stickers : le pointeur pousse les stickers à l'intérieur, un clic secoue le sachet
+document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
+  const stickers = [...pouch.querySelectorAll('.bag__sticker')];
+  pouch.addEventListener('pointermove', e => {
+    const r = pouch.getBoundingClientRect();
+    stickers.forEach((st, i) => {
+      const s = st.getBoundingClientRect();
+      const dx = s.left + s.width / 2 - e.clientX, dy = s.top + s.height / 2 - e.clientY;
+      const d = Math.hypot(dx, dy) || 1, push = Math.max(0, 1 - d / (r.width * .6)) * 22 * (1 + i * .15);
+      st.style.setProperty('--px', `${(dx / d * push).toFixed(1)}px`);
+      st.style.setProperty('--py', `${(dy / d * push).toFixed(1)}px`);
+    });
+  });
+  pouch.addEventListener('pointerleave', () => stickers.forEach(st => { st.style.removeProperty('--px'); st.style.removeProperty('--py'); }));
+  pouch.addEventListener('click', () => { pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake'); });
+  pouch.addEventListener('animationend', e => e.target === pouch && pouch.classList.remove('is-shake'));
+});
+
 // Afficher / masquer les annotations de test
 const toggle = document.querySelector('[data-toggle-issues]');
 if (toggle) {

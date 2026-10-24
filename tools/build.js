@@ -84,11 +84,31 @@ function gallery(images) {
   return `\n        <div class="gallery" style="--cols:${cols}">\n          ${imgs}\n        </div>`;
 }
 
+// Sachet transparent avec des stickers qui flottent dedans (composition Framer recréée).
+// Chaque sticker a sa place, son angle et son rythme ; site.js les pousse avec le pointeur
+const BAG_SLOTS = [
+  { x: 30, y: 36, w: 42, r: -12 }, { x: 68, y: 44, w: 40, r: 9 },
+  { x: 36, y: 72, w: 40, r: 7 }, { x: 70, y: 76, w: 36, r: -8 },
+];
+function bag(b) {
+  if (!b) return '';
+  const n = b.stickers.length;
+  // Avec moins de stickers, ils sont plus grands et mieux répartis
+  const slots = n <= 2 ? [{ x: 38, y: 44, w: 54, r: -10 }, { x: 62, y: 70, w: 52, r: 8 }]
+    : n === 3 ? [{ x: 32, y: 34, w: 44, r: -10 }, { x: 72, y: 46, w: 38, r: 9 }, { x: 40, y: 75, w: 42, r: 5 }]
+    : BAG_SLOTS;
+  const stickers = b.stickers.map((id, i) => {
+    const sl = slots[i];
+    return `<img class="bag__sticker" src="assets/img/${id}" alt="" style="--x:${sl.x}%;--y:${sl.y}%;--w:${sl.w}%;--r:${sl.r}deg;--d:${(i * -1.7).toFixed(1)}s">`;
+  }).join('');
+  return `\n        <div class="bag" data-bag><div class="bag__pouch">${stickers}<img class="bag__plastic" src="assets/img/${b.bag}" alt=""></div></div>`;
+}
+
 function projectSections(p) {
   return p.sections.map(s => `
       <section class="section">
         <h2>${esc(s.title)}</h2>
-        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${gallery(s.images)}
+        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${gallery(s.images)}${bag(s.bag)}
       </section>`).join('\n') + (p.wall ? `
       <section class="wall" aria-label="Logos">
         ${[0, 1, 2, 3].map(c => `<div class="wall__col"><div class="wall__track">${

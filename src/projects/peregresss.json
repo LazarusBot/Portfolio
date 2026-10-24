@@ -70,26 +70,18 @@
           "h": 1488
         },
         {
-          "id": "UhFAwHhk6vyAUlMuHOusmYBw.png",
-          "w": 1910,
-          "h": 2550
-        },
-        {
-          "id": "I65AuRONTT8JAeDg76YKwevhKw.png",
-          "w": 1036,
-          "h": 968
-        },
-        {
-          "id": "aaq6DEoa9Cv0JK9pbGun2Dks.png",
-          "w": 3897,
-          "h": 4993
-        },
-        {
           "id": "PWjHoSHqc9XpYuGibZgUbthHugM.gif",
           "w": 638,
           "h": 352
         }
-      ]
+      ],
+      "bag": {
+        "bag": "aaq6DEoa9Cv0JK9pbGun2Dks.png",
+        "stickers": [
+          "UhFAwHhk6vyAUlMuHOusmYBw.png",
+          "I65AuRONTT8JAeDg76YKwevhKw.png"
+        ]
+      }
     }
   ]
 }
