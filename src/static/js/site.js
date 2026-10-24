@@ -2,12 +2,21 @@
 // Images téléchargées dans le repo par tools/build.js
 const IMG = id => `assets/img/${id}`;
 
-// Cartes projets : le GIF n'est chargé qu'au survol et repart du début à chaque fois
-document.querySelectorAll('.card__hover[data-gif]').forEach(img => {
-  img.closest('.card').addEventListener('mouseenter', () => {
-    img.src = '';
-    img.src = img.dataset.gif;
+// Cartes projets : le GIF (ou la vidéo qui le remplace) n'est chargé qu'au survol
+// et repart du début à chaque fois
+document.querySelectorAll('.card__hover[data-gif], .card__hover[data-src]').forEach(media => {
+  const card = media.closest('.card');
+  card.addEventListener('mouseenter', () => {
+    if (media.tagName === 'VIDEO') {
+      if (!media.getAttribute('src')) media.src = media.dataset.src;
+      media.currentTime = 0;
+      media.play().catch(() => {});
+    } else {
+      media.src = '';
+      media.src = media.dataset.gif;
+    }
   });
+  if (media.tagName === 'VIDEO') card.addEventListener('mouseleave', () => media.pause());
 });
 
 // Menu mobile : le bouton « + » déplie la nav en pastilles

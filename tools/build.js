@@ -19,9 +19,24 @@ const IMG_DIR = path.join(SRC, 'static', 'assets', 'img');
 const read = f => fs.readFileSync(f, 'utf8');
 
 // En production : retire les pastilles de problèmes et les blocs marqués data-test-only
-const clean = html => !PROD ? html : html
+const clean = html => toVideo(!PROD ? html : html
   .replace(/ ?<(span|a) class="issue[^"]*"[^>]*>[^<]*<\/\1>/g, '')
-  .replace(/\n?\s*<(section|div)[^>]*data-test-only[^>]*>[\s\S]*?<\/\1>/g, '');
+  .replace(/\n?\s*<(section|div)[^>]*data-test-only[^>]*>[\s\S]*?<\/\1>/g, ''));
+
+// Les GIF convertis par tools/convert-gifs.sh deviennent des vidéos muettes en boucle
+const hasMp4 = id => fs.existsSync(path.join(IMG_DIR, `${id}.mp4`));
+function toVideo(html) {
+  // Survol des cartes : la vidéo n'est chargée et lancée qu'au survol (voir site.js)
+  html = html.replace(/<img class="card__hover" data-gif="assets\/img\/(\w+)\.gif" alt="">/g, (m, id) =>
+    hasMp4(id) ? `<video class="card__hover" data-src="assets/img/${id}.mp4" muted loop playsinline preload="none"></video>` : m);
+  return html.replace(/<img([^>]*?) src="assets\/img\/(\w+)\.gif"([^>]*)>/g, (m, before, id, after) => {
+    if (!hasMp4(id)) return m;
+    const attrs = before + after;
+    const keep = (attrs.match(/ (?:class|width|height)="[^"]*"/g) || []).join('');
+    const alt = attrs.match(/ alt="([^"]+)"/);
+    return `<video${keep} src="assets/img/${id}.mp4"${alt ? ` aria-label="${alt[1]}"` : ''} autoplay muted loop playsinline></video>`;
+  });
+}
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const partials = Object.fromEntries(fs.readdirSync(path.join(SRC, 'partials'))
@@ -83,7 +98,8 @@ function copyDir(from, to) {
 
 async function downloadMissing(ids) {
   fs.mkdirSync(IMG_DIR, { recursive: true });
-  const missing = [...ids].filter(id => !fs.existsSync(path.join(IMG_DIR, id)));
+  const missing = [...ids].filter(id => !fs.existsSync(path.join(IMG_DIR, id))
+    && !fs.existsSync(path.join(SRC, 'originals', id)));
   for (const id of missing) {
     const url = `https://framerusercontent.com/images/${id}${id.endsWith('.gif') ? '' : '?scale-down-to=1600'}`;
     const res = await fetch(url);
