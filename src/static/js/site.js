@@ -194,32 +194,61 @@ document.querySelectorAll('.pz-chars__card').forEach(b => {
   b.addEventListener('animationend', e => e.animationName === 'pz-jump' && b.classList.remove('is-jump'));
 });
 
-// Podz : les personnages suivent le pointeur des yeux, clignent au hasard
-// et s'endorment après quelques secondes sans mouvement
+// Podz : les personnages suivent le pointeur des yeux et penchent légèrement la tête vers lui.
+// Le mouvement est lissé image par image ; sur écran tactile, sans souris, le regard se promène seul.
+// Après 7 s sans mouvement, ils s'endorment (yeux fermés, tête penchée).
 document.querySelectorAll('[data-chars]').forEach(row => {
-  const chars = [...row.querySelectorAll('.pz-char')];
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let sleepTimer, visible = false;
-  const look = (x, y) => chars.forEach(svg => {
-    const r = svg.getBoundingClientRect();
-    const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height / 2);
-    const k = 6 / Math.max(Math.hypot(dx, dy), 60);
-    const eyes = svg.querySelector('.pz-eyes');
-    eyes.style.setProperty('--ex', `${(dx * k).toFixed(2)}px`);
-    eyes.style.setProperty('--ey', `${(dy * k).toFixed(2)}px`);
-  });
+  const touch = matchMedia('(hover: none)').matches;
+  const chars = [...row.querySelectorAll('.pz-char')].map(svg => ({
+    svg, eyes: svg.querySelector('.pz-eyes'), x: 0, y: 0, lean: 0,
+  }));
+  let px = null, py = null, lastMove = 0, visible = false, frame = 0, sleepTimer;
+  const asleep = () => row.classList.contains('is-asleep');
   const wake = () => {
     row.classList.remove('is-asleep');
     clearTimeout(sleepTimer);
-    if (visible) sleepTimer = setTimeout(() => row.classList.add('is-asleep'), 7000);
+    sleepTimer = setTimeout(() => row.classList.add('is-asleep'), 7000);
   };
-  addEventListener('pointermove', e => { if (visible) { look(e.clientX, e.clientY); wake(); } }, { passive: true });
+  const tick = t => {
+    const wander = touch && t - lastMove > 2500;
+    chars.forEach((c, i) => {
+      let tx = 0, ty = 0, tl = 0;
+      if (asleep()) { ty = 3; tl = -5; }
+      else if (wander) {
+        // Regard qui se promène : une cible différente par personnage, qui change doucement
+        tx = Math.sin(t / 1300 + i * 2) * 7; ty = Math.cos(t / 1700 + i) * 3 - 2;
+      } else if (px !== null) {
+        const r = c.eyes.getBoundingClientRect();
+        const dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height / 2);
+        const d = Math.hypot(dx, dy) || 1;
+        const reach = 9 * (1 - Math.exp(-d / 220));
+        tx = dx / d * reach;
+        ty = Math.max(-7, Math.min(3, dy / d * reach * .8));
+        tl = Math.max(-6, Math.min(6, dx / 60));
+      }
+      const ease = asleep() ? .04 : .16;
+      c.x += (tx - c.x) * ease; c.y += (ty - c.y) * ease; c.lean += (tl - c.lean) * ease * .6;
+      c.eyes.setAttribute('transform', `translate(${c.x.toFixed(2)} ${c.y.toFixed(2)})`);
+      c.svg.style.setProperty('--lean', `${c.lean.toFixed(2)}deg`);
+    });
+    frame = visible ? requestAnimationFrame(tick) : 0;
+  };
+  addEventListener('pointermove', e => {
+    px = e.clientX; py = e.clientY; lastMove = performance.now();
+    if (visible) wake();
+  }, { passive: true });
   addEventListener('scroll', () => visible && wake(), { passive: true });
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; visible ? wake() : clearTimeout(sleepTimer); }).observe(row);
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (!visible) return clearTimeout(sleepTimer);
+    wake();
+    if (!calm && !frame) frame = requestAnimationFrame(tick);
+  }).observe(row);
   if (calm) return;
-  chars.forEach(svg => {
+  chars.forEach(({ svg }) => {
     const blink = () => {
-      if (visible && !row.classList.contains('is-asleep')) {
+      if (visible && !asleep()) {
         svg.classList.add('is-blink');
         setTimeout(() => svg.classList.remove('is-blink'), 140);
       }
