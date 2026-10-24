@@ -364,6 +364,15 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     .catch(() => {});
 });
 
+// Éléments pleine largeur dans une colonne (data-bleed) : on mesure l'écart entre leur colonne et les bords de l'écran
+const bleeds = [...document.querySelectorAll('[data-bleed]')];
+const bleed = () => bleeds.forEach(el => {
+  const r = el.parentElement.getBoundingClientRect(), w = document.documentElement.clientWidth;
+  el.style.setProperty('--bleed-l', `${Math.max(0, r.left)}px`);
+  el.style.setProperty('--bleed-r', `${Math.max(0, w - r.right)}px`);
+});
+if (bleeds.length) { bleed(); addEventListener('resize', bleed); }
+
 // Afficher / masquer les annotations de test
 const toggle = document.querySelector('[data-toggle-issues]');
 if (toggle) {
