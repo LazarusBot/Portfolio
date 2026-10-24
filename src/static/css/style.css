@@ -474,8 +474,9 @@ video::-webkit-media-controls { display: none !important; }
                 filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .15)); animation: bag-float 5s ease-in-out var(--d) infinite; transition: translate .9s cubic-bezier(.2, .8, .2, 1); }
 @keyframes bag-float { 33% { rotate: calc(var(--r) + 4deg); scale: 1.02; } 66% { rotate: calc(var(--r) - 3deg); scale: .99; } }
 @keyframes bag-shake { 15% { rotate: -5deg; } 35% { rotate: 4deg; } 55% { rotate: -2.5deg; } 75% { rotate: 1.2deg; } 100% { rotate: 0deg; } }
-/* Au clic, les stickers sortent par l'ouverture du sachet (en haut) et dépassent à moitié ; un second clic les range */
-.bag__pouch.is-out .bag__sticker { z-index: 2; translate: calc(-50% + var(--px, 0px) + var(--ox, 0px)) calc(-50% + var(--py, 0px) + var(--oy, 0px));
+/* Au clic, les stickers remontent vers l'ouverture du sachet (en haut) et dépassent à moitié, en restant sous le plastique ;
+   un second clic les range */
+.bag__pouch.is-out .bag__sticker { translate: calc(-50% + var(--px, 0px) + var(--ox, 0px)) calc(-50% + var(--py, 0px) + var(--oy, 0px));
                                    transition: translate .8s cubic-bezier(.34, 1.4, .64, 1) var(--delay, 0s); }
 @media (prefers-reduced-motion: reduce) { .bag__sticker, .bag__pouch.is-shake { animation: none; } }
 @media (max-width: 809px) { .bag { padding: 30px 0; } }
