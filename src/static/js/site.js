@@ -80,8 +80,8 @@ document.querySelectorAll('.contact__mail').forEach(el => {
 });
 
 // Sachets de stickers. Tout se calcule dans le repère du sachet (même s'il est penché) et chaque sticker
-// reste dans le sachet : le pointeur les pousse, un clic les fait remonter et dépasser par l'ouverture
-// (le haut, seule sortie possible) ; un second clic les range. Ils peuvent se chevaucher.
+// reste dans le sachet : le pointeur les pousse, cliquer sur un sticker le fait remonter et dépasser par
+// l'ouverture (le haut, seule sortie possible) ; un second clic le range. Ils peuvent se chevaucher.
 document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   const stickers = [...pouch.querySelectorAll('.bag__sticker')];
   const tilt = () => (parseFloat(getComputedStyle(pouch.closest('.bag')).rotate) || 0) * Math.PI / 180;
@@ -94,7 +94,7 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   // Centre de base (avant décalage) et limites dans lesquelles le centre peut aller
   // Une fois sortis (après le clic), un quart du sticker peut dépasser au-dessus de l'ouverture, jamais ailleurs
   const place = st => {
-    const W = pouch.offsetWidth, H = pouch.offsetHeight, b = box(st), out = pouch.classList.contains('is-out');
+    const W = pouch.offsetWidth, H = pouch.offsetHeight, b = box(st), out = st.classList.contains('is-out');
     return {
       x: parseFloat(st.style.getPropertyValue('--x')) / 100 * W, y: parseFloat(st.style.getPropertyValue('--y')) / 100 * H,
       minX: W * .04 + b.w / 2, maxX: W * .96 - b.w / 2, minY: (out ? -b.h * .28 : H * .09) + b.h / 2, maxY: H * .97 - b.h / 2, b,
@@ -125,17 +125,33 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
     apply();
   });
   pouch.addEventListener('pointerleave', () => { state.forEach(s => { s.px = 0; s.py = 0; }); apply(); });
-  pouch.addEventListener('click', () => {
+  // Sticker réellement sous le pointeur : on ignore les zones transparentes de chaque PNG,
+  // pour pouvoir attraper un sticker caché derrière le coin vide d'un autre
+  const alpha = new Map();
+  const opaqueAt = (st, e) => {
+    if (!alpha.has(st)) {
+      const c = document.createElement('canvas');
+      c.width = st.naturalWidth; c.height = st.naturalHeight;
+      try { c.getContext('2d', { willReadFrequently: true }).drawImage(st, 0, 0); alpha.set(st, c); } catch { alpha.set(st, null); }
+    }
+    const c = alpha.get(st);
+    if (!c) return true;
+    // Point du clic ramené dans l'image (le sticker est penché comme le sachet + son propre angle)
+    const r = st.getBoundingClientRect(), t = -(tilt() + (parseFloat(st.style.getPropertyValue('--r')) || 0) * Math.PI / 180);
+    const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    const x = (dx * Math.cos(t) - dy * Math.sin(t)) / st.offsetWidth + .5, y = (dx * Math.sin(t) + dy * Math.cos(t)) / st.offsetHeight + .5;
+    if (x < 0 || x > 1 || y < 0 || y > 1) return false;
+    return c.getContext('2d').getImageData(Math.floor(x * c.width), Math.floor(y * c.height), 1, 1).data[3] > 40;
+  };
+  pouch.addEventListener('click', e => {
     pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake');
-    const out = pouch.classList.toggle('is-out');
-    const n = stickers.length, W = pouch.offsetWidth;
-    stickers.forEach((st, i) => {
-      const p = place(st), s = state[i];
-      // Remontés jusqu'à dépasser par l'ouverture, répartis sur la largeur (le clamp gère les bords)
-      s.ox = out ? (n > 1 ? p.minX + (p.maxX - p.minX) * i / (n - 1) : W / 2) - p.x : 0;
-      s.oy = out ? p.minY + (i % 2) * p.b.h * .12 - p.y : 0;
-      st.style.setProperty('--delay', `${i * .06}s`);
-    });
+    const hit = document.elementsFromPoint(e.clientX, e.clientY).find(el => stickers.includes(el) && opaqueAt(el, e));
+    if (!hit) return;
+    const i = stickers.indexOf(hit), out = hit.classList.toggle('is-out'), W = pouch.offsetWidth;
+    const p = place(hit), s = state[i];
+    // Remonté jusqu'à dépasser par l'ouverture, en gardant à peu près sa place en largeur
+    s.ox = out ? clamp(p.x + (p.x < W / 2 ? -W * .04 : W * .04), p.minX, p.maxX) - p.x : 0;
+    s.oy = out ? p.minY - p.y : 0;
     apply();
   });
   pouch.addEventListener('animationend', e => e.target === pouch && pouch.classList.remove('is-shake'));
