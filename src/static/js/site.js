@@ -142,7 +142,7 @@ document.querySelectorAll('.carousel').forEach(c => {
     if (e.propertyName === 'width' && c.getAttribute('aria-expanded') !== 'true') c.scrollLeft = 0;
   });
 
-  // Arrivé au bout, continuer à faire glisser étire la dernière photo et la déforme de plus en plus ;
+  // Arrivé au bout, continuer à faire glisser étire la dernière photo, qui file et se décolore peu à peu ;
   // au-delà d'un seuil, on part sur la page Photographs. Si on lâche avant, elle revient en place.
   const last = c.querySelector('img:last-child');
   const hint = document.createElement('span');
@@ -150,22 +150,21 @@ document.querySelectorAll('.carousel').forEach(c => {
   hint.innerHTML = 'Photographs <span aria-hidden="true">→</span>';
   c.after(hint);
   const BASE = 200, LIMIT = 220;
-  // Filtre SVG de déformation (bruit + déplacement), appliqué à la dernière photo pendant qu'on tire
+  // Filtre SVG de flou horizontal : en s'étirant, la photo file comme une traînée, sans se casser
   const NS = 'http://www.w3.org/2000/svg';
   const fx = document.createElementNS(NS, 'svg');
   fx.setAttribute('width', 0); fx.setAttribute('height', 0); fx.setAttribute('aria-hidden', 'true');
   fx.style.position = 'absolute';
-  fx.innerHTML = '<filter id="carousel-warp" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.04" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>';
+  fx.innerHTML = '<filter id="carousel-smear" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur stdDeviation="0 0" edgeMode="duplicate"/></filter>';
   document.body.append(fx);
-  const turb = fx.querySelector('feTurbulence'), warp = fx.querySelector('feDisplacementMap');
+  const smear = fx.querySelector('feGaussianBlur');
   let pull = 0, release, gone = false;
   const render = () => {
     last.style.width = `${BASE + pull}px`;
-    // Plus on tire, plus la photo se déforme : ondulation de plus en plus forte et léger cisaillement
+    // Plus on tire, plus la photo file à l'horizontale et perd sa couleur, comme si elle s'effaçait
     const kk = Math.min(1, pull / LIMIT);
-    warp.setAttribute('scale', (kk * kk * 46).toFixed(1));
-    turb.setAttribute('baseFrequency', `${(.012 + kk * .02).toFixed(4)} ${(.04 + kk * .05).toFixed(4)}`);
-    last.style.transform = `skewY(${(kk * -4).toFixed(2)}deg)`;
+    smear.setAttribute('stdDeviation', `${(kk * kk * 9).toFixed(2)} 0`);
+    last.style.setProperty('--fade-out', (kk * .9).toFixed(3));
     c.scrollLeft = c.scrollWidth;
     const k = Math.min(1, pull / LIMIT);
     hint.style.opacity = k;
