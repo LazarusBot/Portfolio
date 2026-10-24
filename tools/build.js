@@ -61,7 +61,7 @@ const globals = {
   photoCarousel: photos.map((p, i) => `<img src="assets/img/${p.image}" alt="${i ? '' : 'Maxence Prioux'}"${i ? ' loading="lazy"' : ''}>`).join(''),
 };
 
-// Classement Chess.com (Rapid) affiché sur l'accueil. Relu à chaque build ; si Chess.com ne répond pas,
+// Meilleur classement Chess.com (Rapid) affiché sur l'accueil. Relu à chaque build ; si Chess.com ne répond pas,
 // on garde la dernière valeur enregistrée dans src/static/data/chess.json. La page le met aussi à jour en direct.
 const CHESS_FILE = path.join(SRC, 'static', 'data', 'chess.json');
 async function chessData() {
@@ -82,13 +82,13 @@ async function chessData() {
   }
 }
 function chessLine(c) {
-  const r = c.rapid;
-  return `<a class="chess" href="https://www.chess.com/member/${c.username}" target="_blank" rel="noopener" data-chess="${c.username}">
-          <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.7 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
+  const r = c.rapid, best = r.best ?? r.rating;
+  return `<span class="chess" data-chess="${c.username}">
+          <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.8 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
           <span class="chess__label">Currently playing on Chess.com</span>
-          <span class="chess__elo"><small>Rapid</small> <b data-chess-rating="${r.rating}">${r.rating}</b></span>
-          <span class="chess__card" data-chess-card>Best ${r.best ?? '—'} · ${r.win} W · ${r.loss} L · ${r.draw} D</span>
-        </a>`;
+          <span class="chess__elo"><small>Rapid</small> <b data-chess-rating="${best}">${best}</b></span>
+          <span class="chess__card" data-chess-card>Best rapid rating · ${r.win} W · ${r.loss} L · ${r.draw} D</span>
+        </span>`;
 }
 
 function render(tpl, vars) {

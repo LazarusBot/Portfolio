@@ -160,10 +160,10 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   addEventListener('resize', apply);
 });
 
-// Classement Chess.com : le chiffre enregistré au build défile depuis 0, puis la page demande la valeur
-// du moment à Chess.com et l'affiche si elle a changé
-document.querySelectorAll('[data-chess]').forEach(link => {
-  const num = link.querySelector('[data-chess-rating]'), card = link.querySelector('[data-chess-card]');
+// Meilleur classement Chess.com (Rapid) : le chiffre enregistré au build défile depuis 0, puis la page
+// demande la valeur du moment à Chess.com et l'affiche si elle a changé
+document.querySelectorAll('[data-chess]').forEach(line => {
+  const num = line.querySelector('[data-chess-rating]'), card = line.querySelector('[data-chess-card]');
   let shown = 0;
   const countTo = to => {
     const from = shown, t0 = performance.now(), dur = 900;
@@ -177,12 +177,13 @@ document.querySelectorAll('[data-chess]').forEach(link => {
   };
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) shown = +num.dataset.chessRating;
   else countTo(+num.dataset.chessRating);
-  fetch(`https://api.chess.com/pub/player/${link.dataset.chess}/stats`)
+  fetch(`https://api.chess.com/pub/player/${line.dataset.chess}/stats`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
     .then(({ chess_rapid: r }) => {
-      if (!r?.last?.rating) return;
-      card.textContent = `Best ${r.best?.rating ?? '—'} · ${r.record.win} W · ${r.record.loss} L · ${r.record.draw} D`;
-      if (r.last.rating !== +num.dataset.chessRating) { num.dataset.chessRating = r.last.rating; countTo(r.last.rating); }
+      const best = r?.best?.rating ?? r?.last?.rating;
+      if (!best) return;
+      card.textContent = `Best rapid rating · ${r.record.win} W · ${r.record.loss} L · ${r.record.draw} D`;
+      if (best !== +num.dataset.chessRating) { num.dataset.chessRating = best; countTo(best); }
     })
     .catch(() => {});
 });
