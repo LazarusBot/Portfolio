@@ -41,11 +41,15 @@ img { display: block; max-width: 100%; }
 /* Carrousel de photos (composant Framer « Caroussel 2 ») : un clic l'ouvre, le nom glisse à droite */
 .carousel { display: flex; gap: 10px; flex: none; width: 200px; height: 200px; margin-right: 0; padding: 0; border: 0; background: none;
             overflow: hidden; scrollbar-width: none; cursor: pointer;
-            transition: width 1.2s cubic-bezier(.25, 1.15, .4, 1), margin-right 1.2s cubic-bezier(.25, 1.15, .4, 1); }
+            transition: width 1.2s cubic-bezier(.25, 1.15, .4, 1), margin-right 1.2s cubic-bezier(.25, 1.15, .4, 1), --fade .6s ease; }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel img { flex: none; width: 200px; height: 200px; object-fit: cover; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .5); }
 /* Ouvert : deux photos entières et une fine tranche de la troisième ; le nom passe de 350 à 552 px comme sur Framer */
-.carousel[aria-expanded="true"] { width: 437px; margin-right: -35px; overflow-x: auto; }
+.carousel[aria-expanded="true"] { width: 437px; margin-right: -35px; overflow-x: auto; --fade: 90px; }
+/* Fondu blanc sur le bord droit quand le carrousel est ouvert */
+@property --fade { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.carousel { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent); }
 .profile__name { font: 500 26px/0.8 var(--display); letter-spacing: -0.06em; }
 .profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #dedede; transition: color .25s; }
 .profile__job:hover { color: #0a66c2; }
@@ -430,4 +434,66 @@ video::-webkit-media-controls { display: none !important; }
   .pay-card { zoom: .7; }
   .stage--tall { height: auto; }
   .toggle { zoom: .8; }
+}
+
+/* Podz : étude de cas mise en scène à partir du fichier Figma */
+.pz-hero { margin-bottom: 70px; }
+.pz-hero__img { display: block; width: 100%; aspect-ratio: 1440 / 760; object-fit: cover; border-radius: 14px; background: var(--card); }
+.pz-hero__text { display: grid; grid-template-columns: 1fr 1.6fr; gap: 20px 60px; margin-top: 30px; }
+.pz-hero__text h1 { font: 500 44px/1 var(--display); letter-spacing: -0.05em; }
+.pz-hero__text > p { color: var(--muted); line-height: 1.35; }
+.pz-meta { grid-column: 2; display: flex; gap: 40px; font-size: 12px; }
+.pz-meta dt { color: var(--faint); margin-bottom: 4px; }
+.podz .section p { max-width: 560px; }
+.pz-split { display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center; }
+.pz-marks { width: 260px; margin-top: 30px; }
+.pz-tiles { width: 230px; }
+.pz-board { display: block; width: 100%; margin-top: 24px; border-radius: 14px; background: var(--card); }
+.pz-board--dark { background: #222; }
+
+.pz-icon { display: grid; grid-template-columns: 1fr 1fr; margin-top: 24px; border-radius: 14px; overflow: hidden; background: #f2f4f8; transition: background .5s ease; }
+.pz-icon.is-dark { background: #141414; }
+.pz-icon__stage { display: grid; place-items: center; aspect-ratio: 1; }
+.pz-icon__stage img { width: 46%; border-radius: 22.4%; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .18)); transition: transform .45s var(--spring-fast, cubic-bezier(.34, 1.56, .64, 1)), opacity .2s ease; }
+.pz-icon__stage img.is-swap { transform: scale(.86) rotate(-4deg); opacity: 0; }
+.pz-icon__modes { display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 40px; }
+.pz-icon__modes button { padding: 12px 16px; border: 0; border-radius: 10px; background: none; font: inherit; font-size: 13px; text-align: left; color: #999; cursor: pointer; transition: background .2s, color .2s; }
+.pz-icon__modes button:hover { color: #000; }
+.pz-icon__modes button[aria-selected="true"] { background: #fff; color: #000; box-shadow: 0 1px 2px rgba(0, 0, 0, .06); }
+.pz-icon.is-dark .pz-icon__modes button:hover { color: #fff; }
+.pz-icon.is-dark .pz-icon__modes button[aria-selected="true"] { background: #2a2a2a; color: #fff; }
+
+.pz-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px; }
+.pz-photos img { width: 100%; aspect-ratio: 1440 / 1024; object-fit: cover; border-radius: 10px; transition: transform .5s cubic-bezier(.25, 1, .5, 1); }
+.pz-photos img:hover { transform: scale(1.03); }
+
+.pz-chars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px; }
+.pz-chars figure { display: grid; place-items: center; gap: 20px; padding: 50px 0 24px; border-radius: 14px; background: var(--card); }
+.pz-chars img { height: 110px; width: auto; mix-blend-mode: multiply; animation: pz-float 3.2s ease-in-out infinite; }
+.pz-chars figure:nth-child(2) img { animation-delay: -1s; }
+.pz-chars figure:nth-child(3) img { animation-delay: -2s; }
+.pz-chars figure:hover img { animation-duration: .9s; }
+.pz-chars figcaption, .pz-rail figcaption { font-size: 12px; color: var(--muted); }
+@keyframes pz-float { 50% { transform: translateY(-8px) rotate(-2deg); } }
+
+.pz-rail { display: flex; gap: 16px; margin: 24px -100px 0; padding: 4px 100px 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 100px; scrollbar-width: none; cursor: grab;
+           -webkit-mask-image: linear-gradient(to right, transparent, #000 100px, #000 calc(100% - 100px), transparent);
+           mask-image: linear-gradient(to right, transparent, #000 100px, #000 calc(100% - 100px), transparent); }
+.pz-rail::-webkit-scrollbar { display: none; }
+.pz-rail.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+.pz-rail figure { flex: none; display: grid; gap: 12px; scroll-snap-align: start; }
+.pz-rail img { width: 236px; aspect-ratio: 393 / 852; border-radius: 30px; box-shadow: 0 0 0 1px #ececec, 0 10px 30px rgba(0, 0, 0, .06); pointer-events: none; transition: transform .4s cubic-bezier(.34, 1.56, .64, 1); }
+.pz-rail figure:hover img { transform: translateY(-6px); }
+
+@media (prefers-reduced-motion: reduce) { .pz-chars img { animation: none; } }
+@media (max-width: 809px) {
+  .pz-hero__text, .pz-split, .pz-icon { grid-template-columns: 1fr; }
+  .pz-meta { grid-column: 1; }
+  .pz-hero__text h1 { font-size: 34px; }
+  .pz-tiles { width: 220px; }
+  .pz-icon__modes { flex-direction: row; flex-wrap: wrap; padding: 0 16px 20px; }
+  .pz-photos { grid-template-columns: repeat(2, 1fr); }
+  .pz-chars img { height: 70px; }
+  .pz-rail { margin: 24px -16px 0; padding: 4px 16px 10px; scroll-padding: 0 16px; -webkit-mask-image: none; mask-image: none; }
+  .pz-rail img { width: 180px; border-radius: 24px; }
 }

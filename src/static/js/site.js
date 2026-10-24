@@ -104,3 +104,35 @@ document.querySelectorAll('[data-count-to]').forEach(el => {
   const step = () => { el.textContent = '+' + n; if (n++ < to) setTimeout(step, 60); };
   new IntersectionObserver(([e], o) => { if (e.isIntersecting) { step(); o.disconnect(); } }).observe(el);
 });
+
+// Podz : choix du mode de l'icône (fondu avec un léger rebond)
+document.querySelectorAll('[data-icon-switch]').forEach(box => {
+  const img = box.querySelector('[data-icon]');
+  box.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    if (btn.getAttribute('aria-selected') === 'true') return;
+    box.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', b === btn));
+    box.classList.toggle('is-dark', btn.dataset.tone === 'dark');
+    img.classList.add('is-swap');
+    setTimeout(() => {
+      img.src = `assets/podz/${btn.dataset.src}.png`;
+      img.alt = `Podz app icon, ${btn.textContent.toLowerCase()} mode`;
+      img.classList.remove('is-swap');
+    }, 180);
+  }));
+});
+
+// Défilement des écrans à la souris (glisser)
+document.querySelectorAll('[data-drag]').forEach(rail => {
+  let x0 = 0, left0 = 0, down = false;
+  rail.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse') return;
+    down = true; x0 = e.clientX; left0 = rail.scrollLeft;
+    rail.classList.add('is-dragging');
+  });
+  addEventListener('pointermove', e => { if (down) rail.scrollLeft = left0 - (e.clientX - x0); });
+  addEventListener('pointerup', () => {
+    if (!down) return;
+    down = false;
+    rail.classList.remove('is-dragging');
+  });
+});
