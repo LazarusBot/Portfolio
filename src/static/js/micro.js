@@ -84,8 +84,6 @@
     const panel = board.querySelector('.board__panel');
     const list = board.querySelector('.board__view--list');
     const profile = board.querySelector('.board__view--profile');
-    let timer;
-
     const fill = key => {
       const data = BOARD[key];
       panel.querySelector('[data-sub]').textContent = data.sub;
@@ -104,10 +102,7 @@
     const select = tab => {
       tabs.forEach(t => t.setAttribute('aria-selected', t === tab));
       moveIndicator(tab);
-      // L'indicateur part d'abord, le panneau change juste après
-      clearTimeout(timer);
-      panel.classList.add('swap');
-      timer = setTimeout(() => { fill(tab.dataset.tab); panel.classList.remove('swap'); }, 160);
+      fill(tab.dataset.tab);
     };
     const showProfile = on => { list.hidden = on; profile.hidden = !on; board.classList.toggle('is-profile', on); };
 
@@ -119,42 +114,43 @@
     requestAnimationFrame(() => moveIndicator(tabs[0]));
   }
 
-  // ---------- Tabs Preview : aperçu façon Chrome sous l'onglet survolé ----------
+  // ---------- Tabs Preview (« TabsGroup » Framer) : l'onglet survolé s'élargit et montre son aperçu ----------
   const PREVIEWS = {
-    obsidian: { img: 'preview-obsidian.jpg', url: 'www.obsidian.com/home', title: 'Obsidian - Sharpen your own thinking', icon: 'favicon-obsidian.svg' },
-    github: { img: 'preview-github.jpg', url: 'www.github.com/login', title: 'Github - Futur will be together', icon: 'favicon-github.svg' },
-    apple: { img: 'preview-apple.jpg', url: 'www.apple.com/products', title: 'Apple - Explore our new products', icon: 'favicon-apple.svg' },
+    github: `<div class="mc preview preview--card"><img src="${IMG('1Z4hV4m6WcIfUKFIhxfOtAsJkA.png')}" alt="">
+      <span class="preview__line"></span>
+      <span class="preview__meta"><span><b class="mc-title">www.github.com/login</b><small class="mc-sub">Github - Futur will be together</small></span>
+      <svg viewBox="0 0 26 25" width="21" height="20"><path d="${document.querySelector('[data-preview=github] .btab__icon path')?.getAttribute('d') || ''}"/></svg></span></div>`,
+    // Sur Framer, l'aperçu Apple est une seule image qui contient déjà la carte
+    apple: `<div class="preview preview--image"><img src="${IMG('qqWo1L1nX933enb3HiG6nFgeo.png')}" alt=""></div>`,
   };
   const browser = document.getElementById('browser');
   if (browser) {
     const bar = browser.querySelector('.browser__bar');
-    const card = document.createElement('div');
-    card.className = 'mc preview';
-    browser.append(card);
-    let current;
-
+    const cards = {};
+    Object.entries(PREVIEWS).forEach(([key, html]) => {
+      browser.insertAdjacentHTML('beforeend', html);
+      cards[key] = browser.lastElementChild;
+    });
     const show = tab => {
+      browser.classList.toggle('is-hover', !!tab);
       browser.querySelectorAll('.btab').forEach(t => t.classList.toggle('hover', t === tab));
-      if (!tab) { card.classList.remove('show'); current = null; return; }
-      const key = tab.dataset.preview, p = PREVIEWS[key];
-      if (key !== current) {
-        card.innerHTML = `<img src="${M(p.img)}" alt="">
-          <span class="preview__line"></span>
-          <span class="preview__meta"><span><b class="mc-title">${p.url}</b><small class="mc-sub">${p.title}</small></span><img src="${M(p.icon)}" alt=""></span>`;
-        current = key;
-      }
-      // Centré sous l'onglet, sans dépasser de la barre
-      const left = Math.min(Math.max(tab.offsetLeft + tab.offsetWidth / 2 - 208, 0), bar.offsetWidth - 416);
-      card.style.left = `${left}px`;
-      card.classList.add('show');
+      Object.entries(cards).forEach(([key, card]) => {
+        const on = !!tab && tab.dataset.preview === key;
+        card.classList.toggle('show', on);
+        if (on) {
+          // Centré sous l'onglet (largeur finale après l'élargissement), sans dépasser de la barre
+          const left = key === 'github' ? 242 + 243 / 2 - 208 : 698 - 416 + 24;
+          card.style.left = `${left}px`;
+        }
+      });
     };
     browser.querySelectorAll('.btab[data-preview]').forEach(tab => {
       tab.addEventListener('mouseenter', () => show(tab));
       tab.addEventListener('click', () => show(tab));
     });
-    browser.addEventListener('mouseleave', () => show(null));
-    // Précharge les aperçus pour un affichage immédiat au survol
-    Object.values(PREVIEWS).forEach(p => (new Image().src = M(p.img)));
+    browser.querySelector('.btab--active').addEventListener('mouseenter', () => show(null));
+    bar.addEventListener('mouseleave', () => show(null));
+    Object.values(cards).forEach(c => c.querySelector('img').decode?.().catch(() => {}));
   }
 
   // ---------- Classic Pop-ups : la pile se déplie en liste ----------
@@ -174,26 +170,57 @@
     toggle.querySelector('.toggle__close').addEventListener('click', e => { e.stopPropagation(); set(false); });
   }
 
-  // ---------- Badges Tooltip : le survol du badge ouvre les choix, un choix fait rebondir le badge ----------
+  // ---------- Badges Tooltip (« Tooltip » Framer) ----------
+  // Survol du badge : il grossit. Clic : la pastille s'ouvre. Dans la pastille, l'anneau suit l'icône survolée ;
+  // un clic choisit l'icône sous l'anneau, qui devient le badge, et referme la pastille.
   const badges = document.getElementById('badges');
   if (badges) {
     const badge = badges.querySelector('.badges__badge');
+    const ring = badges.querySelector('.badges__ring');
     const choices = [...badges.querySelectorAll('[data-badge]')];
-    let closeTimer;
-    const setOpen = open => { clearTimeout(closeTimer); badges.classList.toggle('open', open); badge.setAttribute('aria-expanded', open); };
-    const pick = (btn, animate) => {
-      choices.forEach(c => c.setAttribute('aria-checked', c === btn));
-      const path = btn.querySelector('path'), target = badge.querySelector('path');
+    let current = 0, focus = 0;
+    const moveRing = i => { focus = i; ring.style.transform = `translateY(${i * 43}px)`; };
+    const setOpen = open => {
+      badges.classList.toggle('open', open);
+      badge.setAttribute('aria-expanded', open);
+      if (open) moveRing(current);
+    };
+    const pick = (i, animate) => {
+      current = i;
+      choices.forEach((c, j) => c.setAttribute('aria-checked', j === i));
+      const path = choices[i].querySelector('path'), target = badge.querySelector('path');
       target.setAttribute('d', path.getAttribute('d'));
       target.setAttribute('fill', path.getAttribute('fill'));
       if (animate) { badge.classList.remove('pop-in'); void badge.offsetWidth; badge.classList.add('pop-in'); }
     };
-    badge.addEventListener('mouseenter', () => setOpen(true));
-    badges.addEventListener('mouseleave', () => { closeTimer = setTimeout(() => setOpen(false), 250); });
-    badges.addEventListener('mouseenter', () => clearTimeout(closeTimer));
     badge.addEventListener('click', e => { e.stopPropagation(); setOpen(!badges.classList.contains('open')); });
-    choices.forEach(c => c.addEventListener('click', e => { e.stopPropagation(); setOpen(false); pick(c, true); }));
+    choices.forEach((c, i) => {
+      c.addEventListener('mouseenter', () => moveRing(i));
+      c.addEventListener('focus', () => moveRing(i));
+    });
+    badges.querySelector('.badges__tip').addEventListener('click', e => { e.stopPropagation(); pick(focus, true); setOpen(false); });
     document.addEventListener('click', e => !badges.contains(e.target) && setOpen(false));
-    pick(choices[0], false);
+    pick(0, false);
   }
+
+  // ---------- Payment (« Payment » Framer) : appui → le vert balaie le bouton → « Payment is done ✓ » → retour ----------
+  const pay = document.getElementById('pay');
+  if (pay) {
+    let busy = false;
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    pay.addEventListener('click', async () => {
+      if (busy) return;
+      busy = true;
+      pay.classList.add('processing');
+      await wait(500);
+      pay.classList.add('done');
+      await wait(450);
+      pay.classList.add('checked');
+      await wait(1300);
+      pay.classList.remove('processing', 'done', 'checked');
+      await wait(400);
+      busy = false;
+    });
+  }
+
 }
