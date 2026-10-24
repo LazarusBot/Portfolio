@@ -962,3 +962,14 @@ video::-webkit-media-controls { display: none !important; }
   .pz-badge { padding: 30px 0; }
   .pz-phone { --s: .62; }
 }
+
+/* Bouton son, fixe en bas à droite de toutes les pages */
+.sound-toggle { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%;
+                background: rgba(239, 239, 239, .85); color: var(--soft); cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                transition: color .2s, scale .3s cubic-bezier(.34, 1.56, .64, 1); }
+.sound-toggle:hover { color: #000; scale: 1.08; }
+.sound-toggle:active { scale: .92; }
+.sound-toggle svg { width: 18px; height: 18px; }
+.sound-toggle__off { opacity: 0; }
+.sound-toggle.is-off .sound-toggle__waves { opacity: 0; }
+.sound-toggle.is-off .sound-toggle__off { opacity: 1; }

@@ -2,6 +2,71 @@
 // Images téléchargées dans le repo par tools/build.js
 const IMG = id => `assets/img/${id}`;
 
+// Sons du portfolio, trois rôles : « select » pour choisir (onglets, modes, carrousel, menu),
+// « pop » pour ce qu'on touche (stickers, personnages, démos), « robot » quand l'app travaille
+// (recherche, paiement). Ils ne jouent qu'après un premier geste (règle des navigateurs) ; le bouton
+// en bas à droite les coupe et le choix est gardé.
+const sound = (() => {
+  const FILES = { select: 'assets/sounds/select.mp3', pop: 'assets/sounds/pop.mp3', robot: 'assets/sounds/robot.mp3' };
+  const VOL = { select: .3, pop: .45, robot: .22 };
+  let ctx = null, buffers = {}, last = {};
+  let on = true;
+  try { on = localStorage.getItem('sound') !== 'off'; } catch {}
+  const unlock = () => {
+    if (ctx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    ctx = new AC();
+    Object.entries(FILES).forEach(([k, url]) => fetch(url).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b)).then(buf => (buffers[k] = buf)).catch(() => {}));
+  };
+  ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, unlock, { once: true, capture: true }));
+  const play = (name, { rate = 1, vol = 1, gap = 70 } = {}) => {
+    if (!on || !ctx || !buffers[name]) return;
+    const now = performance.now();
+    if (now - (last[name] || 0) < gap) return;
+    last[name] = now;
+    if (ctx.state === 'suspended') ctx.resume();
+    const src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = buffers[name];
+    // Légère variation de hauteur : un son répété ne sonne jamais deux fois pareil
+    src.playbackRate.value = rate * (0.96 + Math.random() * 0.08);
+    g.gain.value = VOL[name] * vol;
+    src.connect(g).connect(ctx.destination);
+    src.start();
+  };
+  // Bouton son : petit rond fixe en bas à droite
+  const btn = document.createElement('button');
+  btn.className = 'sound-toggle';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path class="sound-toggle__waves" d="M15.5 9.2a4 4 0 0 1 0 5.6M18 7a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="sound-toggle__off" d="M16 9.5l5 5M21 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+  const sync = () => {
+    btn.classList.toggle('is-off', !on);
+    btn.setAttribute('aria-pressed', on);
+    btn.setAttribute('aria-label', on ? 'Turn sound off' : 'Turn sound on');
+    btn.title = on ? 'Sound on' : 'Sound off';
+  };
+  btn.addEventListener('click', () => {
+    on = !on;
+    try { localStorage.setItem('sound', on ? 'on' : 'off'); } catch {}
+    sync();
+    if (on) { unlock(); setTimeout(() => play('select'), 30); }
+  });
+  sync();
+  document.body.append(btn);
+  // Sons déclenchés au clic, selon l'élément (le premier sélecteur qui correspond gagne)
+  const CLICKS = [
+    ['.pz-states__tabs [data-state="search"]', 'robot'],
+    ['.pay', 'robot'],
+    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .menu-btn', 'select'],
+    ['.contact__mail, .stage', 'pop'],
+  ];
+  addEventListener('click', e => {
+    if (e.target.closest('.sound-toggle')) return;
+    const hit = CLICKS.find(([sel]) => e.target.closest(sel));
+    if (hit) setTimeout(() => play(hit[1]), 0);
+  });
+  return { play };
+})();
+
 // Cartes projets : le GIF (ou la vidéo qui le remplace) n'est chargé qu'au survol
 // et repart du début à chaque fois
 document.querySelectorAll('.card__hover[data-gif], .card__hover[data-src]').forEach(media => {
@@ -146,8 +211,9 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   pouch.addEventListener('click', e => {
     pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake');
     const hit = document.elementsFromPoint(e.clientX, e.clientY).find(el => stickers.includes(el) && opaqueAt(el, e));
-    if (!hit) return;
+    if (!hit) return sound.play('pop', { rate: .7, vol: .6 });
     const i = stickers.indexOf(hit), out = hit.classList.toggle('is-out'), W = pouch.offsetWidth;
+    sound.play('pop', { rate: out ? 1.15 : .9 });
     const p = place(hit), s = state[i];
     // Remonté jusqu'à dépasser par l'ouverture, en gardant à peu près sa place en largeur
     s.ox = out ? clamp(p.x + (p.x < W / 2 ? -W * .04 : W * .04), p.minX, p.maxX) - p.x : 0;
@@ -183,6 +249,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   const next = () => {
     if (busy || values.length < 2) return;
     busy = true;
+    sound.play('select', { vol: .6, rate: 1.1 });
     i = (i + 1) % values.length;
     const [label, val] = values[i];
     const old = pill.querySelector('.chess__value');
@@ -322,8 +389,8 @@ document.querySelectorAll('[data-tilt]').forEach(stage => {
 
 // Podz : les personnages sautent au clic
 const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
-document.querySelectorAll('.pz-chars__card').forEach(b => {
-  b.addEventListener('click', () => replay(b, 'is-jump'));
+document.querySelectorAll('.pz-chars__card').forEach((b, i) => {
+  b.addEventListener('click', () => { replay(b, 'is-jump'); sound.play('pop', { rate: [.85, 1, 1.2][i] || 1 }); });
   b.addEventListener('animationend', e => e.animationName === 'pz-jump' && b.classList.remove('is-jump'));
 });
 
