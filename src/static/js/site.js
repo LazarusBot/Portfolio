@@ -142,7 +142,7 @@ document.querySelectorAll('.carousel').forEach(c => {
     if (e.propertyName === 'width' && c.getAttribute('aria-expanded') !== 'true') c.scrollLeft = 0;
   });
 
-  // Arrivé au bout, continuer à faire glisser étire la dernière photo, qui file et se décolore peu à peu ;
+  // Arrivé au bout, continuer à faire glisser étire la dernière photo, qui file et blanchit peu à peu ;
   // au-delà d'un seuil, on part sur la page Photographs. Si on lâche avant, elle revient en place.
   const last = c.querySelector('img:last-child');
   const hint = document.createElement('span');
@@ -161,7 +161,7 @@ document.querySelectorAll('.carousel').forEach(c => {
   let pull = 0, release, gone = false;
   const render = () => {
     last.style.width = `${BASE + pull}px`;
-    // Plus on tire, plus la photo file à l'horizontale et perd sa couleur, comme si elle s'effaçait
+    // Plus on tire, plus la photo file à l'horizontale et blanchit, comme si elle s'effaçait dans la page
     const kk = Math.min(1, pull / LIMIT);
     smear.setAttribute('stdDeviation', `${(kk * kk * 9).toFixed(2)} 0`);
     last.style.setProperty('--fade-out', (kk * .9).toFixed(3));

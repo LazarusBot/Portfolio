@@ -44,10 +44,11 @@ img { display: block; max-width: 100%; }
             transition: width 1.2s cubic-bezier(.25, 1.15, .4, 1), --fade .6s ease; }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel img { flex: none; width: 200px; height: 200px; object-fit: cover; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .5); }
-/* Au bout du carrousel : la dernière photo s'étire, file à l'horizontale et se décolore ; « Photographs → » apparaît */
+/* Au bout du carrousel : la dernière photo s'étire, file à l'horizontale et blanchit ; « Photographs → » apparaît */
 .profile { position: relative; }
 .carousel[aria-expanded="true"].is-pulling { --fade: 0px; }
-.carousel.is-pulling img:last-child { object-fit: fill; filter: url(#carousel-smear) grayscale(var(--fade-out, 0)); opacity: calc(1 - var(--fade-out, 0) * .35); }
+/* La traînée blanchit : plus lumineuse et moins contrastée, jusqu'à presque se fondre dans le blanc de la page */
+.carousel.is-pulling img:last-child { object-fit: fill; filter: url(#carousel-smear) brightness(calc(1 + var(--fade-out, 0) * .9)) contrast(calc(1 - var(--fade-out, 0) * .55)) saturate(calc(1 - var(--fade-out, 0) * .5)); }
 .carousel.is-releasing img:last-child { transition: width .65s cubic-bezier(.3, 1.9, .5, 1); }
 .carousel-hint { position: absolute; display: inline-flex; gap: 6px; padding: 6px 11px; border-radius: 99px; background: rgba(0, 0, 0, .55); color: #fff; font-size: 12px;
                  pointer-events: none; opacity: 0; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
