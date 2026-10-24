@@ -449,8 +449,8 @@ video::-webkit-media-controls { display: none !important; }
 .pz-hero__phone > * { position: absolute; left: 0; top: 0; transform: scale(var(--s)); transform-origin: 0 0; }
 .pz-hero__frame { width: 472px; height: 923px; max-width: none; }
 .pz-hero__screen { left: calc(40px * var(--s)); top: calc(28px * var(--s)); width: 393px; height: 852px; overflow: hidden; border-radius: 50px; background: #fafafa; }
-.pz-hero__screen .pz-phone__status { left: 0; top: 0; z-index: 1; background: #fafafa; }
-.pz-hero__screen video { position: absolute; left: 0; top: 44px; width: 393px; height: 807px; object-fit: cover; }
+/* La barre d'état fait partie de la vidéo : l'heure de l'enregistrement y est remplacée par 9:41 */
+.pz-hero__screen video { position: absolute; left: 0; top: 0; width: 393px; height: 852px; object-fit: cover; object-position: top; }
 .pz-hero__play { position: absolute; left: 50%; top: 50%; z-index: 2; display: grid; place-items: center; width: 64px; height: 64px; margin: -32px 0 0 -32px; padding: 0 0 0 3px;
                  border: 0; border-radius: 50%; background: rgba(0, 0, 0, .55); color: #fff; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
                  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
