@@ -84,8 +84,8 @@
           "I65AuRONTT8JAeDg76YKwevhKw.png"
         ]
       },
-      "layout": "row",
-      "bagFirst": true
+      "layout": "grid2",
+      "bagOver": true
     }
   ]
 }

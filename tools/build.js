@@ -79,6 +79,16 @@ function pageMeta(src) {
 function gallery(images, layout) {
   const full = images.filter(i => i.full).map(i => `\n        <img class="gallery-full" src="assets/img/${i.id}" alt=""${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">`).join('');
   images = images.filter(i => !i.full);
+  // layout "grid2" : grille 2 × 2 pleine largeur, les deux images d'une rangée ont la même hauteur
+  if (layout === 'grid2' && images.length) {
+    const ratio = i => (i.w && i.h ? i.w / i.h : 1);
+    const imgs = images.map((i, k) => {
+      const pair = images.slice(k - (k % 2), k - (k % 2) + 2);
+      const r = pair.reduce((a, b) => a + ratio(b), 0) / pair.length;
+      return `<img src="assets/img/${i.id}" alt="" style="aspect-ratio:${r.toFixed(3)}" loading="lazy">`;
+    }).join('\n          ');
+    return `\n        <div class="gallery-2x2">\n          ${imgs}\n        </div>${full}`;
+  }
   if (layout === 'row' && images.length) {
     const imgs = images.map(i => {
       const r = i.w && i.h ? i.w / i.h : 1;
@@ -118,11 +128,19 @@ function bag(b) {
   return `\n        <div class="bag" data-bag><div class="bag__pouch">${stickers}<img class="bag__plastic" src="assets/img/${b.bag}" alt=""></div></div>`;
 }
 
+// Sachet posé par-dessus la grille (il reste visible pendant qu'on fait défiler les visuels) ;
+// l'image "full" éventuelle passe après le tout
+function bagOver(s) {
+  const grid = gallery(s.images.filter(i => !i.full), s.layout);
+  const full = gallery(s.images.filter(i => i.full), s.layout);
+  return `\n        <div class="bag-over">${grid}\n          <div class="bag-over__layer">${bag(s.bag).replace('class="bag"', 'class="bag bag--over"')}</div>\n        </div>${full}`;
+}
+
 function projectSections(p) {
   return p.sections.map(s => `
       <section class="section">
         <h2>${esc(s.title)}</h2>
-        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${s.bagFirst ? bag(s.bag) + gallery(s.images, s.layout) : gallery(s.images, s.layout) + bag(s.bag)}
+        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${s.bagOver ? bagOver(s) : gallery(s.images, s.layout) + bag(s.bag)}
       </section>`).join('\n') + (p.wall ? `
       <section class="wall" aria-label="Logos">
         ${[0, 1, 2, 3].map(c => `<div class="wall__col"><div class="wall__track">${

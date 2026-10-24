@@ -93,15 +93,24 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
     });
   });
   pouch.addEventListener('pointerleave', () => stickers.forEach(st => { st.style.removeProperty('--px'); st.style.removeProperty('--py'); }));
-  // Au clic, le sachet se secoue et les stickers en sortent à moitié, vers l'extérieur ; un autre clic les range
-  stickers.forEach((st, i) => {
-    const x = parseFloat(st.style.getPropertyValue('--x')) - 50, y = parseFloat(st.style.getPropertyValue('--y')) - 50;
-    const d = Math.hypot(x, y) || 1;
-    st.style.setProperty('--ox', `${(x / d * 34 + (i % 2 ? 6 : -6)).toFixed(0)}%`);
-    st.style.setProperty('--oy', `${(y / d * 24 - 16).toFixed(0)}%`);
-  });
+  // Au clic, le sachet se secoue et les stickers sortent par l'ouverture du haut : ils remontent
+  // jusqu'à dépasser à moitié du sachet, répartis sur sa largeur ; un autre clic les range
+  const aim = () => {
+    const p = pouch.getBoundingClientRect(), n = stickers.length;
+    stickers.forEach((st, i) => {
+      const r = st.getBoundingClientRect();
+      const cx = r.left + r.width / 2 - (parseFloat(st.style.getPropertyValue('--px')) || 0);
+      const cy = r.top + r.height / 2 - (parseFloat(st.style.getPropertyValue('--py')) || 0);
+      const tx = p.left + p.width * (n > 1 ? .22 + .56 * i / (n - 1) : .5);
+      const ty = p.top + p.height * .08 - r.height * (i % 2) * .08;
+      st.style.setProperty('--ox', `${(tx - cx).toFixed(0)}px`);
+      st.style.setProperty('--oy', `${(ty - cy).toFixed(0)}px`);
+      st.style.setProperty('--delay', `${i * .06}s`);
+    });
+  };
   pouch.addEventListener('click', () => {
     pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake');
+    if (!pouch.classList.contains('is-out')) aim();
     pouch.classList.toggle('is-out');
   });
   pouch.addEventListener('animationend', e => e.target === pouch && pouch.classList.remove('is-shake'));
