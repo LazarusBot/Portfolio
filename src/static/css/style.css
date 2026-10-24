@@ -40,24 +40,32 @@ img { display: block; max-width: 100%; }
 .profile { display: flex; gap: 50px; align-items: center; padding: 45px 0 55px; border-bottom: 1px solid var(--line); }
 .profile__photo { width: 200px; height: 200px; object-fit: cover; }
 .profile__name { font: 500 26px/0.8 var(--display); letter-spacing: -0.06em; }
-.profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #dedede; }
-.profile__job img { width: 13px; opacity: .25; }
-.contact { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; padding: 4px 4px 4px 25px; background: var(--pill); border-radius: 99px; }
-.contact__mail { font: 500 18px/1.2 "Inter", sans-serif; color: var(--soft); letter-spacing: 0; margin-right: 70px; cursor: pointer; }
-.contact__btn { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; transition: background .2s; }
-.contact__btn:hover { background: #e4e4e4; }
-.contact__btn img { width: 18px; opacity: .6; }
+.profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #dedede; transition: color .25s; }
+.profile__job:hover { color: #0a66c2; }
+/* Icônes en masque CSS pour pouvoir changer leur couleur au survol */
+.icon { display: block; background: currentColor; -webkit-mask: var(--src) center/contain no-repeat; mask: var(--src) center/contain no-repeat; transition: background-color .25s; }
+.icon--linkedin { --src: url(../assets/linkedin.svg); width: 15px; height: 15px; }
+.icon--whatsapp { --src: url(../assets/whatsapp.svg); width: 20px; height: 20px; }
+.icon--x { --src: url(../assets/x.svg); width: 18px; height: 17px; }
+.contact { display: inline-flex; align-items: center; gap: 10px; width: 390px; height: 50px; margin-top: 30px; padding: 0 5px 0 25px; background: #e8e8e8; border-radius: 25px; }
+.contact__mail { flex: 1; font: 500 18px/22px "Inter", sans-serif; color: var(--soft); letter-spacing: 0; cursor: pointer; transition: color .25s; }
+.contact__mail:hover { color: #000; }
+.contact__btn { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 99px; background: #dedede; color: var(--soft); }
+.contact__btn:hover { color: #000; }
 .profile__info { display: flex; flex-direction: column; align-items: flex-start; }
 
 /* ---------- Grille de projets ---------- */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; padding: 75px 0 150px; }
 .card__media { position: relative; aspect-ratio: 595 / 446; background: var(--card); overflow: hidden; display: grid; place-items: center; }
-.card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.card__media--contain img { object-fit: contain; }
-.card:hover .card__media img { transform: scale(1.03); }
+.card__media img { width: 100%; height: 100%; object-fit: cover; }
+.card__media--contain > img:first-child { object-fit: contain; }
+/* Survol comme sur Framer : le GIF du projet remplace le visuel + pastille Figma */
+.card__hover, .card__badge { position: absolute; opacity: 0; transition: opacity .3s ease; pointer-events: none; }
+.card__hover { inset: 0; }
+.card__media .card__badge { width: 30px; height: 30px; right: 12px; bottom: 12px; top: auto; left: auto; object-fit: contain; }
+.card:hover .card__hover, .card:hover .card__badge { opacity: 1; }
 .card__caption { margin-top: 15px; color: var(--muted); }
-.micro-dot { width: 14px; height: 14px; border-radius: 50%; background: #d9d9d9; animation: pulse 1.6s ease-in-out infinite; }
-@keyframes pulse { 50% { transform: scale(1.6); opacity: .5; } }
+.micro-plus { width: 15px; height: 15px; background: #c2c2c2; -webkit-mask: url(../assets/micro-dot.svg) center/contain no-repeat; mask: url(../assets/micro-dot.svg) center/contain no-repeat; }
 
 /* ---------- Fil d'Ariane / pages internes ---------- */
 .crumb { padding: 50px 0 30px; font-size: 12px; color: var(--faint); }
@@ -198,8 +206,8 @@ img { display: block; max-width: 100%; }
   .profile__photo { display: none; }
   .strip { display: flex; }
   .profile__job { margin-top: 26px; }
-  .contact { margin-top: 26px; width: 100%; }
-  .contact__mail { flex: 1; margin-right: 0; font-size: 16px; }
+  .contact { margin-top: 26px; width: 100%; max-width: 390px; }
+  .contact__mail { font-size: 17px; }
   .grid { grid-template-columns: 1fr; gap: 40px; padding-top: 50px; }
   .card__media { aspect-ratio: 290 / 218; }
   .photos { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -212,3 +220,9 @@ img { display: block; max-width: 100%; }
   .lvl { grid-column: 2; justify-self: start; }
 }
 .lvl--done { background: #e7efff; color: #2450b3; }
+
+/* ---------- About : liens et soulignés comme sur Framer ---------- */
+.co, .u { text-decoration: underline; text-decoration-color: #dedede; text-underline-offset: 2px; }
+.years { font-style: italic; }
+.sport + .sport { padding-top: 30px; border-top: 1px solid #dedede; }
+.topic { border-bottom-color: #dedede; }

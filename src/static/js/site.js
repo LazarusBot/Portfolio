@@ -2,6 +2,14 @@
 // Images téléchargées dans le repo par tools/build.js
 const IMG = id => `assets/img/${id}`;
 
+// Cartes projets : le GIF n'est chargé qu'au survol et repart du début à chaque fois
+document.querySelectorAll('.card__hover[data-gif]').forEach(img => {
+  img.closest('.card').addEventListener('mouseenter', () => {
+    img.src = '';
+    img.src = img.dataset.gif;
+  });
+});
+
 // Menu mobile : le bouton « + » déplie la nav en pastilles
 const menuBtn = document.querySelector('.menu-btn');
 if (menuBtn) {
