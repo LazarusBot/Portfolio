@@ -6,33 +6,45 @@
     <p class="crumb"><a href="index.html">Home /</a> <strong>Podz</strong></p>
     <main class="project podz">
 
-      <section class="pz-hero">
-        <img class="pz-hero__img" src="assets/podz/banner-2.jpg" alt="Rifugio Passo Santner at sunrise, with the Podz logo">
-        <div class="pz-hero__text">
-          <h1>Podz</h1>
-          <p>Building a modern iOS app from scratch to find and book mountain shelters, the pods. I designed it end to end: the brand, the mascots, the design system, every screen and the motion.</p>
-          <dl class="pz-meta">
-            <div><dt>Role</dt><dd>Product designer</dd></div>
-            <div><dt>Platform</dt><dd>iOS</dd></div>
-            <div><dt>Scope</dt><dd>Brand, UI, motion</dd></div>
-          </dl>
+      <div class="pz-hero"><img src="assets/podz/banner-2.jpg" alt="Rifugio Passo Santner at sunrise, with the Podz logo"></div>
+
+      <dl class="pz-scope" data-reveal>
+        <div><dt>Role</dt><dd>Product designer</dd></div>
+        <div><dt>Platform</dt><dd>iOS</dd></div>
+        <div><dt>Scope</dt><dd>Brand, UI, motion</dd></div>
+      </dl>
+
+      <section class="section" data-reveal>
+        <h2>Description</h2>
+        <p>Building from scratch a modern iOS app to find and book mountain shelters, the pods. Brand, characters, design system, screens and motion.</p>
+      </section>
+
+      <section class="section" data-reveal>
+        <h2>Logo evolution</h2>
+        <p>From a flat red tile to a glass pod: five steps to give the shelter more volume and character.</p>
+        <div class="pz-evo" data-evo>
+          <div class="pz-evo__stage">
+            <img src="assets/podz/evo-v1-symbol.svg" alt="" class="is-on">
+            <img src="assets/podz/evo-b.png" alt="">
+            <img src="assets/podz/evo-a.png" alt="">
+            <img src="assets/podz/evo-f.png" alt="">
+            <img src="assets/podz/icon-default.png" alt="" class="pz-evo__glass">
+          </div>
+          <ol class="pz-evo__steps">
+            <li><button aria-current="true">First mark</button></li>
+            <li><button>Hexagon</button></li>
+            <li><button>Light pod</button></li>
+            <li><button>Tilted pod</button></li>
+            <li><button>Glass icon</button></li>
+          </ol>
         </div>
       </section>
 
-      <section class="section pz-split">
-        <div>
-          <h2>Logo</h2>
-          <p>A pod seen from the side: a small shelter with a sloped roof. It works alone as a symbol and next to the wordmark, on four colours taken from the app.</p>
-          <img class="pz-marks" src="assets/podz/logo-marks.png" alt="Podz wordmark and symbol lockups">
-        </div>
-        <img class="pz-tiles" src="assets/podz/logo-tiles.png" alt="Podz symbol and wordmark on red, blue, yellow and grey tiles">
-      </section>
-
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>App icon</h2>
-        <p>The pod becomes a glass block that sits above its shadow. It ships in the six iOS modes. Pick one to preview it.</p>
+        <p>The final icon in the six iOS modes. Move over it, then pick a mode.</p>
         <div class="pz-icon" data-icon-switch>
-          <div class="pz-icon__stage">
+          <div class="pz-icon__stage" data-tilt>
             <img src="assets/podz/icon-default.png" alt="Podz app icon, default mode" data-icon>
           </div>
           <div class="pz-icon__modes" role="tablist" aria-label="Icon mode">
@@ -46,33 +58,31 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>Imagery</h2>
-        <p>Real shelters from the Alps and the Dolomites carry the brand: the wordmark sits on the photo, nothing else.</p>
-        <div class="pz-photos">
-          <img src="assets/podz/banner-1.jpg" alt="" loading="lazy">
-          <img src="assets/podz/banner-3.jpg" alt="" loading="lazy">
-          <img src="assets/podz/banner-4.jpg" alt="" loading="lazy">
-          <img src="assets/podz/banner-5.jpg" alt="" loading="lazy">
-          <img src="assets/podz/banner-6.jpg" alt="" loading="lazy">
-          <img src="assets/podz/banner115.jpg" alt="" loading="lazy">
-        </div>
+        <p>Real shelters from the Alps and the Dolomites carry the brand.</p>
       </section>
+      <div class="pz-marquee" aria-label="Podz brand photos">
+        <div class="pz-marquee__track">
+          <img src="assets/podz/banner-1.jpg" alt=""><img src="assets/podz/banner-3.jpg" alt=""><img src="assets/podz/banner-4.jpg" alt=""><img src="assets/podz/banner-5.jpg" alt=""><img src="assets/podz/banner-6.jpg" alt=""><img src="assets/podz/banner115.jpg" alt="">
+          <img src="assets/podz/banner-1.jpg" alt="" aria-hidden="true"><img src="assets/podz/banner-3.jpg" alt="" aria-hidden="true"><img src="assets/podz/banner-4.jpg" alt="" aria-hidden="true"><img src="assets/podz/banner-5.jpg" alt="" aria-hidden="true"><img src="assets/podz/banner-6.jpg" alt="" aria-hidden="true"><img src="assets/podz/banner115.jpg" alt="" aria-hidden="true">
+        </div>
+      </div>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>Characters</h2>
-        <p>Hexi, Podzi and Roundi live in the empty states, the loaders and the friend lists. Each one is drawn from the logo's simple shapes.</p>
-        <div class="pz-chars">
-          <figure><img src="assets/podz/hexi.png" alt="Hexi" width="203" height="148"><figcaption>Hexi</figcaption></figure>
-          <figure><img src="assets/podz/podzi.png" alt="Podzi" width="151" height="151"><figcaption>Podzi</figcaption></figure>
-          <figure><img src="assets/podz/roundi.png" alt="Roundi" width="165" height="165"><figcaption>Roundi</figcaption></figure>
+        <p>Hexi, Podzi and Roundi live in the empty states, the loaders and the friend lists. Click one.</p>
+        <div class="pz-chars" data-stagger>
+          <button><img src="assets/podz/hexi.png" alt="" width="203" height="148"><span>Hexi</span></button>
+          <button><img src="assets/podz/podzi.png" alt="" width="151" height="151"><span>Podzi</span></button>
+          <button><img src="assets/podz/roundi.png" alt="" width="165" height="165"><span>Roundi</span></button>
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>The app</h2>
-        <p>From the first launch to the booking: onboarding, sign-in with or without an account, a feed of pods, Lenny the search assistant, the inbox and the profile. Scroll or drag through the screens.</p>
-        <div class="pz-rail" data-drag>
+        <p>Onboarding, sign-in, a feed of pods, Lenny the search assistant, the inbox and the profile. Drag through the screens.</p>
+        <div class="pz-rail" data-drag data-stagger>
           <figure><img src="assets/podz/s-onboarding.jpg" alt="" loading="lazy"><figcaption>Splash</figcaption></figure>
           <figure><img src="assets/podz/s-final.jpg" alt="" loading="lazy"><figcaption>Onboarding</figcaption></figure>
           <figure><img src="assets/podz/s-login.jpg" alt="" loading="lazy"><figcaption>Sign in</figcaption></figure>
@@ -87,28 +97,28 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>Pod details</h2>
-        <p>Seven takes on the same pod page, from a classic sheet to a full-bleed photo, to find the right balance between the place, the availability and the booking button.</p>
+        <p>Seven takes on the pod page, from a classic sheet to a full-bleed photo.</p>
         <img class="pz-board" src="assets/podz/pods.jpg" alt="Seven explorations of the pod detail screen" loading="lazy">
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>Components</h2>
-        <p>Location cards and stacks, filters, counters, the tab bar, the selection bar and a payment button that goes from Apple Pay to done. Each component has its states, ready for prototyping.</p>
+        <p>Location cards and stacks, filters, counters, the tab bar, the selection bar and the payment button, each with its states.</p>
         <img class="pz-board" src="assets/podz/general.jpg" alt="Podz components and their states" loading="lazy">
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>Pinned</h2>
         <p>Friends pin the pods they like. The card grows with the photos added by the group.</p>
         <img class="pz-board" src="assets/podz/pinned.jpg" alt="Variations of the pinned pod card" loading="lazy">
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2>Member badge</h2>
-        <p>Each member gets a badge, used in the app and on the motion pieces.</p>
-        <img class="pz-board pz-board--dark" src="assets/podz/banner-podz.png" alt="Podz member badge on a red lanyard" loading="lazy">
+        <p>Each member gets a badge. Pull it.</p>
+        <div class="pz-badge"><button data-badge aria-label="Pull the badge"><img src="assets/podz/badge.png" alt="Podz member badge on a red lanyard" width="210" height="390"></button></div>
       </section>
 
     </main>

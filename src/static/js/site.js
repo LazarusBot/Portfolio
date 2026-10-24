@@ -105,6 +105,41 @@ document.querySelectorAll('[data-count-to]').forEach(el => {
   new IntersectionObserver(([e], o) => { if (e.isIntersecting) { step(); o.disconnect(); } }).observe(el);
 });
 
+
+// Podz : apparition au défilement (les grilles marquées data-stagger arrivent en cascade)
+const reveal = new IntersectionObserver(entries => entries.forEach(({ isIntersecting, target }) => {
+  if (!isIntersecting) return;
+  target.classList.add('is-in');
+  reveal.unobserve(target);
+}), { rootMargin: '0px 0px -12% 0px' });
+document.querySelectorAll('[data-stagger]').forEach(g => [...g.children].forEach((c, i) => c.style.setProperty('--d', `${Math.min(i, 6) * 0.07}s`)));
+document.querySelectorAll('[data-reveal]').forEach(el => reveal.observe(el));
+
+// Podz : évolution du logo, une étape toutes les 2,4 s tant que la section est visible
+document.querySelectorAll('[data-evo]').forEach(box => {
+  const imgs = [...box.querySelectorAll('.pz-evo__stage img')];
+  const btns = [...box.querySelectorAll('.pz-evo__steps button')];
+  let i = 0, timer = null;
+  const show = n => {
+    imgs[i].classList.replace('is-on', 'is-off');
+    const old = imgs[i];
+    setTimeout(() => old.classList.remove('is-off'), 500);
+    i = n;
+    imgs[i].classList.add('is-on');
+    btns.forEach((b, k) => b.setAttribute('aria-current', k === i));
+  };
+  const play = () => { clearInterval(timer); box.classList.remove('is-paused'); timer = setInterval(() => show((i + 1) % imgs.length), 2400); };
+  btns.forEach((b, k) => b.addEventListener('click', () => {
+    clearInterval(timer);
+    box.classList.add('is-paused');
+    if (k !== i) show(k);
+  }));
+  new IntersectionObserver(([e]) => {
+    if (box.classList.contains('is-paused')) return;
+    if (e.isIntersecting) play(); else clearInterval(timer);
+  }, { threshold: .5 }).observe(box);
+});
+
 // Podz : choix du mode de l'icône (fondu avec un léger rebond)
 document.querySelectorAll('[data-icon-switch]').forEach(box => {
   const img = box.querySelector('[data-icon]');
@@ -119,6 +154,35 @@ document.querySelectorAll('[data-icon-switch]').forEach(box => {
       img.classList.remove('is-swap');
     }, 180);
   }));
+});
+
+// Podz : l'icône s'incline vers la souris et revient avec un rebond
+document.querySelectorAll('[data-tilt]').forEach(stage => {
+  stage.addEventListener('pointermove', e => {
+    const r = stage.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    stage.classList.add('is-tilting');
+    stage.style.setProperty('--ry', `${x * 28}deg`);
+    stage.style.setProperty('--rx', `${-y * 28}deg`);
+  });
+  stage.addEventListener('pointerleave', () => {
+    stage.classList.remove('is-tilting');
+    stage.style.setProperty('--ry', '0deg');
+    stage.style.setProperty('--rx', '0deg');
+  });
+});
+
+// Podz : les personnages sautent au clic, le badge se balance quand on le tire
+const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+document.querySelectorAll('.pz-chars button').forEach(b => {
+  b.addEventListener('click', () => replay(b, 'is-jump'));
+  b.addEventListener('animationend', () => b.classList.remove('is-jump'));
+});
+document.querySelectorAll('[data-badge]').forEach(b => {
+  b.addEventListener('click', () => replay(b, 'is-swinging'));
+  b.addEventListener('animationend', () => b.classList.remove('is-swinging'));
+  // Un premier balancement quand le badge arrive à l'écran
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { setTimeout(() => replay(b, 'is-swinging'), 400); o.disconnect(); } }, { threshold: .6 }).observe(b);
 });
 
 // Défilement des écrans à la souris (glisser)
