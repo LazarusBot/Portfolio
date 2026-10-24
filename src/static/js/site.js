@@ -141,6 +141,51 @@ document.querySelectorAll('.carousel').forEach(c => {
   c.addEventListener('transitionend', e => {
     if (e.propertyName === 'width' && c.getAttribute('aria-expanded') !== 'true') c.scrollLeft = 0;
   });
+
+  // Arrivé au bout, continuer à faire glisser étire la dernière photo comme un élastique ;
+  // au-delà d'un seuil, on part sur la page Photographs. Si on lâche avant, elle revient en place.
+  const last = c.querySelector('img:last-child');
+  const hint = document.createElement('span');
+  hint.className = 'carousel-hint';
+  hint.innerHTML = 'Photographs <span aria-hidden="true">→</span>';
+  c.after(hint);
+  const BASE = 200, LIMIT = 150;
+  let pull = 0, release, gone = false;
+  const render = () => {
+    last.style.width = `${BASE + pull}px`;
+    c.scrollLeft = c.scrollWidth;
+    const k = Math.min(1, pull / LIMIT);
+    hint.style.opacity = k;
+    hint.style.translate = `${(1 - k) * -12}px 0`;
+    // Position de l'indication : sur le bord droit du carrousel, quelle que soit sa largeur
+    hint.style.left = `${c.offsetLeft + c.offsetWidth - hint.offsetWidth - 14}px`;
+    hint.style.top = `${c.offsetTop + c.offsetHeight - hint.offsetHeight - 12}px`;
+    c.classList.toggle('is-pulling', pull > 0);
+  };
+  const letGo = () => {
+    c.classList.add('is-releasing');
+    pull = 0; render();
+    setTimeout(() => c.classList.remove('is-releasing'), 500);
+  };
+  c.addEventListener('wheel', e => {
+    if (gone || c.getAttribute('aria-expanded') !== 'true') return;
+    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+    const atEnd = c.scrollLeft + c.clientWidth >= c.scrollWidth - 2;
+    if (!(atEnd && (d > 0 || pull > 0))) return;
+    e.preventDefault();
+    // Plus on tire, plus ça résiste
+    pull = Math.max(0, pull + d * (1 - pull / (LIMIT * 1.6)) * .6);
+    c.classList.remove('is-releasing');
+    render();
+    clearTimeout(release);
+    if (pull >= LIMIT) {
+      gone = true;
+      sound.play('select');
+      setTimeout(() => (location.href = 'photographs.html'), 160);
+      return;
+    }
+    release = setTimeout(letGo, 180);
+  }, { passive: false });
 });
 
 // Menu mobile : le bouton « + » déplie la nav en pastilles
