@@ -36,6 +36,20 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && 'IntersectionObs
   document.querySelectorAll('.card__hover[data-gif]:not([data-gif$=".gif"]), .card__hover[data-src]').forEach(m => preload.observe(m));
 }
 
+// Carrousel de photos du profil : un clic l'ouvre (les autres photos apparaissent), un autre le referme
+document.querySelectorAll('.carousel').forEach(c => {
+  c.addEventListener('click', () => {
+    const open = c.getAttribute('aria-expanded') !== 'true';
+    c.setAttribute('aria-expanded', open);
+    c.setAttribute('aria-label', open ? 'Hide the photos' : 'Show more photos');
+    if (!open) c.scrollTo({ left: 0, behavior: 'smooth' });
+  });
+  // Une fois refermé, on revient toujours sur la photo de profil
+  c.addEventListener('transitionend', e => {
+    if (e.propertyName === 'width' && c.getAttribute('aria-expanded') !== 'true') c.scrollLeft = 0;
+  });
+});
+
 // Menu mobile : le bouton « + » déplie la nav en pastilles
 const menuBtn = document.querySelector('.menu-btn');
 if (menuBtn) {

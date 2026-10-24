@@ -56,6 +56,8 @@ const globals = {
   lang: 'en',
   description: 'Maxence Prioux — Product Designer based in Toulouse.',
   photoStrip: photos.map(p => `<img src="assets/img/${p.image}" alt="">`).join(''),
+  // Carrousel du profil (desktop) : la première photo est la photo de profil
+  photoCarousel: photos.map((p, i) => `<img src="assets/img/${p.image}" alt="${i ? '' : 'Maxence Prioux'}"${i ? ' loading="lazy"' : ''}>`).join(''),
 };
 
 function render(tpl, vars) {
