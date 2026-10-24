@@ -149,10 +149,12 @@ document.querySelectorAll('.carousel').forEach(c => {
   hint.className = 'carousel-hint';
   hint.innerHTML = 'Photographs <span aria-hidden="true">→</span>';
   c.after(hint);
-  const BASE = 200, LIMIT = 150;
+  const BASE = 200, LIMIT = 220;
   let pull = 0, release, gone = false;
   const render = () => {
     last.style.width = `${BASE + pull}px`;
+    // L'élastique s'amincit un peu en s'étirant
+    last.style.scale = `1 ${(1 - Math.min(1, pull / LIMIT) * .08).toFixed(3)}`;
     c.scrollLeft = c.scrollWidth;
     const k = Math.min(1, pull / LIMIT);
     hint.style.opacity = k;
@@ -165,7 +167,7 @@ document.querySelectorAll('.carousel').forEach(c => {
   const letGo = () => {
     c.classList.add('is-releasing');
     pull = 0; render();
-    setTimeout(() => c.classList.remove('is-releasing'), 500);
+    setTimeout(() => c.classList.remove('is-releasing'), 700);
   };
   c.addEventListener('wheel', e => {
     if (gone || c.getAttribute('aria-expanded') !== 'true') return;
@@ -174,7 +176,7 @@ document.querySelectorAll('.carousel').forEach(c => {
     if (!(atEnd && (d > 0 || pull > 0))) return;
     e.preventDefault();
     // Plus on tire, plus ça résiste
-    pull = Math.max(0, pull + d * (1 - pull / (LIMIT * 1.6)) * .6);
+    pull = Math.max(0, pull + d * (1 - pull / (LIMIT * 1.5)) * .95);
     c.classList.remove('is-releasing');
     render();
     clearTimeout(release);

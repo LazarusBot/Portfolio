@@ -48,7 +48,7 @@ img { display: block; max-width: 100%; }
 .profile { position: relative; }
 .carousel[aria-expanded="true"].is-pulling { --fade: 0px; }
 .carousel.is-pulling img:last-child { object-fit: fill; }
-.carousel.is-releasing img:last-child { transition: width .45s cubic-bezier(.34, 1.56, .64, 1); }
+.carousel.is-releasing img:last-child { transition: width .65s cubic-bezier(.3, 1.9, .5, 1), scale .65s cubic-bezier(.3, 1.9, .5, 1); }
 .carousel-hint { position: absolute; display: inline-flex; gap: 6px; padding: 6px 11px; border-radius: 99px; background: rgba(0, 0, 0, .55); color: #fff; font-size: 12px;
                  pointer-events: none; opacity: 0; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .carousel.is-releasing + .carousel-hint { transition: opacity .3s, translate .3s; }
