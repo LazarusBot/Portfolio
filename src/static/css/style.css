@@ -41,11 +41,12 @@ img { display: block; max-width: 100%; }
 /* Carrousel de photos (composant Framer « Caroussel 2 ») : un clic l'ouvre, le nom glisse à droite */
 .carousel { display: flex; gap: 10px; flex: none; width: 200px; height: 200px; margin-right: 0; padding: 0; border: 0; background: none;
             overflow: hidden; scrollbar-width: none; cursor: pointer;
-            transition: width 1.2s cubic-bezier(.25, 1.15, .4, 1), margin-right 1.2s cubic-bezier(.25, 1.15, .4, 1), --fade .6s ease; }
+            transition: width 1.2s cubic-bezier(.25, 1.15, .4, 1), --fade .6s ease; }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel img { flex: none; width: 200px; height: 200px; object-fit: cover; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .5); }
-/* Ouvert : deux photos entières et une fine tranche de la troisième ; le nom passe de 350 à 552 px comme sur Framer */
-.carousel[aria-expanded="true"] { width: 437px; margin-right: -35px; overflow-x: auto; --fade: 90px; }
+/* Ouvert : deux photos entières et une fine tranche de la troisième ; le nom garde le même écart de 50 px qu'à l'état fermé */
+/* Sur un écran plus étroit, il s'ouvre moins pour laisser la place au bloc contact (390 px) */
+.carousel[aria-expanded="true"] { width: max(200px, min(437px, calc(100% - 440px))); overflow-x: auto; --fade: 90px; }
 /* Fondu blanc sur le bord droit quand le carrousel est ouvert */
 @property --fade { syntax: '<length>'; inherits: false; initial-value: 0px; }
 .carousel { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
