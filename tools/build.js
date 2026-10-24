@@ -18,10 +18,16 @@ const TEST_ONLY_PAGES = ['problemes.html'];
 const IMG_DIR = path.join(SRC, 'static', 'assets', 'img');
 const read = f => fs.readFileSync(f, 'utf8');
 
+// Version des fichiers CSS/JS calculée sur leur contenu : un navigateur ne peut pas
+// garder un ancien site.js en cache après une mise à jour
+const hash = f => require('crypto').createHash('md5').update(read(path.join(SRC, 'static', f))).digest('hex').slice(0, 8);
+const ASSETS = ['css/style.css', 'js/site.js'];
+const versioned = html => ASSETS.reduce((h, f) => h.split(`"${f}"`).join(`"${f}?v=${hash(f)}"`), html);
+
 // En production : retire les pastilles de problèmes et les blocs marqués data-test-only
-const clean = html => toVideo(!PROD ? html : html
+const clean = html => versioned(toVideo(!PROD ? html : html
   .replace(/ ?<(span|a) class="issue[^"]*"[^>]*>[^<]*<\/\1>/g, '')
-  .replace(/\n?\s*<(section|div)[^>]*data-test-only[^>]*>[\s\S]*?<\/\1>/g, ''));
+  .replace(/\n?\s*<(section|div)[^>]*data-test-only[^>]*>[\s\S]*?<\/\1>/g, '')));
 
 // Les GIF convertis par tools/convert-gifs.sh deviennent des vidéos muettes en boucle
 const hasMp4 = id => fs.existsSync(path.join(IMG_DIR, `${id}.mp4`));
