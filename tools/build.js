@@ -70,9 +70,11 @@ async function chessData() {
     const res = await fetch(`https://api.chess.com/pub/player/${saved.username}/stats`, {
       headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)' }, signal: AbortSignal.timeout(8000),
     });
-    const r = (await res.json()).chess_rapid;
+    const d = await res.json(), r = d.chess_rapid;
     if (!r?.last?.rating) throw new Error('pas de partie rapide');
     const fresh = { ...saved, rapid: { rating: r.last.rating, best: r.best?.rating ?? null, win: r.record.win, loss: r.record.loss, draw: r.record.draw },
+      blitz: d.chess_blitz?.best?.rating ?? d.chess_blitz?.last?.rating ?? saved.blitz ?? null,
+      puzzles: d.tactics?.highest?.rating ?? saved.puzzles ?? null,
       updated: new Date().toISOString().slice(0, 10) };
     fs.writeFileSync(CHESS_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
@@ -87,7 +89,7 @@ function chessLine(c) {
           <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.8 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
           <span class="chess__label">Currently playing on Chess.com</span>
           <span class="chess__elo"><small>Rapid</small> <b data-chess-rating="${best}">${best}</b></span>
-          <span class="chess__card" data-chess-card>Best rapid rating · ${r.win} W · ${r.loss} L · ${r.draw} D</span>
+          <span class="chess__card" data-chess-card>Blitz <b>${c.blitz ?? '—'}</b><i></i>Puzzles <b>${c.puzzles ?? '—'}</b></span>
         </span>`;
 }
 

@@ -161,7 +161,7 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
 });
 
 // Meilleur classement Chess.com (Rapid) : le chiffre enregistré au build défile depuis 0, puis la page
-// demande la valeur du moment à Chess.com et l'affiche si elle a changé
+// demande les valeurs du moment à Chess.com (Rapid, et au survol Blitz et Puzzles) et les affiche si elles ont changé
 document.querySelectorAll('[data-chess]').forEach(line => {
   const num = line.querySelector('[data-chess-rating]'), card = line.querySelector('[data-chess-card]');
   let shown = 0;
@@ -179,10 +179,13 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   else countTo(+num.dataset.chessRating);
   fetch(`https://api.chess.com/pub/player/${line.dataset.chess}/stats`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
-    .then(({ chess_rapid: r }) => {
+    .then(({ chess_rapid: r, chess_blitz: b, tactics: t }) => {
       const best = r?.best?.rating ?? r?.last?.rating;
       if (!best) return;
-      card.textContent = `Best rapid rating · ${r.record.win} W · ${r.record.loss} L · ${r.record.draw} D`;
+      const vals = card.querySelectorAll('b');
+      const blitz = b?.best?.rating ?? b?.last?.rating, puzzles = t?.highest?.rating;
+      if (blitz) vals[0].textContent = blitz;
+      if (puzzles) vals[1].textContent = puzzles;
       if (best !== +num.dataset.chessRating) { num.dataset.chessRating = best; countTo(best); }
     })
     .catch(() => {});
