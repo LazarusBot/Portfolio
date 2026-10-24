@@ -3,7 +3,7 @@
 const IMG = id => `assets/img/${id}`;
 
 // Sons du portfolio, trois rôles : « select » pour choisir (onglets, modes, carrousel, menu),
-// « pop » pour ce qu'on touche (stickers, personnages, démos, et en plus léger chaque survol), « robot » quand l'app travaille
+// « pop » pour ce qu'on touche (stickers, personnages, démos, et en plus léger au survol des onglets et du contact), « robot » quand l'app travaille
 // (recherche, paiement). Ils ne jouent qu'après un premier geste (règle des navigateurs) ; le bouton
 // en bas à droite les coupe et le choix est gardé.
 const sound = (() => {
@@ -56,12 +56,12 @@ const sound = (() => {
   // Par défaut, tout lien sonne « select » (on se déplace) et tout bouton « pop » (on agit).
   // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
-    ['.bag__pouch, .pz-chars__card, .chess', null],
+    ['.bag__pouch, .pz-chars__card, .chess, .nav a, .contact, .profile__job', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
-    ['.nav a, .logo', 'select', { rate: 1.08 }],
+    ['.logo', 'select', { rate: 1.08 }],
     ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .menu-btn', 'select'],
-    ['.contact__mail, .stage', 'pop'],
+    ['.stage', 'pop'],
     ['.card, .crumb a', 'select', { vol: .8, rate: .95 }],
     ['a[href]', 'select', { vol: .7 }],
     ['button, [role="button"], summary', 'pop', { vol: .8 }],
@@ -81,16 +81,16 @@ const sound = (() => {
       setTimeout(() => (location.href = a.href), 140);
     } else setTimeout(() => play(hit[1], hit[2]), 0);
   });
-  // Survol : petit « pop » aigu et discret en entrant sur un élément cliquable (souris seulement).
-  // On ne rejoue pas tant qu'on reste sur le même élément ; Chess.com a déjà son propre son au survol.
-  const HOVER = 'a[href], button:not(.sound-toggle), [role="button"], [role="tab"], .card, .carousel, .pz-chars__card, .bag__pouch, .contact__mail, .stage';
+  // Survol : petit « pop » aigu et discret, seulement sur les onglets de navigation et le bloc contact
+  // (mail, WhatsApp, X, LinkedIn). Ces éléments n'ont pas de son au clic, pour ne jamais doubler.
+  const HOVER = '.nav a, .contact__mail, .contact__btn, .profile__job';
   let hovered = null;
   addEventListener('pointerover', e => {
     if (e.pointerType !== 'mouse') return;
     const el = e.target.closest(HOVER);
     if (el === hovered) return;
     hovered = el;
-    if (el && !el.closest('.chess')) play('pop', { rate: 1.35, vol: .35, gap: 50 });
+    if (el) play('pop', { rate: 1.35, vol: .35, gap: 50 });
   }, { passive: true });
   return { play };
 })();
