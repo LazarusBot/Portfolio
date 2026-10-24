@@ -115,6 +115,21 @@ const reveal = new IntersectionObserver(entries => entries.forEach(({ isIntersec
 document.querySelectorAll('[data-stagger]').forEach(g => [...g.children].forEach((c, i) => c.style.setProperty('--d', `${Math.min(i, 6) * 0.07}s`)));
 document.querySelectorAll('[data-reveal]').forEach(el => reveal.observe(el));
 
+// Podz : la vidéo de l'en-tête tourne seulement quand elle est visible. Si le navigateur bloque la lecture
+// automatique (Safari en mode économie d'énergie), l'image fixe reste et un bouton lecture apparaît.
+document.querySelectorAll('[data-beta]').forEach(video => {
+  const btn = video.parentElement.querySelector('.pz-hero__play');
+  const play = () => video.play().then(() => (btn.hidden = true)).catch(() => (btn.hidden = false));
+  btn.addEventListener('click', play);
+  new IntersectionObserver(([e]) => (e.isIntersecting ? play() : video.pause()), { threshold: .25 }).observe(video);
+});
+
+// Podz : la photo de l'en-tête défile un peu moins vite que la page
+const heroBg = document.querySelector('.pz-hero__bg');
+if (heroBg && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  addEventListener('scroll', () => heroBg.style.setProperty('--py', `${Math.min(scrollY, 800) * .25}px`), { passive: true });
+}
+
 // Podz : évolution du logo, une étape toutes les 2,4 s tant que la section est visible
 document.querySelectorAll('[data-evo]').forEach(box => {
   const imgs = [...box.querySelectorAll('.pz-evo__stage img')];
