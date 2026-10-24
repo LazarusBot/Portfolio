@@ -67,7 +67,9 @@
           "2vZQoqt4Ipx0wHvs7q7R324n0.png",
           "VZss0BbRrezR4IlLuakWbm8PdpQ.png"
         ]
-      }
+      },
+      "layout": "grid2",
+      "bagOver": true
     },
     {
       "title": "Labels",

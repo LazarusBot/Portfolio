@@ -88,7 +88,9 @@
           "mjYVsFkJJl0D6YIzJLXHy0Q1PQc.png",
           "MPpNKmATju5O6MwUcbqWAYpvDQ.png"
         ]
-      }
+      },
+      "layout": "grid2",
+      "bagOver": true
     },
     {
       "title": "Socials prototype",

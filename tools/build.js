@@ -79,15 +79,16 @@ function pageMeta(src) {
 function gallery(images, layout) {
   const full = images.filter(i => i.full).map(i => `\n        <img class="gallery-full" src="assets/img/${i.id}" alt=""${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">`).join('');
   images = images.filter(i => !i.full);
-  // layout "grid2" : grille 2 × 2 pleine largeur, les deux images d'une rangée ont la même hauteur
+  // layout "grid2" : 2 rangées de 2 sur toute la largeur. Dans chaque rangée, les deux images ont la même
+  // hauteur et une largeur proportionnelle à leur format, donc rien n'est recadré
   if (layout === 'grid2' && images.length) {
-    const ratio = i => (i.w && i.h ? i.w / i.h : 1);
-    const imgs = images.map((i, k) => {
-      const pair = images.slice(k - (k % 2), k - (k % 2) + 2);
-      const r = pair.reduce((a, b) => a + ratio(b), 0) / pair.length;
-      return `<img src="assets/img/${i.id}" alt="" style="aspect-ratio:${r.toFixed(3)}" loading="lazy">`;
-    }).join('\n          ');
-    return `\n        <div class="gallery-2x2">\n          ${imgs}\n        </div>${full}`;
+    const rows = [];
+    for (let k = 0; k < images.length; k += 2) rows.push(images.slice(k, k + 2));
+    const html = rows.map(row => `<div class="gallery-2x2__row">${row.map(i => {
+      const r = i.w && i.h ? i.w / i.h : 1;
+      return `<img src="assets/img/${i.id}" alt="" style="--r:${r.toFixed(3)}" loading="lazy">`;
+    }).join('')}</div>`).join('\n          ');
+    return `\n        <div class="gallery-2x2">\n          ${html}\n        </div>${full}`;
   }
   if (layout === 'row' && images.length) {
     const imgs = images.map(i => {
