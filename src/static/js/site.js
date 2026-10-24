@@ -32,7 +32,8 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && 'IntersectionObs
       new Image().src = target.dataset.gif;
     }
   }), { rootMargin: '300px 0px' });
-  document.querySelectorAll('.card__hover[data-gif], .card__hover[data-src]').forEach(m => preload.observe(m));
+  // Les GIF ne sont pas préchargés : ils pèsent jusqu'à 9 Mo chacun
+  document.querySelectorAll('.card__hover[data-gif]:not([data-gif$=".gif"]), .card__hover[data-src]').forEach(m => preload.observe(m));
 }
 
 // Menu mobile : le bouton « + » déplie la nav en pastilles

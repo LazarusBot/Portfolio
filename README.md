@@ -29,7 +29,6 @@ Chaque push sur `main` lance `.github/workflows/deploy.yml`, qui construit la ve
 ## Outils
 
 - `tools/import-framer.py` : réimporte les études de cas depuis le site Framer (`--download` pour les images).
-- `tools/convert-gifs.sh` : allège les GIF lourds (`brew install ffmpeg webp`). WebP animé s'il fait moins
-  de 2 Mo (il s'anime partout, comme un GIF), sinon MP4. Le build remplace ensuite les `….gif` automatiquement.
-  Les GIF d'origine sont gardés dans `src/originals/`.
+- `tools/convert-gifs.sh` : (non utilisé pour l'instant, le site garde les GIF) convertit les GIF lourds en
+  WebP animé ou MP4 (`brew install ffmpeg webp`) ; le build les utilise alors automatiquement à la place des GIF.
 - `tools/serve.js` : mini serveur local (le serveur Python est bloqué par le pare-feu macOS).
