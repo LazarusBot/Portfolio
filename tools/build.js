@@ -112,15 +112,16 @@ function galleryGrid(images) {
 // Sachet transparent avec des stickers qui flottent dedans (composition Framer recréée).
 // Chaque sticker a sa place, son angle et son rythme ; site.js les pousse avec le pointeur
 const BAG_SLOTS = [
-  { x: 30, y: 36, w: 42, r: -12 }, { x: 68, y: 44, w: 40, r: 9 },
-  { x: 36, y: 72, w: 40, r: 7 }, { x: 70, y: 76, w: 36, r: -8 },
+  { x: 32, y: 34, w: 54, r: -12 }, { x: 68, y: 42, w: 52, r: 9 },
+  { x: 34, y: 70, w: 52, r: 7 }, { x: 68, y: 76, w: 48, r: -8 },
 ];
 function bag(b) {
   if (!b) return '';
   const n = b.stickers.length;
   // Avec moins de stickers, ils sont plus grands et mieux répartis
-  const slots = n <= 2 ? [{ x: 38, y: 44, w: 54, r: -10 }, { x: 62, y: 70, w: 52, r: 8 }]
-    : n === 3 ? [{ x: 32, y: 34, w: 44, r: -10 }, { x: 72, y: 46, w: 38, r: 9 }, { x: 40, y: 75, w: 42, r: 5 }]
+  // Positions de départ ; site.js les resserre si un sticker dépasse du sachet
+  const slots = n <= 2 ? [{ x: 40, y: 38, w: 72, r: -10 }, { x: 60, y: 70, w: 68, r: 8 }]
+    : n === 3 ? [{ x: 36, y: 32, w: 60, r: -10 }, { x: 66, y: 50, w: 54, r: 9 }, { x: 42, y: 74, w: 58, r: 5 }]
     : BAG_SLOTS;
   const stickers = b.stickers.map((id, i) => {
     const sl = slots[i];

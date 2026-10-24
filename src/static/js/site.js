@@ -79,41 +79,68 @@ document.querySelectorAll('.contact__mail').forEach(el => {
   });
 });
 
-// Sachets de stickers : le pointeur pousse les stickers à l'intérieur, un clic secoue le sachet
+// Sachets de stickers. Tout se calcule dans le repère du sachet (même s'il est penché) et chaque sticker
+// reste toujours dans le sachet : le pointeur les pousse, un clic les fait remonter vers l'ouverture
+// (en haut, sous la fermeture) ; un second clic les range. Ils peuvent se chevaucher.
 document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   const stickers = [...pouch.querySelectorAll('.bag__sticker')];
-  pouch.addEventListener('pointermove', e => {
-    const r = pouch.getBoundingClientRect();
-    stickers.forEach((st, i) => {
-      const s = st.getBoundingClientRect();
-      const dx = s.left + s.width / 2 - e.clientX, dy = s.top + s.height / 2 - e.clientY;
-      const d = Math.hypot(dx, dy) || 1, push = Math.max(0, 1 - d / (r.width * .6)) * 22 * (1 + i * .15);
-      st.style.setProperty('--px', `${(dx / d * push).toFixed(1)}px`);
-      st.style.setProperty('--py', `${(dy / d * push).toFixed(1)}px`);
-    });
-  });
-  pouch.addEventListener('pointerleave', () => stickers.forEach(st => { st.style.removeProperty('--px'); st.style.removeProperty('--py'); }));
-  // Au clic, le sachet se secoue et les stickers sortent par l'ouverture du haut : ils remontent
-  // jusqu'à dépasser à moitié du sachet, répartis sur sa largeur ; un autre clic les range
-  const aim = () => {
-    const p = pouch.getBoundingClientRect(), n = stickers.length;
-    stickers.forEach((st, i) => {
-      const r = st.getBoundingClientRect();
-      const cx = r.left + r.width / 2 - (parseFloat(st.style.getPropertyValue('--px')) || 0);
-      const cy = r.top + r.height / 2 - (parseFloat(st.style.getPropertyValue('--py')) || 0);
-      const tx = p.left + p.width * (n > 1 ? .22 + .56 * i / (n - 1) : .5);
-      const ty = p.top + p.height * .08 - r.height * (i % 2) * .08;
-      st.style.setProperty('--ox', `${(tx - cx).toFixed(0)}px`);
-      st.style.setProperty('--oy', `${(ty - cy).toFixed(0)}px`);
-      st.style.setProperty('--delay', `${i * .06}s`);
-    });
+  const tilt = () => (parseFloat(getComputedStyle(pouch.closest('.bag')).rotate) || 0) * Math.PI / 180;
+  // Boîte occupée par un sticker penché (son angle + l'oscillation de l'animation)
+  const box = st => {
+    const a = Math.abs((parseFloat(st.style.getPropertyValue('--r')) || 0) + 4) * Math.PI / 180;
+    const w = st.offsetWidth, h = st.offsetHeight;
+    return { w: w * Math.cos(a) + h * Math.sin(a), h: w * Math.sin(a) + h * Math.cos(a) };
   };
+  // Centre de base (avant décalage) et limites dans lesquelles le centre peut aller
+  const place = st => {
+    const W = pouch.offsetWidth, H = pouch.offsetHeight, b = box(st);
+    return {
+      x: parseFloat(st.style.getPropertyValue('--x')) / 100 * W, y: parseFloat(st.style.getPropertyValue('--y')) / 100 * H,
+      minX: W * .04 + b.w / 2, maxX: W * .96 - b.w / 2, minY: H * .09 + b.h / 2, maxY: H * .97 - b.h / 2, b,
+    };
+  };
+  const clamp = (v, lo, hi) => (lo > hi ? (lo + hi) / 2 : Math.max(lo, Math.min(hi, v)));
+  const state = stickers.map(() => ({ ox: 0, oy: 0, px: 0, py: 0 }));
+  const apply = () => stickers.forEach((st, i) => {
+    const p = place(st), s = state[i];
+    const cx = clamp(p.x + s.ox + s.px, p.minX, p.maxX), cy = clamp(p.y + s.oy + s.py, p.minY, p.maxY);
+    st.style.setProperty('--px', `${(cx - p.x).toFixed(1)}px`);
+    st.style.setProperty('--py', `${(cy - p.y).toFixed(1)}px`);
+  });
+  // Position du pointeur dans le repère du sachet
+  const local = e => {
+    const r = pouch.getBoundingClientRect(), t = -tilt();
+    const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    return { x: dx * Math.cos(t) - dy * Math.sin(t) + pouch.offsetWidth / 2, y: dx * Math.sin(t) + dy * Math.cos(t) + pouch.offsetHeight / 2 };
+  };
+  pouch.addEventListener('pointermove', e => {
+    const m = local(e), W = pouch.offsetWidth;
+    stickers.forEach((st, i) => {
+      const p = place(st), s = state[i];
+      const dx = p.x + s.ox - m.x, dy = p.y + s.oy - m.y, d = Math.hypot(dx, dy) || 1;
+      const push = Math.max(0, 1 - d / (W * .6)) * W * .06 * (1 + i * .15);
+      s.px = dx / d * push; s.py = dy / d * push;
+    });
+    apply();
+  });
+  pouch.addEventListener('pointerleave', () => { state.forEach(s => { s.px = 0; s.py = 0; }); apply(); });
   pouch.addEventListener('click', () => {
     pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake');
-    if (!pouch.classList.contains('is-out')) aim();
-    pouch.classList.toggle('is-out');
+    const out = pouch.classList.toggle('is-out');
+    const n = stickers.length, W = pouch.offsetWidth;
+    stickers.forEach((st, i) => {
+      const p = place(st), s = state[i];
+      // Remontés tout en haut, répartis sur la largeur (le clamp les garde dans le sachet)
+      s.ox = out ? (n > 1 ? p.minX + (p.maxX - p.minX) * i / (n - 1) : W / 2) - p.x : 0;
+      s.oy = out ? p.minY + (i % 2) * p.b.h * .12 - p.y : 0;
+      st.style.setProperty('--delay', `${i * .06}s`);
+    });
+    apply();
   });
   pouch.addEventListener('animationend', e => e.target === pouch && pouch.classList.remove('is-shake'));
+  // Les stickers sont agrandis : on vérifie dès le chargement qu'ils tiennent dans le sachet
+  stickers.forEach(st => (st.complete ? apply() : st.addEventListener('load', apply)));
+  addEventListener('resize', apply);
 });
 
 // Afficher / masquer les annotations de test

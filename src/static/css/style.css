@@ -476,8 +476,7 @@ video::-webkit-media-controls { display: none !important; }
 @keyframes bag-shake { 15% { rotate: -5deg; } 35% { rotate: 4deg; } 55% { rotate: -2.5deg; } 75% { rotate: 1.2deg; } 100% { rotate: 0deg; } }
 /* Au clic, les stickers remontent vers l'ouverture du sachet (en haut) et dépassent à moitié, en restant sous le plastique ;
    un second clic les range */
-.bag__pouch.is-out .bag__sticker { translate: calc(-50% + var(--px, 0px) + var(--ox, 0px)) calc(-50% + var(--py, 0px) + var(--oy, 0px));
-                                   transition: translate .8s cubic-bezier(.34, 1.4, .64, 1) var(--delay, 0s); }
+.bag__pouch.is-out .bag__sticker { transition: translate .8s cubic-bezier(.34, 1.4, .64, 1) var(--delay, 0s); }
 @media (prefers-reduced-motion: reduce) { .bag__sticker, .bag__pouch.is-shake { animation: none; } }
 @media (max-width: 809px) { .bag { padding: 30px 0; } }
 
