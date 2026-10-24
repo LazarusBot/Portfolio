@@ -52,17 +52,34 @@ const sound = (() => {
   });
   sync();
   document.body.append(btn);
-  // Sons déclenchés au clic, selon l'élément (le premier sélecteur qui correspond gagne)
+  // Sons déclenchés au clic, selon l'élément (le premier sélecteur qui correspond gagne).
+  // Par défaut, tout lien sonne « select » (on se déplace) et tout bouton « pop » (on agit).
+  // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
+    ['.bag__pouch, .pz-chars__card, .chess', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
+    ['.nav a, .logo', 'select', { rate: 1.08 }],
     ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .menu-btn', 'select'],
     ['.contact__mail, .stage', 'pop'],
+    ['.card, .crumb a', 'select', { vol: .8, rate: .95 }],
+    ['a[href]', 'select', { vol: .7 }],
+    ['button, [role="button"], summary', 'pop', { vol: .8 }],
   ];
   addEventListener('click', e => {
     if (e.target.closest('.sound-toggle')) return;
     const hit = CLICKS.find(([sel]) => e.target.closest(sel));
-    if (hit) setTimeout(() => play(hit[1]), 0);
+    if (!hit || !hit[1]) return;
+    // Lien interne ouvert dans la même page : on attend un instant avant de partir,
+    // sinon le son est coupé par le changement de page
+    const a = e.target.closest('a[href]');
+    const leaves = a && !a.target && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.defaultPrevented
+      && a.origin === location.origin && !a.getAttribute('href').startsWith('#') && a.href !== location.href;
+    if (leaves && on && ctx && buffers[hit[1]]) {
+      e.preventDefault();
+      play(hit[1], hit[2]);
+      setTimeout(() => (location.href = a.href), 140);
+    } else setTimeout(() => play(hit[1], hit[2]), 0);
   });
   return { play };
 })();
