@@ -5,7 +5,7 @@
 
   <div class="wrap wrap--narrow">
     <p class="crumb"><a href="index.html">Home /</a> <strong>Micro-interactions</strong>
-      <a class="issue" href="problemes.html#p10" title="2 interactions recodées sur 7">#10 2/7 recodées</a>
+      <a class="issue" href="problemes.html#p10" title="Les 7 interactions sont recodées">#10</a>
     </p>
 
     <main>
@@ -14,6 +14,109 @@
         <p class="mi__desc">Pop-up notifications appear as compact cards triggered by collaborator activity : a proposal, a comment, or a vocal message. Multiple alerts stack behind one another and collapse into a single summary, keeping the interface calm until the user chooses to look closer.</p>
         <div class="stage">
           <div class="notifs" id="notifs" title="Clique pour ajouter une notification"></div>
+        </div>
+      </section>
+
+      <section class="mi">
+        <div class="mi__title">Tabs Navigation <span class="mi__hint">interact with me ! :)</span></div>
+        <p class="mi__desc">Clicking a tab starts a quick transition: the active indicator snaps across first, then the panel swaps in place. The same navigation also switches between profile pages, so each selected user feels like a fast, focused view change.</p>
+        <div class="stage">
+          <div class="mc board" id="board">
+            <div class="mc board__tabs" role="tablist">
+              <span class="board__indicator"></span>
+              <button role="tab" aria-selected="true" data-tab="goals">Goals</button>
+              <button role="tab" aria-selected="false" data-tab="assists">Assists</button>
+              <button role="tab" aria-selected="false" data-tab="passes">Passes</button>
+            </div>
+            <div class="board__panel">
+              <b class="mc-title">World Cup Leaderboard</b>
+              <small class="mc-sub" data-sub></small>
+              <ul class="board__rows" data-rows></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mi">
+        <div class="mi__title">Tabs Preview <span class="mi__hint">interact with me ! :)</span></div>
+        <p class="mi__desc">Hover or click through the tabs to refresh the preview area in place, making each option feel browsable before committing to a selection.</p>
+        <div class="stage">
+          <div class="browser" id="browser">
+            <div class="mc browser__bar">
+              <div class="btab btab--active">
+                <svg class="btab__icon" viewBox="0 0 19 25" width="19" height="25"><path d="M7.04945 15.6951L7.46171 15.5713C8.39819 15.2987 9.60936 15.0212 10.9677 15.1946C12.0279 15.3012 13.0252 15.758 13.8084 16.4957C14.788 17.2965 15.5717 18.4976 16.3552 20.4995C15.9176 21.3368 15.651 22.2562 15.5717 23.202C15.3756 24.4031 14.2982 25.304 13.1227 24.9036C10.7946 24.0463 8.34769 23.5734 5.87398 23.5023H5.67807C7.44128 20.6996 7.63719 17.9971 7.04945 15.6951ZM2.93531 10.3901V10.2901L3.21349 10.6181C3.90722 11.4474 4.88218 12.7173 5.48215 14.2937C6.76964 17.1297 6.47054 20.4533 4.69851 23.0018L0.486416 18.5978C-0.0033572 18.0973 -0.101313 17.3967 0.094604 16.696L2.83735 10.6904L2.93531 10.3901ZM12.437 1.88229L15.7675 6.1862C16.0613 6.48651 16.0613 6.78682 16.0613 7.18714C16.1532 8.21944 16.159 10.1313 16.7243 11.5209L16.845 11.7915C17.3677 13.0305 18.0247 14.2055 18.8041 15.2946C19 15.595 19 15.8953 19 16.2956L17.0409 19.2984H16.943C16.2573 17.697 15.4736 16.4957 14.4941 15.6951C13.3186 14.6942 12.1431 14.2937 11.0656 14.0936H10.6738C9.79221 12.1918 9.79221 10.6904 9.79221 9.38917C9.95414 8.05883 10.3525 6.76985 10.9677 5.58573L11.7513 3.98417L12.437 2.48276V1.88229ZM9.10651 0.38088C9.5963 0.0805681 10.0861 -0.11959 10.6738 0.0805677C11.0656 0.481034 11.2615 0.7812 11.3595 1.18167V2.1826C11.0939 2.96096 10.7999 3.72886 10.4779 4.48464L10.0861 5.18527C8.597 7.88549 8.41613 11.1383 9.5963 13.9935C8.66187 14.0811 7.74105 14.2826 6.85353 14.594H6.75558C5.97652 12.4993 4.73643 10.6157 3.13122 9.08901L3.52305 6.0862C3.621 5.68573 3.81692 5.28542 4.11077 5.08526L9.10651 0.38088Z"/></svg>
+                <span><b>Obsidian</b><small>148 Mb of memory usage</small></span>
+                <svg class="btab__close" viewBox="0 0 26 26" width="26" height="26"><path d="M10 10L16 16M16 10L10 16" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="btab" data-preview="github">
+                <svg class="btab__icon" viewBox="0 0 26 25" width="26" height="25"><path d="M10.9941 18.2734C7.64256 17.8701 5.28125 15.4757 5.28125 12.3755C5.28125 11.1153 5.73828 9.75422 6.5 8.84686C6.16991 8.01509 6.22069 6.25076 6.60156 5.51984C7.61719 5.3938 8.98828 5.92311 9.80078 6.65404C10.7656 6.35158 11.7812 6.20035 13.0254 6.20035C14.2695 6.20035 15.2852 6.35158 16.1992 6.62884C16.9863 5.92311 18.3828 5.3938 19.3984 5.51984C19.7539 6.20035 19.8047 7.96468 19.4746 8.82164C20.2871 9.77942 20.7188 11.0649 20.7188 12.3755C20.7188 15.4757 18.3574 17.8197 14.9551 18.2482C15.8183 18.8027 16.4023 20.0125 16.4023 21.3988V24.0201C16.4023 24.7761 17.0371 25.2047 17.7988 24.9022C22.3945 23.163 26 18.6011 26 12.9552C26 5.82229 20.1602 0 12.9746 0C5.78906 0 0 5.82227 0 12.9552C0 18.5506 3.58006 23.1883 8.40428 24.9275C9.08984 25.1794 9.75 24.7259 9.75 24.0454V22.0289C9.39453 22.1801 8.9375 22.2809 8.53125 22.2809C6.85547 22.2809 5.86522 21.3736 5.15428 19.6849C4.875 19.0043 4.57031 18.6011 3.98631 18.5255C3.68163 18.5002 3.58006 18.3742 3.58006 18.223C3.58006 17.9205 4.08788 17.6937 4.59569 17.6937C5.33203 17.6937 5.96678 18.1474 6.62694 19.08C7.13475 19.8109 7.66797 20.1386 8.30272 20.1386C8.9375 20.1386 9.34375 19.9117 9.92772 19.332C10.3594 18.9035 10.6894 18.5255 10.9941 18.2734Z"/></svg>
+                <span><b>Github</b><small>500 Mb of memory usage</small></span>
+                <svg class="btab__close" viewBox="0 0 26 26" width="26" height="26"><path d="M10 10L16 16M16 10L10 16" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="btab" data-preview="apple">
+                <svg class="btab__icon" viewBox="0 0 21 25" width="21" height="25"><path d="M17.5386 13.2817C17.5748 17.065 20.9625 18.324 21 18.3401C20.9714 18.4288 20.4587 20.1342 19.2152 21.8957C18.1402 23.4187 17.0246 24.936 15.2671 24.9675C13.5402 24.9983 12.985 23.9748 11.0106 23.9748C9.03688 23.9748 8.41993 24.9361 6.78522 24.9983C5.08881 25.0606 3.79697 23.3515 2.71314 21.8341C0.498364 18.7303 -1.19418 13.0635 1.07848 9.23826C2.20749 7.33865 4.22511 6.13573 6.41506 6.10489C8.08089 6.07408 9.65319 7.19125 10.6716 7.19125C11.6893 7.19125 13.6 5.84776 15.6087 6.04507C16.4496 6.07899 18.8101 6.37433 20.3258 8.52491C20.2036 8.5983 17.5093 10.1187 17.5386 13.2817ZM14.2931 3.99163C15.1937 2.93486 15.7999 1.46375 15.6345 0C14.3363 0.0505772 12.7665 0.838564 11.8353 1.89475C11.0008 2.83005 10.27 4.32705 10.4672 5.76183C11.9142 5.87035 13.3924 5.04906 14.2931 3.99163Z"/></svg>
+                <span><b>Apple</b><small>1.2 Gb of memory usage</small></span>
+                <svg class="btab__close" viewBox="0 0 26 26" width="26" height="26"><path d="M10 10L16 16M16 10L10 16" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="mc preview" data-for="github">
+              <img src="assets/img/1Z4hV4m6WcIfUKFIhxfOtAsJkA.png" alt="Aperçu de github.com">
+              <div class="preview__meta">
+                <span><b class="mc-title">www.github.com/login</b><small class="mc-sub">Github - Futur will be together</small></span>
+                <svg viewBox="0 0 26 25" width="21" height="20"><path d="M10.9941 18.2734C7.64256 17.8701 5.28125 15.4757 5.28125 12.3755C5.28125 11.1153 5.73828 9.75422 6.5 8.84686C6.16991 8.01509 6.22069 6.25076 6.60156 5.51984C7.61719 5.3938 8.98828 5.92311 9.80078 6.65404C10.7656 6.35158 11.7812 6.20035 13.0254 6.20035C14.2695 6.20035 15.2852 6.35158 16.1992 6.62884C16.9863 5.92311 18.3828 5.3938 19.3984 5.51984C19.7539 6.20035 19.8047 7.96468 19.4746 8.82164C20.2871 9.77942 20.7188 11.0649 20.7188 12.3755C20.7188 15.4757 18.3574 17.8197 14.9551 18.2482C15.8183 18.8027 16.4023 20.0125 16.4023 21.3988V24.0201C16.4023 24.7761 17.0371 25.2047 17.7988 24.9022C22.3945 23.163 26 18.6011 26 12.9552C26 5.82229 20.1602 0 12.9746 0C5.78906 0 0 5.82227 0 12.9552C0 18.5506 3.58006 23.1883 8.40428 24.9275C9.08984 25.1794 9.75 24.7259 9.75 24.0454V22.0289C9.39453 22.1801 8.9375 22.2809 8.53125 22.2809C6.85547 22.2809 5.86522 21.3736 5.15428 19.6849C4.875 19.0043 4.57031 18.6011 3.98631 18.5255C3.68163 18.5002 3.58006 18.3742 3.58006 18.223C3.58006 17.9205 4.08788 17.6937 4.59569 17.6937C5.33203 17.6937 5.96678 18.1474 6.62694 19.08C7.13475 19.8109 7.66797 20.1386 8.30272 20.1386C8.9375 20.1386 9.34375 19.9117 9.92772 19.332C10.3594 18.9035 10.6894 18.5255 10.9941 18.2734Z"/></svg>
+              </div>
+            </div>
+            <div class="preview preview--image" data-for="apple">
+              <img src="assets/img/qqWo1L1nX933enb3HiG6nFgeo.png" alt="Aperçu de apple.com">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mi">
+        <div class="mi__title">Classic Pop-ups <span class="mi__hint">interact with me ! :)</span></div>
+        <p class="mi__desc">The notification is built as a reusable component: an avatar, a sender handle, an action label, and a secondary message line, all wrapped in a rounded card. It ships in both light and dark themes so it reads clearly across the whole app.</p>
+        <div class="stage">
+          <button class="deck" id="deck" aria-expanded="false" aria-label="Expand the notifications">
+            <span class="mc pop" style="--i:0"><span class="pop__avatar"><img src="assets/img/5bwU7VMTceSOMrgYdsOR7ovTvNI.jpeg" alt=""><svg class="star" viewBox="0 0 19 20"><path d="M 9.5 0 L 11.318 5.381 L 16.218 2.929 L 13.888 8.087 L 19 10 L 13.888 11.913 L 16.218 17.071 L 11.318 14.619 L 9.5 20 L 7.682 14.619 L 2.782 17.071 L 5.112 11.913 L 0 10 L 5.112 8.087 L 2.782 2.929 L 7.682 5.381 Z"/></svg></span><span class="pop__text"><b>@migwel send a vocal message.</b><small>Open the conversation.</small></span></span>
+            <span class="mc pop" style="--i:1"><span class="pop__avatar"><img src="assets/img/5bwU7VMTceSOMrgYdsOR7ovTvNI.jpeg" alt=""><svg class="star" viewBox="0 0 19 20"><path d="M 9.5 0 L 11.318 5.381 L 16.218 2.929 L 13.888 8.087 L 19 10 L 13.888 11.913 L 16.218 17.071 L 11.318 14.619 L 9.5 20 L 7.682 14.619 L 2.782 17.071 L 5.112 11.913 L 0 10 L 5.112 8.087 L 2.782 2.929 L 7.682 5.381 Z"/></svg></span><span class="pop__text"><b>@migwel send a vocal message.</b><small>Open the conversation.</small></span></span>
+            <span class="mc pop" style="--i:2"><span class="pop__avatar"><img src="assets/img/5bwU7VMTceSOMrgYdsOR7ovTvNI.jpeg" alt=""><svg class="star" viewBox="0 0 19 20"><path d="M 9.5 0 L 11.318 5.381 L 16.218 2.929 L 13.888 8.087 L 19 10 L 13.888 11.913 L 16.218 17.071 L 11.318 14.619 L 9.5 20 L 7.682 14.619 L 2.782 17.071 L 5.112 11.913 L 0 10 L 5.112 8.087 L 2.782 2.929 L 7.682 5.381 Z"/></svg></span>
+              <span class="pop__text pop__text--one"><b>@migwel send a vocal message.</b><small>Open the conversation.</small></span>
+              <span class="pop__text pop__text--many"><b>@migwel send <strong>3</strong> vocal messages.</b><small>Expand the notifications.</small></span>
+              <svg class="pop__expand" viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-6 6M4 20l6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 2.4"/></svg>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section class="mi">
+        <div class="mi__title">Open / Close Button <span class="mi__hint">interact with me ! :)</span></div>
+        <p class="mi__desc">A single control toggles the notification between two states: collapsed into a small avatar badge, or expanded into a full card showing the sender, message, and a secondary line. Tapping the close icon shrinks it back down, keeping the interface tidy until the next alert needs attention.</p>
+        <div class="stage">
+          <div class="mc toggle" id="toggle" role="button" tabindex="0" aria-expanded="false" aria-label="Open the notification">
+            <img class="toggle__avatar toggle__avatar--closed" src="assets/img/tBFDmD0xvnVYxmP4jAjVeQcZg.png" alt="">
+            <img class="toggle__avatar toggle__avatar--open" src="assets/img/0Kp8AL9tTOO1xbl6FYWl3Zkc.png" alt="">
+            <span class="toggle__text"><b>@leoyna add a new task for your medical needs.</b><small>just booked an appointment for you, look your calendar</small></span>
+            <button class="toggle__close" aria-label="Close the notification"><svg viewBox="0 0 8 8" width="8" height="8"><path d="M1 1l6 6M7 1L1 7" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="mi">
+        <div class="mi__title">Badges Tooltip <span class="mi__hint">interact with me ! :)</span></div>
+        <p class="mi__desc">Hovering the avatar's badge opens a small tooltip listing alternate status icons, such as a warning, a favorite, and a highlight. Picking one instantly swaps the badge, giving each notification a quick, glanceable indicator without opening the card.</p>
+        <div class="stage">
+          <div class="badges" id="badges">
+            <span class="badges__avatar">
+              <img src="assets/img/83799ASJccYokINFApiD2uuuw.jpg" alt="">
+              <button class="badges__badge" aria-label="Change the badge" aria-expanded="false"><svg viewBox="0 0 16 16"><path/></svg></button>
+            </span>
+            <span class="badges__tip" role="menu">
+              <button role="menuitem" data-badge="warning" aria-label="Warning"><svg viewBox="0 0 16 16"><path d="M 8 0 L 10.828 5.172 L 16 8 L 10.828 10.828 L 8 16 L 5.172 10.828 L 0 8 L 5.172 5.172 Z" fill="#ff4926"/></svg></button>
+              <button role="menuitem" data-badge="favorite" aria-label="Favorite"><svg viewBox="0 0 16 16"><path d="M 8 0.764 L 10.351 5.528 L 15.608 6.292 L 11.804 10 L 12.702 15.236 L 8 12.764 L 3.298 15.236 L 4.196 10 L 0.392 6.292 L 5.649 5.528 Z" fill="#ffcb0f"/></svg></button>
+              <button role="menuitem" data-badge="highlight" aria-label="Highlight"><svg viewBox="0 0 16 16"><path d="M 8 0.396 L 9.736 4.792 L 14.255 3.408 L 11.9 7.506 L 15.799 10.176 L 11.127 10.89 L 11.471 15.604 L 8 12.396 L 4.529 15.604 L 4.873 10.89 L 0.201 10.176 L 4.1 7.506 L 1.745 3.408 L 6.264 4.792 Z" fill="#1c7bff"/></svg></button>
+            </span>
+          </div>
         </div>
       </section>
 
@@ -33,15 +136,11 @@
         </div>
       </section>
 
-      <section class="mi" data-test-only>
-        <div class="mi__title">Tabs Navigation · Tabs Preview · Classic Pop-ups · Open / Close Button · Badges Tooltip</div>
-        <p class="mi__desc">Ces 5 interactions sont des composants Framer : il n'y a pas de code à récupérer, il faut les recoder une par une à partir de leurs états et transitions.</p>
-        <div class="stage stage--todo"><span>Pas recodées dans cette version test <span class="issue">#10</span></span></div>
-      </section>
     </main>
   </div>
 
 {{> scripts}}
+  <script src="js/micro.js"></script>
   <script>
     // Nested Pop-ups : chaque clic ajoute une notif, au-delà de 3 elles se replient en résumé
     const feed = [

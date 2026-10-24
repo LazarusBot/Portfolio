@@ -21,7 +21,7 @@ const read = f => fs.readFileSync(f, 'utf8');
 // Version des fichiers CSS/JS calculée sur leur contenu : un navigateur ne peut pas
 // garder un ancien site.js en cache après une mise à jour
 const hash = f => require('crypto').createHash('md5').update(read(path.join(SRC, 'static', f))).digest('hex').slice(0, 8);
-const ASSETS = ['css/style.css', 'js/site.js'];
+const ASSETS = ['css/style.css', 'js/site.js', 'js/micro.js'];
 const versioned = html => ASSETS.reduce((h, f) => h.split(`"${f}"`).join(`"${f}?v=${hash(f)}"`), html);
 
 // En production : retire les pastilles de problèmes et les blocs marqués data-test-only
@@ -150,6 +150,7 @@ async function main() {
   const scan = txt => (txt.match(/\b[A-Za-z0-9]{16,40}\.(?:png|jpe?g|gif|webp)\b/g) || []).forEach(id => ids.add(id));
   written.forEach(f => scan(read(path.join(OUT, f))));
   scan(read(path.join(SRC, 'static', 'data', 'photos.json')));
+  fs.readdirSync(path.join(SRC, 'static', 'js')).forEach(f => scan(read(path.join(SRC, 'static', 'js', f))));
   fs.readdirSync(path.join(SRC, 'pages')).forEach(f => scan(read(path.join(SRC, 'pages', f))));
   const fetched = await downloadMissing(ids);
 
