@@ -1,0 +1,98 @@
+{
+  "slug": "podz",
+  "title": "Podz",
+  "sections": [
+    {
+      "title": "Description",
+      "text": [
+        "Building from scratch a shelter booking modern iOS app."
+      ],
+      "images": []
+    },
+    {
+      "title": "Logo",
+      "text": [
+        "The design system was built using IBM Plex Sans, featuring a comprehensive typography scale, an extensive icon library with over 100 custom XChange icons, and a structured color palette including brand blues, semantic states, and dark/light mode support."
+      ],
+      "images": [
+        {
+          "id": "lLMwQEQi8N79YuD9i0OwIUUcWw.png",
+          "w": 5823,
+          "h": 11378
+        },
+        {
+          "id": "zEO76mhVQtQRbd924iDfyURWoDE.png",
+          "w": 2845,
+          "h": 2845
+        },
+        {
+          "id": "v4oO7nRQERiKLhcr8T0piVf7VM.png",
+          "w": 2845,
+          "h": 2845
+        },
+        {
+          "id": "a2IhHJySt4c0pMt3no1nxTh5NGw.png",
+          "w": 2845,
+          "h": 2845
+        },
+        {
+          "id": "aDtLPFhind0m7MoUiMCLAN5Eas.png",
+          "w": 2845,
+          "h": 2845
+        },
+        {
+          "id": "R0CGNJZyxdZytbwCn1fBsCKyo.png",
+          "w": 2845,
+          "h": 2845
+        },
+        {
+          "id": "35Z4KW2zFkf0uBvGsJGMsubTfk.png",
+          "w": 2845,
+          "h": 2845
+        }
+      ]
+    },
+    {
+      "title": "Onboarding",
+      "text": [
+        "All screens were built as self-contained components in light and dark mode, covering key flows such as transactions, documents, profile, connection states, and progress indicators. Each component was designed to be reusable and consistent across the app."
+      ],
+      "images": [
+        {
+          "id": "K8UcMHw7LjS2t1Naj80e3yV3E.png",
+          "w": 1092,
+          "h": 2367
+        },
+        {
+          "id": "eXoF3FfCO64oTXKmOvu2K5ufErs.png",
+          "w": 1092,
+          "h": 2367
+        },
+        {
+          "id": "hPukeTb417hIpNw4kI8U5074A.png",
+          "w": 1092,
+          "h": 2367
+        },
+        {
+          "id": "zNNpCpROLKxOgcuOkpsUlqA6m3k.png",
+          "w": 1092,
+          "h": 2367
+        }
+      ]
+    },
+    {
+      "title": "Wireframing",
+      "text": [
+        "The wireframes focused on the core connectivity dashboard, mapping out the connection status, data plan distribution across Corporate, Personal, and eWallet accounts, and key actions like refilling the wallet or disconnecting. The layout prioritized clarity around usage and real-time state."
+      ],
+      "images": []
+    },
+    {
+      "title": "Animations",
+      "text": [
+        "The prototype demonstrated the live connected experience — showing the active VPN session timer, a stacked card wallet interface for switching between eWallet, Personal, and Corporate plans, and a filterable transaction history. It allowed stakeholders to validate key interactions before development."
+      ],
+      "images": []
+    }
+  ]
+}

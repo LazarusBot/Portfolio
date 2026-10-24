@@ -1,0 +1,85 @@
+<!-- meta {"title": "Problèmes du recodage", "lang": "fr"} -->
+{{> head}}
+<body>
+  <div class="testbar">
+    <a href="index.html">← Retour au site de test</a>
+  </div>
+
+  <div class="wrap wrap--narrow">
+    <main class="issues">
+      <h1>Ce qui pose problème pour quitter Framer</h1>
+      <p>Les 17 pages sont recodées. Les numéros correspondent aux pastilles roses du site de test. Pour régénérer le site après une modification : <code>node tools/build.js</code>.</p>
+
+      <div class="issue-item" id="p1"><span class="n">#1</span><div>
+        <h3>Images hébergées chez Framer</h3>
+        <p>Les 182 images sont maintenant dans le repo (<code>src/static/assets/img</code>, environ 32 Mo), réduites à 1600 px de large au maximum. Le build télécharge automatiquement celles qui manquent, plus aucune page ne dépend de framerusercontent.com.</p>
+      </div><span class="lvl lvl--done">Résolu</span></div>
+
+      <div class="issue-item" id="p2"><span class="n">#2</span><div>
+        <h3>La police Neue Montreal est payante</h3>
+        <p>Le nom et « Product Designer » utilisent Neue Montreal (Pangram Pangram), servie par Framer. Hors de Framer, il te faut ta propre licence web, sinon une alternative gratuite. Le test utilise Inter Tight : c'est proche, mais un peu différent.</p>
+      </div><span class="lvl lvl--mid">À décider</span></div>
+
+      <div class="issue-item" id="p3"><span class="n">#3</span><div>
+        <h3>Les cartes projets ne sont pas des liens sur le site actuel</h3>
+        <p>Sur maxence.fyi, cliquer sur une carte ne mène nulle part. Dans le test, ce sont de vrais liens. Raising Studio est confirmé (même image que dans l'étude de cas). Les autres liens sont déduits des noms Framer. La carte « Set of logos redesign » (appelée « Carddi » dans Framer) mène à logoset. Sur visual, la carte du tableau mène à axeinos. Carddi, Sensia, Padel World et Interface design (appstore) ne sont liés depuis aucune page, comme sur le site actuel.</p>
+      </div><span class="lvl lvl--mid">À confirmer</span></div>
+
+      <div class="issue-item" id="p4"><span class="n">#4</span><div>
+        <h3>La carte Micro-interactions est un composant animé Framer</h3>
+        <p>La carte n'a pas d'image : c'est un composant Framer avec une animation. Le test le remplace par un point qui pulse en CSS. Pour retrouver l'animation exacte, il faut la recoder ou l'exporter en vidéo ou en GIF.</p>
+      </div><span class="lvl lvl--low">Mineur</span></div>
+
+      <div class="issue-item" id="p5"><span class="n">#5</span><div>
+        <h3>Page visual : deux cartes ont la même légende</h3>
+        <p>Les deux cartes affichent « Set of logos redesign. », alors qu'elles mènent à Axeinos et à Quantum Pulse. C'est sûrement un oubli sur Framer, je les ai laissées telles quelles.</p>
+      </div><span class="lvl lvl--low">Contenu</span></div>
+
+      <div class="issue-item" id="p6"><span class="n">#6</span><div>
+        <h3>Le CMS de Photographs devient un fichier JSON</h3>
+        <p>Les photos sont listées dans <code>src/static/data/photos.json</code>. Pour en ajouter une : déposer l'image dans <code>assets/img</code>, ajouter une ligne, lancer le build. La grille de photographs et la bande de photos du profil mobile se mettent à jour toutes les deux. Si tu veux une interface d'admin comme sur Framer, il faudra ajouter Decap CMS.</p>
+      </div><span class="lvl lvl--done">Fonctionne</span></div>
+
+      <div class="issue-item" id="p7"><span class="n">#7</span><div>
+        <h3>Photographs : les infos EXIF sont des valeurs de remplissage</h3>
+        <p>Les 6 photos affichent exactement les mêmes réglages (ISO 50, ƒ1,5, 1/461 s), et la 02 a une faute (« 26m »). Je les ai reprises telles quelles. Les vraies valeurs pourraient être lues automatiquement depuis les fichiers.</p>
+      </div><span class="lvl lvl--low">Contenu</span></div>
+
+      <div class="issue-item" id="p8"><span class="n">#8</span><div>
+        <h3>About : le compteur « +0 years » du tennis</h3>
+        <p>Le site actuel affiche « +0 years ». Soit l'animation de compteur est cassée, soit la valeur manque. Le test a un compteur animé qui fonctionne, il suffit de changer <code>data-count-to</code> dans <code>src/pages/about.html</code>.</p>
+      </div><span class="lvl lvl--low">Contenu</span></div>
+
+      <div class="issue-item" id="p9"><span class="n">#9</span><div>
+        <h3>Animations de about : recodées en CSS</h3>
+        <p>Les accordéons, l'éventail d'images qui s'ouvre au survol, le défilement infini des affiches et le zoom sur les robots sont recodés sans librairie. Les courbes d'animation ne sont pas exactement celles de Framer : compare les deux côte à côte.</p>
+      </div><span class="lvl lvl--done">Fonctionne</span></div>
+
+      <div class="issue-item" id="p10"><span class="n">#10</span><div>
+        <h3>Microinteractions : 5 composants interactifs restent à recoder</h3>
+        <p>Chaque démo est un composant Framer avec ses états et ses transitions, sans code récupérable. Nested Pop-ups et Process Button sont recodés. Il reste Tabs Navigation, Tabs Preview, Classic Pop-ups, Open / Close Button et Badges Tooltip.</p>
+      </div><span class="lvl lvl--high">Reste à faire</span></div>
+
+      <div class="issue-item" id="p11"><span class="n">#11</span><div>
+        <h3>Header et profil partagés entre les pages</h3>
+        <p>Il y a maintenant un petit build sans dépendance (<code>tools/build.js</code>). Le header, le profil, le head et les scripts sont écrits une seule fois dans <code>src/partials</code>. Changer l'email, c'est modifier un seul fichier. Le site généré va dans <code>test/</code>, c'est ce dossier qui sera publié sur GitHub Pages.</p>
+      </div><span class="lvl lvl--done">Résolu</span></div>
+
+      <div class="issue-item" id="p12"><span class="n">#12</span><div>
+        <h3>Études de cas : générées, mais avec une mise en page simplifiée</h3>
+        <p>Les 11 études de cas sont importées depuis le site actuel par <code>tools/import-framer.py</code> (titres, textes, images) et générées depuis un seul modèle. Différence avec Framer : les images de chaque section sont rangées dans une grille automatique (2, 3 ou 4 colonnes selon leur format), et non dans les compositions faites à la main. Le mur de logos qui défile sur logoset est recodé en CSS. Les sections Wireframing et Animations de Podz n'ont pas de visuel, déjà sur le site actuel.</p>
+      </div><span class="lvl lvl--mid">À relire</span></div>
+
+      <div class="issue-item" id="p13"><span class="n">#13</span><div>
+        <h3>Version mobile</h3>
+        <p>Les composants propres au mobile de Framer sont recodés : le bouton « + » qui se transforme en « × » et déplie product / visual / about en pastilles, et la bande de photos défilante du profil qui mène à Photographs. Sous 810 px, la photo de profil laisse sa place à la bande, comme sur Framer.</p>
+      </div><span class="lvl lvl--done">Résolu</span></div>
+
+      <div class="issue-item" id="p14"><span class="n">#14</span><div>
+        <h3>Statistiques de visites, pages oubliées et URLs</h3>
+        <p>Les stats Framer (events.framer.com) disparaissent, à remplacer par GoatCounter, Umami ou rien. Le sitemap publie aussi <code>/old-home</code>, que je n'ai pas recodé. Les URLs restent identiques sur GitHub Pages : <code>/about</code> sert automatiquement <code>about.html</code>.</p>
+      </div><span class="lvl lvl--low">Mineur</span></div>
+    </main>
+  </div>
+</body>
+</html>

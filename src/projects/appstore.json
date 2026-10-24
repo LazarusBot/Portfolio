@@ -1,0 +1,58 @@
+{
+  "slug": "appstore",
+  "title": "Interface design",
+  "sections": [
+    {
+      "title": "Description",
+      "text": [
+        "Building from scratch the design system & composants to refresh an old connnectivity app."
+      ],
+      "images": []
+    },
+    {
+      "title": "Design System",
+      "text": [
+        "The design system was built using IBM Plex Sans, featuring a comprehensive typography scale, an extensive icon library with over 100 custom XChange icons, and a structured color palette including brand blues, semantic states, and dark/light mode support."
+      ],
+      "images": [
+        {
+          "id": "DrRZvcZEshOjG2hsYVo4qkqkk4.png",
+          "w": 1140,
+          "h": 681
+        }
+      ]
+    },
+    {
+      "title": "Components",
+      "text": [
+        "All screens were built as self-contained components in light and dark mode, covering key flows such as transactions, documents, profile, connection states, and progress indicators. Each component was designed to be reusable and consistent across the app."
+      ],
+      "images": []
+    },
+    {
+      "title": "Wireframing",
+      "text": [
+        "The wireframes focused on the core connectivity dashboard, mapping out the connection status, data plan distribution across Corporate, Personal, and eWallet accounts, and key actions like refilling the wallet or disconnecting. The layout prioritized clarity around usage and real-time state."
+      ],
+      "images": [
+        {
+          "id": "jifeTnS6IkX0u3UqnthU5Ou7aE.png",
+          "w": 652,
+          "h": 809
+        },
+        {
+          "id": "Z0XRFeclmorO9tKhQPWF44jkQGg.png",
+          "w": 1117,
+          "h": 810
+        }
+      ]
+    },
+    {
+      "title": "Prototyping",
+      "text": [
+        "The prototype demonstrated the live connected experience — showing the active VPN session timer, a stacked card wallet interface for switching between eWallet, Personal, and Corporate plans, and a filterable transaction history. It allowed stakeholders to validate key interactions before development."
+      ],
+      "images": []
+    }
+  ]
+}

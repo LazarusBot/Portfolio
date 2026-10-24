@@ -1,0 +1,91 @@
+<!-- meta {"title": "Maxence — About"} -->
+{{> head}}
+<body>
+{{> topbar}}
+
+  <div class="wrap">
+{{> header}}
+
+{{> profile}}
+
+    <main>
+      <div class="intro">
+        <p>I’m an independent product designer based in "la ville rose" also known as Toulouse.</p>
+        <p>Currently looking for a project that I truly believe in and into which I can pour all my creativity.</p>
+      </div>
+
+      <details class="acc" open>
+        <summary>Experience</summary>
+        <div class="acc__body">
+          <div class="row"><span>Product Designer, Marlink</span><span>2024 → now</span></div>
+          <div class="row"><span>iOS Developer, Collins Aerospace</span><span>2023 → 2024</span></div>
+          <div class="row"><span>Product Designer &amp; iOS Developer, Marlink</span><span>2022 → 2023</span></div>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>Sports</summary>
+        <div class="acc__body">
+          <div class="sport">
+            <div class="sport__head"><span>Tennis</span><span><span data-count-to="0">+0</span> years <a class="issue" href="problemes.html#p8" title="Le compteur affiche +0 sur le site actuel">#8</a></span></div>
+            <p>It has taught me discipline and how to handle pressure. Every point is a split-second decision.</p>
+            <img src="assets/img/DQlbEr9qRo6KCxI5UX4d485a21M.gif" alt="Tennis" loading="lazy">
+            <div class="sport__foot"><span>UTR <b>10.24</b> or FR <b>3/6</b></span><span>Stade Toulousain Tennis Club</span></div>
+          </div>
+          <div class="sport">
+            <div class="sport__head"><span>Basket</span><span>only 2 years</span></div>
+            <p>Teamwork, reading the field, and adapting on the fly: skills that naturally translate to teamwork.</p>
+            <img src="assets/img/JXG330tUsQhTrd8JXgZqX7snfs.png" alt="Basket" loading="lazy">
+            <div class="sport__foot"><span>Can't even dunk <b>:/</b></span><span>Local ranked</span></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc" open>
+        <summary>Things of interest</summary>
+        <div class="acc__body">
+          <div class="topic">
+            <h3>Topics: Art <span class="issue" title="Éventail recodé en CSS (survol)">#9</span></h3>
+            <p>This is everywhere, from a little touch of red on a painting to a spatial turbine piece.</p>
+            <div class="fan">
+              <figure><figcaption>(1)</figcaption><img src="assets/img/DAkowFJZXowYyjt18Cf18qX7pBU.jpg" alt=""></figure>
+              <figure><figcaption>(2)</figcaption><img src="assets/img/TIL3po9cFJKGmrLLXOPNJwUS4N8.jpg" alt=""></figure>
+              <figure><figcaption>(3)</figcaption><img src="assets/img/fcFSEtR4zArpgD4I0hBVsW2J9R8.jpg" alt=""></figure>
+              <figure><figcaption>(4)</figcaption><img src="assets/img/VtQw3mBDaHxQVAsekb8MbuqN0KQ.jpeg" alt=""></figure>
+            </div>
+          </div>
+
+          <div class="topic">
+            <h3>Topics: Visual Graphic <span class="issue" title="Défilement infini recodé en CSS">#9</span></h3>
+            <p>I love it when suddenly all the images, typographies and layout are matching in chorus.</p>
+            <div class="marquee">
+              <div class="marquee__track" id="marquee"></div>
+            </div>
+          </div>
+
+          <div class="topic" style="border:0">
+            <h3>Topics: Humanoid Robots</h3>
+            <p>Ever since my first job in the welding robotics industry, I’ve been constantly learning more about the robotics field. I’d like to contribute to it as a designer in the future.</p>
+            <div class="robots">
+              <img src="assets/img/GC9KAG5Ma0qwurTvvXSGFuY0g4.webp" alt="">
+              <img src="assets/img/T6ofIyk8pncUSCzj0roNAUbsa0.jpg" alt="">
+              <img src="assets/img/mMJnQViIkquW0XzJNIh27ZMVCTs.webp" alt="">
+              <img src="assets/img/d4ME8lz1fRiaI3u36uHWb9Du36c.jpg" alt="">
+            </div>
+          </div>
+        </div>
+      </details>
+      <div style="height:120px"></div>
+    </main>
+  </div>
+
+{{> scripts}}
+  <script>
+    // Le défilement est doublé pour boucler sans saut
+    const posters = ['C0b0R3tB6paHghignbOE2XXEQ.png', 't40z2YvFVQMQg3u5aMIq38JLoI4.png', 'THFzKBq4UbI4dOWhIRNMkIsGKAw.png',
+                     'V9rbhVdFnfeUc6IeMGH83kS4HV0.png', 'pFnawRAd2vf75IAf3itWvQanJQ.png', 'hk6Zf00a4kspZgVoszIPAwLKQOU.png'];
+    const html = posters.map(p => `<img src="${IMG(p)}" alt="" loading="lazy">`).join('');
+    document.getElementById('marquee').innerHTML = html + html;
+  </script>
+</body>
+</html>

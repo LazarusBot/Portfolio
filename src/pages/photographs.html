@@ -1,0 +1,51 @@
+<!-- meta {"title": "Photographs — Maxence Prioux"} -->
+{{> head}}
+<body>
+{{> topbar}}
+
+  <div class="wrap wrap--narrow">
+    <p class="crumb"><a href="visual.html">Home /</a> <strong>Photographs</strong>
+      <a class="issue" href="problemes.html#p6" title="Le CMS Framer est remplacé par data/photos.json">#6 CMS → JSON</a>
+    </p>
+    <p class="lead">A collection of moments, places, and people.
+      <a class="issue" href="problemes.html#p7" title="EXIF identiques partout, faute sur la 02">#7</a>
+    </p>
+
+    <main class="photos" id="photos"></main>
+  </div>
+
+  <div class="lightbox" id="lightbox"><img alt=""></div>
+
+{{> scripts}}
+  <script>
+    // Remplace le CMS Framer : pour ajouter une photo, ajouter une ligne dans data/photos.json
+    const grid = document.getElementById('photos');
+    const box = document.getElementById('lightbox');
+
+    fetch('data/photos.json')
+      .then(r => r.json())
+      .then(photos => {
+        grid.innerHTML = photos.map((p, i) => `
+          <figure class="photo" data-full="${IMG(p.image)}">
+            <div class="photo__media">
+              <img src="${IMG(p.image)}" alt="${p.alt}" loading="lazy">
+              <span class="photo__exif">${p.exif}</span>
+            </div>
+            <figcaption class="photo__num">${String(i + 1).padStart(2, '0')}</figcaption>
+          </figure>`).join('');
+      })
+      .catch(() => {
+        grid.innerHTML = '<p class="lead">Impossible de charger data/photos.json (la page doit être servie par un serveur, pas ouverte en file://).</p>';
+      });
+
+    grid.addEventListener('click', e => {
+      const fig = e.target.closest('.photo');
+      if (!fig) return;
+      box.querySelector('img').src = fig.dataset.full;
+      box.classList.add('open');
+    });
+    box.addEventListener('click', () => box.classList.remove('open'));
+    document.addEventListener('keydown', e => e.key === 'Escape' && box.classList.remove('open'));
+  </script>
+</body>
+</html>

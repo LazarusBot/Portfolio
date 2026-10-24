@@ -1,0 +1,92 @@
+{
+  "slug": "carddi",
+  "title": "Carddi",
+  "sections": [
+    {
+      "title": "Description",
+      "text": [
+        "An app to follow your tasks."
+      ],
+      "images": []
+    },
+    {
+      "title": "The challenge",
+      "text": [
+        "To-do apps are everywhere. Most of them get abandoned after two weeks. The challenge: make task management feel like something you'd actually want to open every morning not something you avoid."
+      ],
+      "images": [
+        {
+          "id": "slf54ZuBleYT4oX3IDXj0ttj6o.png",
+          "w": 2845,
+          "h": 2134
+        },
+        {
+          "id": "ORZFpxkRg0nFU8zf6Ol0RMuk2AI.png",
+          "w": 395,
+          "h": 832
+        },
+        {
+          "id": "YIO10fPPqmQF6OeryVnfPyr16I.png",
+          "w": 395,
+          "h": 832
+        },
+        {
+          "id": "XQKedUWAHaHUdE9UU9JphJguak.png",
+          "w": 399,
+          "h": 836
+        }
+      ]
+    },
+    {
+      "title": "The strategy",
+      "text": [
+        "The answer was to make it tactile. Cards you swipe, stack, and sort, not lists you scroll past. Grouping tasks into decks gives your work a shape. You see what's on your day at a glance, instead of drowning in one endless feed.\""
+      ],
+      "images": [
+        {
+          "id": "Z0DC7R53i2UyVg3o23tKTUw7G8.png",
+          "w": 399,
+          "h": 836
+        },
+        {
+          "id": "XR3rN2XCzGX6DMI0echhEvCIpNg.png",
+          "w": 399,
+          "h": 836
+        },
+        {
+          "id": "Q5PWuNHfFTk0opLFej4Xxx2Do.png",
+          "w": 395,
+          "h": 832
+        }
+      ]
+    },
+    {
+      "title": "The result",
+      "text": [
+        "Carddi is a concept project — but the problem it solves is real. I wanted to explore what a task app looks like when it's designed around how people actually think, not around feature lists. Every screen went through at least three iterations before it felt right."
+      ],
+      "images": [
+        {
+          "id": "AjGerenR7kM2uXjudhNRmPJyThY.png",
+          "w": 399,
+          "h": 836
+        },
+        {
+          "id": "5fppNPKU9nXO1bUMKl4XlSHYsuA.png",
+          "w": 395,
+          "h": 832
+        },
+        {
+          "id": "xP9rlAGzL77IaqxpscOVyCc4k.png",
+          "w": 395,
+          "h": 832
+        }
+      ]
+    },
+    {
+      "title": "Next project",
+      "text": [],
+      "images": []
+    }
+  ]
+}

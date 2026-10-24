@@ -1,0 +1,7 @@
+# Sites générés par tools/build.js
+test/
+dist/
+
+.DS_Store
+.claude/
+__pycache__/
