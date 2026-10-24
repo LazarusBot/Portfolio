@@ -226,3 +226,7 @@ img { display: block; max-width: 100%; }
 .years { font-style: italic; }
 .sport + .sport { padding-top: 30px; border-top: 1px solid #dedede; }
 .topic { border-bottom-color: #dedede; }
+
+/* Vidéos remplaçant des GIF : pas de bouton lecture si le navigateur bloque la lecture auto */
+video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+video::-webkit-media-controls { display: none !important; }

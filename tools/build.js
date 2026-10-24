@@ -29,14 +29,16 @@ const clean = html => versioned(toVideo(!PROD ? html : html
   .replace(/ ?<(span|a) class="issue[^"]*"[^>]*>[^<]*<\/\1>/g, '')
   .replace(/\n?\s*<(section|div)[^>]*data-test-only[^>]*>[\s\S]*?<\/\1>/g, '')));
 
-// Les GIF convertis par tools/convert-gifs.sh deviennent des vidéos muettes en boucle
-const hasMp4 = id => fs.existsSync(path.join(IMG_DIR, `${id}.mp4`));
+// Les GIF convertis par tools/convert-gifs.sh deviennent un WebP animé (une image, comme le GIF)
+// ou, s'il était trop lourd en WebP, une vidéo muette en boucle
+const has = (id, ext) => fs.existsSync(path.join(IMG_DIR, `${id}.${ext}`));
 function toVideo(html) {
+  html = html.replace(/assets\/img\/(\w+)\.gif/g, (m, id) => (has(id, 'webp') ? `assets/img/${id}.webp` : m));
   // Survol des cartes : la vidéo n'est chargée et lancée qu'au survol (voir site.js)
   html = html.replace(/<img class="card__hover" data-gif="assets\/img\/(\w+)\.gif" alt="">/g, (m, id) =>
-    hasMp4(id) ? `<video class="card__hover" data-src="assets/img/${id}.mp4" muted loop playsinline preload="none"></video>` : m);
+    has(id, 'mp4') ? `<video class="card__hover" data-src="assets/img/${id}.mp4" muted loop playsinline preload="none"></video>` : m);
   return html.replace(/<img([^>]*?) src="assets\/img\/(\w+)\.gif"([^>]*)>/g, (m, before, id, after) => {
-    if (!hasMp4(id)) return m;
+    if (!has(id, 'mp4')) return m;
     const attrs = before + after;
     const keep = (attrs.match(/ (?:class|width|height)="[^"]*"/g) || []).join('');
     const alt = attrs.match(/ alt="([^"]+)"/);
