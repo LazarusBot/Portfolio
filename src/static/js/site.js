@@ -19,6 +19,22 @@ document.querySelectorAll('.card__hover[data-gif], .card__hover[data-src]').forE
   if (media.tagName === 'VIDEO') card.addEventListener('mouseleave', () => media.pause());
 });
 
+// Sur un appareil avec souris, précharge l'animation de survol quand la carte approche de
+// l'écran : au survol elle démarre tout de suite au lieu d'attendre le téléchargement
+if (matchMedia('(hover: hover) and (pointer: fine)').matches && 'IntersectionObserver' in window) {
+  const preload = new IntersectionObserver(entries => entries.forEach(({ isIntersecting, target }) => {
+    if (!isIntersecting) return;
+    preload.unobserve(target);
+    if (target.tagName === 'VIDEO') {
+      target.preload = 'auto';
+      target.src = target.dataset.src;
+    } else {
+      new Image().src = target.dataset.gif;
+    }
+  }), { rootMargin: '300px 0px' });
+  document.querySelectorAll('.card__hover[data-gif], .card__hover[data-src]').forEach(m => preload.observe(m));
+}
+
 // Menu mobile : le bouton « + » déplie la nav en pastilles
 const menuBtn = document.querySelector('.menu-btn');
 if (menuBtn) {

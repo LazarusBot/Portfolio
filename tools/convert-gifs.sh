@@ -17,6 +17,7 @@ IMG=src/static/assets/img
 ORIG=src/originals
 MIN_KB=${MIN_KB:-300}
 MAX_WEBP_KB=${MAX_WEBP_KB:-2048}
+MAX_W=${MAX_W:-1200}
 mkdir -p "$ORIG"
 size_kb() { echo $(( $(stat -f%z "$1") / 1024 )); }
 
@@ -28,7 +29,14 @@ for gif in "$IMG"/*.gif "$ORIG"/*.gif; do
   [ "$kb" -ge "$MIN_KB" ] || continue
   rm -f "$IMG/$id.webp" "$IMG/$id.mp4"
 
-  gif2webp -quiet -lossy -q 70 -m 4 -mt "$gif" -o "$IMG/$id.webp"
+  # Réduit à MAX_W px de large avant le WebP : un grand WebP animé se décode lentement
+  # (surtout dans Safari) et l'animation paraît ralentie
+  small="$(mktemp -t gif).gif"
+  ffmpeg -loglevel error -y -i "$gif" \
+    -vf "scale='min($MAX_W,iw)':-2:flags=lanczos,split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=sierra2_4a" \
+    "$small"
+  gif2webp -quiet -lossy -q 70 -m 4 -mt "$small" -o "$IMG/$id.webp"
+  rm -f "$small"
   if [ "$(size_kb "$IMG/$id.webp")" -le "$MAX_WEBP_KB" ]; then
     out="$IMG/$id.webp"
   else
