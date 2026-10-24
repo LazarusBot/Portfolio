@@ -83,13 +83,14 @@ async function chessData() {
     return saved;
   }
 }
+// Le chiffre change de catégorie à chaque survol : Rapid → Blitz → Puzzles (meilleurs scores)
 function chessLine(c) {
-  const r = c.rapid, best = r.best ?? r.rating;
-  return `<span class="chess" data-chess="${c.username}">
+  const best = c.rapid.best ?? c.rapid.rating;
+  const values = [['Rapid', best], ['Blitz', c.blitz], ['Puzzles', c.puzzles]].filter(([, v]) => v);
+  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}'>
           <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.8 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
           <span class="chess__label">Currently playing on Chess.com</span>
-          <span class="chess__elo"><small>Rapid</small> <b data-chess-rating="${best}">${best}</b></span>
-          <span class="chess__card" data-chess-card>Blitz <b>${c.blitz ?? '—'}</b><i></i>Puzzles <b>${c.puzzles ?? '—'}</b></span>
+          <span class="chess__elo" aria-live="polite"><span class="chess__value"><small>Rapid</small> <b>${best}</b></span></span>
         </span>`;
 }
 

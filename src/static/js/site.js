@@ -160,33 +160,54 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   addEventListener('resize', apply);
 });
 
-// Meilleur classement Chess.com (Rapid) : le chiffre enregistré au build défile depuis 0, puis la page
-// demande les valeurs du moment à Chess.com (Rapid, et au survol Blitz et Puzzles) et les affiche si elles ont changé
+// Meilleurs classements Chess.com. Le premier (Rapid) défile depuis 0 au chargement ; chaque survol
+// (ou toucher, sur mobile) passe au suivant : Rapid → Blitz → Puzzles. Les valeurs enregistrées au build
+// sont remplacées par celles du moment dès que Chess.com répond.
 document.querySelectorAll('[data-chess]').forEach(line => {
-  const num = line.querySelector('[data-chess-rating]'), card = line.querySelector('[data-chess-card]');
-  let shown = 0;
-  const countTo = to => {
-    const from = shown, t0 = performance.now(), dur = 900;
+  const pill = line.querySelector('.chess__elo');
+  let values = JSON.parse(line.dataset.chessValues), i = 0, shown = 0, busy = false;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const countUp = (b, to) => {
+    const t0 = performance.now(), dur = 900;
     const step = t => {
-      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-      shown = Math.round(from + (to - from) * e);
-      num.textContent = shown;
+      const k = Math.min(1, (t - t0) / dur);
+      shown = Math.round(to * (1 - Math.pow(1 - k, 3)));
+      b.textContent = shown;
       if (k < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   };
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) shown = +num.dataset.chessRating;
-  else countTo(+num.dataset.chessRating);
+  const first = pill.querySelector('b');
+  if (!calm) countUp(first, values[0][1]);
+  // L'ancienne valeur monte et s'efface, la nouvelle arrive par en dessous
+  const next = () => {
+    if (busy || values.length < 2) return;
+    busy = true;
+    i = (i + 1) % values.length;
+    const [label, val] = values[i];
+    const old = pill.querySelector('.chess__value');
+    const neu = document.createElement('span');
+    neu.className = 'chess__value is-in';
+    neu.innerHTML = `<small>${label}</small> <b>${val}</b>`;
+    pill.style.width = `${pill.offsetWidth}px`;
+    pill.append(neu);
+    old.classList.add('is-out');
+    requestAnimationFrame(() => {
+      pill.style.width = `${neu.scrollWidth + 18}px`;
+      neu.classList.remove('is-in');
+    });
+    setTimeout(() => { old.remove(); pill.style.width = ''; busy = false; }, calm ? 0 : 320);
+  };
+  line.addEventListener('pointerenter', e => e.pointerType === 'mouse' && next());
+  line.addEventListener('click', next);
   fetch(`https://api.chess.com/pub/player/${line.dataset.chess}/stats`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
     .then(({ chess_rapid: r, chess_blitz: b, tactics: t }) => {
-      const best = r?.best?.rating ?? r?.last?.rating;
-      if (!best) return;
-      const vals = card.querySelectorAll('b');
-      const blitz = b?.best?.rating ?? b?.last?.rating, puzzles = t?.highest?.rating;
-      if (blitz) vals[0].textContent = blitz;
-      if (puzzles) vals[1].textContent = puzzles;
-      if (best !== +num.dataset.chessRating) { num.dataset.chessRating = best; countTo(best); }
+      const fresh = [['Rapid', r?.best?.rating ?? r?.last?.rating], ['Blitz', b?.best?.rating ?? b?.last?.rating], ['Puzzles', t?.highest?.rating]].filter(([, v]) => v);
+      if (!fresh.length) return;
+      values = fresh;
+      const cur = values.find(([l]) => l === pill.querySelector('small').textContent);
+      if (cur) pill.querySelector('b').textContent = cur[1];
     })
     .catch(() => {});
 });
