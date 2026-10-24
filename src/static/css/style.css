@@ -72,7 +72,7 @@ img { display: block; max-width: 100%; }
               transition: width .3s cubic-bezier(.34, 1.4, .64, 1), background .25s, color .25s; }
 .chess__value { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; line-height: 22px; transition: translate .3s cubic-bezier(.34, 1.4, .64, 1), opacity .2s; }
 .chess__value small { font-size: 11px; }
-.chess__value b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.chess__value b { font-weight: 600; font-variant-numeric: tabular-nums; color: #000; }
 /* Pendant le changement, les deux valeurs se superposent : l'une sort par le haut, l'autre entre par le bas */
 .chess__value.is-out { position: absolute; left: 9px; top: 0; translate: 0 -100%; opacity: 0; }
 .chess__value.is-in { translate: 0 100%; opacity: 0; }
