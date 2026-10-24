@@ -93,7 +93,17 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
     });
   });
   pouch.addEventListener('pointerleave', () => stickers.forEach(st => { st.style.removeProperty('--px'); st.style.removeProperty('--py'); }));
-  pouch.addEventListener('click', () => { pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake'); });
+  // Au clic, le sachet se secoue et les stickers en sortent à moitié, vers l'extérieur ; un autre clic les range
+  stickers.forEach((st, i) => {
+    const x = parseFloat(st.style.getPropertyValue('--x')) - 50, y = parseFloat(st.style.getPropertyValue('--y')) - 50;
+    const d = Math.hypot(x, y) || 1;
+    st.style.setProperty('--ox', `${(x / d * 34 + (i % 2 ? 6 : -6)).toFixed(0)}%`);
+    st.style.setProperty('--oy', `${(y / d * 24 - 16).toFixed(0)}%`);
+  });
+  pouch.addEventListener('click', () => {
+    pouch.classList.remove('is-shake'); void pouch.offsetWidth; pouch.classList.add('is-shake');
+    pouch.classList.toggle('is-out');
+  });
   pouch.addEventListener('animationend', e => e.target === pouch && pouch.classList.remove('is-shake'));
 });
 

@@ -23,7 +23,8 @@
           "w": 313,
           "h": 467
         }
-      ]
+      ],
+      "layout": "row"
     },
     {
       "title": "Primary logo",
@@ -72,7 +73,8 @@
         {
           "id": "PWjHoSHqc9XpYuGibZgUbthHugM.gif",
           "w": 638,
-          "h": 352
+          "h": 352,
+          "full": true
         }
       ],
       "bag": {
@@ -81,7 +83,9 @@
           "UhFAwHhk6vyAUlMuHOusmYBw.png",
           "I65AuRONTT8JAeDg76YKwevhKw.png"
         ]
-      }
+      },
+      "layout": "row",
+      "bagFirst": true
     }
   ]
 }

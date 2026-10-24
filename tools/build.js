@@ -73,8 +73,22 @@ function pageMeta(src) {
   return m ? [JSON.parse(m[1]), src.slice(m[0].length)] : [{}, src];
 }
 
-// Mise en page d'une rangée d'images selon leur format dominant
-function gallery(images) {
+// Mise en page d'une rangée d'images selon leur format dominant.
+// layout "row" : une seule rangée à hauteur égale, chaque image prend une largeur proportionnelle à son format.
+// Une image marquée "full" passe après, sur toute la largeur.
+function gallery(images, layout) {
+  const full = images.filter(i => i.full).map(i => `\n        <img class="gallery-full" src="assets/img/${i.id}" alt=""${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">`).join('');
+  images = images.filter(i => !i.full);
+  if (layout === 'row' && images.length) {
+    const imgs = images.map(i => {
+      const r = i.w && i.h ? i.w / i.h : 1;
+      return `<img src="assets/img/${i.id}" alt="" style="--r:${r.toFixed(3)}"${r > 1.3 ? ' data-wide' : ''} loading="lazy">`;
+    }).join('\n          ');
+    return `\n        <div class="gallery-row">\n          ${imgs}\n        </div>${full}`;
+  }
+  return galleryGrid(images) + full;
+}
+function galleryGrid(images) {
   if (!images.length) return '';
   const ratio = images.map(i => (i.w && i.h ? i.w / i.h : 1.5));
   const avg = ratio.reduce((a, b) => a + b, 0) / ratio.length;
@@ -108,7 +122,7 @@ function projectSections(p) {
   return p.sections.map(s => `
       <section class="section">
         <h2>${esc(s.title)}</h2>
-        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${gallery(s.images)}${bag(s.bag)}
+        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${s.bagFirst ? bag(s.bag) + gallery(s.images, s.layout) : gallery(s.images, s.layout) + bag(s.bag)}
       </section>`).join('\n') + (p.wall ? `
       <section class="wall" aria-label="Logos">
         ${[0, 1, 2, 3].map(c => `<div class="wall__col"><div class="wall__track">${

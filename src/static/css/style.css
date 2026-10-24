@@ -437,18 +437,29 @@ video::-webkit-media-controls { display: none !important; }
 }
 
 
+/* Rangée à hauteur égale (layout "row") et image pleine largeur ("full") des études de cas */
+.gallery-row { display: flex; gap: 20px; margin-top: 20px; }
+.gallery-row img { flex: var(--r) 1 0; min-width: 0; width: 100%; height: auto; aspect-ratio: var(--r); object-fit: cover; background: var(--card); }
+.gallery-full { display: block; width: 100%; height: auto; margin-top: 20px; background: var(--card); }
+@media (max-width: 809px) {
+  .gallery-row { flex-wrap: wrap; gap: 8px; }
+  .gallery-row img { flex-basis: calc(50% - 4px); flex-grow: 0; }
+  .gallery-row img[data-wide] { flex-basis: 100%; order: -1; }
+}
+
 /* Sachet de stickers (Aer, Peregresss, Raising) : les stickers flottent sous le plastique */
 .bag { display: grid; place-items: center; margin-top: 20px; padding: 50px 0; background: #ececec; }
 .bag__pouch { position: relative; width: min(360px, 70%); aspect-ratio: 1249 / 1600; cursor: pointer; transform-origin: 50% 8%; }
 .bag__pouch.is-shake { animation: bag-shake .9s cubic-bezier(.3, 0, .3, 1); }
-.bag__plastic { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .12)); }
+.bag__plastic { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .12)); }
 .bag__sticker { position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto; translate: calc(-50% + var(--px, 0px)) calc(-50% + var(--py, 0px)); rotate: var(--r);
                 filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .15)); animation: bag-float 5s ease-in-out var(--d) infinite; transition: translate .9s cubic-bezier(.2, .8, .2, 1); }
 @keyframes bag-float { 33% { rotate: calc(var(--r) + 4deg); scale: 1.02; } 66% { rotate: calc(var(--r) - 3deg); scale: .99; } }
 @keyframes bag-shake { 15% { rotate: -5deg; } 35% { rotate: 4deg; } 55% { rotate: -2.5deg; } 75% { rotate: 1.2deg; } 100% { rotate: 0deg; } }
-.bag__pouch.is-shake .bag__sticker { animation: bag-jumble .9s cubic-bezier(.3, 0, .3, 1); }
-@keyframes bag-jumble { 30% { translate: calc(-50% + 6px) calc(-50% - 14px); } 60% { translate: calc(-50% - 4px) calc(-50% + 6px); } }
-@media (prefers-reduced-motion: reduce) { .bag__sticker, .bag__pouch.is-shake, .bag__pouch.is-shake .bag__sticker { animation: none; } }
+/* Au clic, les stickers sortent à moitié du sachet (au-dessus du plastique), un second clic les range */
+.bag__pouch.is-out .bag__sticker { z-index: 2; translate: calc(-50% + var(--px, 0px) + var(--ox, 0px)) calc(-50% + var(--py, 0px) + var(--oy, 0px)); rotate: calc(var(--r) * 2.2);
+                                   transition: translate .7s cubic-bezier(.34, 1.56, .64, 1), rotate .7s cubic-bezier(.34, 1.56, .64, 1); }
+@media (prefers-reduced-motion: reduce) { .bag__sticker, .bag__pouch.is-shake { animation: none; } }
 @media (max-width: 809px) { .bag { padding: 30px 0; } }
 
 /* Podz : étude de cas mise en scène à partir du fichier Figma, même sobriété que les autres */
