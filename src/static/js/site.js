@@ -433,6 +433,18 @@ if (robotsData) {
   });
 }
 
+// Études de cas : les flèches ← et → du clavier ouvrent le projet précédent ou suivant
+// (sauf dans un champ de saisie, une fenêtre ouverte ou avec une touche de raccourci)
+const pnavPrev = document.querySelector('[data-prev]'), pnavNext = document.querySelector('[data-next]');
+if (pnavPrev && pnavNext) {
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || document.querySelector('dialog[open]')) return;
+    if (e.target.closest?.('input, textarea, select, [contenteditable], [data-drag], .carousel')) return;
+    const link = e.key === 'ArrowLeft' ? pnavPrev : e.key === 'ArrowRight' ? pnavNext : null;
+    if (link) link.click();
+  });
+}
+
 // Afficher / masquer les annotations de test
 const toggle = document.querySelector('[data-toggle-issues]');
 if (toggle) {

@@ -56,6 +56,7 @@ const globals = {
   lang: 'en',
   description: 'Maxence Prioux — Product Designer based in Toulouse.',
   chessLine: '',
+  projectNav: '',
   photoStrip: photos.map(p => `<img src="assets/img/${p.image}" alt="">`).join(''),
   // Carrousel du profil (desktop) : la première photo est la photo de profil
   photoCarousel: photos.map((p, i) => `<img src="assets/img/${p.image}" alt="${i ? '' : 'Maxence Prioux'}"${i ? ' loading="lazy"' : ''}>`).join(''),
@@ -92,6 +93,43 @@ function chessLine(c) {
           <span class="chess__label">Currently playing on Chess.com</span>
           <span class="chess__elo" aria-live="polite"><span class="chess__value"><small>Rapid</small> <b>${best}</b></span></span>
         </span>`;
+}
+
+// Navigation entre projets : l'ordre est celui des cartes de Product (index) puis de Visual.
+// Chaque étude de cas reçoit un lien vers la précédente et la suivante, et son fil d'Ariane pointe vers sa page.
+function projectOrder() {
+  const list = [];
+  for (const [page, section] of [['index.html', 'product'], ['visual.html', 'visual']]) {
+    const src = read(path.join(SRC, 'pages', page));
+    for (const m of src.matchAll(/<a class="card" href="([\w-]+)\.html">\s*<div class="card__media[^>]*>([\s\S]*?)<\/div>\s*<p class="card__caption">([\s\S]*?)<\/p>/g)) {
+      const [, slug, media, caption] = m;
+      // Image fixe de la carte, sinon son animation de survol (Micro-interactions n'a pas d'image fixe)
+      const cover = (media.match(/<img(?![^>]*card__(?:hover|badge))[^>]*\ssrc="([^"]+)"/) || media.match(/data-gif="([^"]+)"/) || [])[1];
+      if (!cover) continue;
+      if (slug === 'photographs' || list.some(p => p.slug === slug)) continue;
+      list.push({ slug, cover, section, caption: caption.replace(/<[^>]+>[^<]*<\/[^>]+>/g, '').replace(/<[^>]+>/g, '').trim() });
+    }
+  }
+  return list;
+}
+const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions' };
+function projectNav(order, slug, titleOf) {
+  const i = order.findIndex(p => p.slug === slug);
+  if (i < 0) return '';
+  const prev = order[(i - 1 + order.length) % order.length], next = order[(i + 1) % order.length];
+  const link = (p, dir) => `<a class="pnav__link pnav__link--${dir}" href="${p.slug}.html" data-${dir}>
+          <img src="${p.cover}" alt="" loading="lazy">
+          <span><small>${dir === 'prev' ? '← Previous' : 'Next →'}</small><b>${esc(titleOf(p.slug))}</b><em>${esc(p.caption)}</em></span>
+        </a>`;
+  return `
+      <nav class="pnav" aria-label="Other projects">
+        ${link(prev, 'prev')}
+        ${link(next, 'next')}
+      </nav>`;
+}
+function crumbOf(order, slug) {
+  const p = order.find(p => p.slug === slug);
+  return p && p.section === 'visual' ? { crumbHref: 'visual.html', crumbLabel: 'Visual' } : { crumbHref: 'index.html', crumbLabel: 'Product' };
 }
 
 function render(tpl, vars) {
@@ -212,13 +250,18 @@ async function main() {
   const written = [];
 
   const chess = chessLine(await chessData());
+  const order = projectOrder();
+  const titles = Object.fromEntries(fs.readdirSync(path.join(SRC, 'projects')).filter(f => /^[a-z].*\.json$/.test(f))
+    .map(f => { const p = JSON.parse(read(path.join(SRC, 'projects', f))); return [p.slug, p.title]; }));
+  const titleOf = slug => titles[slug] || TITLES[slug] || slug;
+  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), ...crumbOf(order, slug) });
 
   // Pages
   const template = read(path.join(SRC, 'templates', 'project.html'));
   for (const f of fs.readdirSync(path.join(SRC, 'pages')).filter(f => f.endsWith('.html'))) {
     if (PROD && TEST_ONLY_PAGES.includes(f)) continue;
     const [meta, body] = pageMeta(read(path.join(SRC, 'pages', f)));
-    fs.writeFileSync(path.join(OUT, f), clean(render(body, { ...globals, chessLine: meta.chess ? chess : '', ...meta })));
+    fs.writeFileSync(path.join(OUT, f), clean(render(body, { ...globals, chessLine: meta.chess ? chess : '', ...navVars(path.basename(f, '.html')), ...meta })));
     written.push(f);
   }
 
@@ -232,6 +275,7 @@ async function main() {
       name: esc(p.title),
       description: esc(p.sections[0]?.text[0] || globals.description),
       sections: projectSections(p),
+      ...navVars(p.slug),
     });
     fs.writeFileSync(path.join(OUT, `${p.slug}.html`), clean(html));
     written.push(`${p.slug}.html`);
