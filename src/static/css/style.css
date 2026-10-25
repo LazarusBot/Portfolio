@@ -161,18 +161,18 @@ img { display: block; max-width: 100%; }
 .sport__foot b { font-weight: 500; }
 .topic { padding: 20px 0 25px; border-bottom: 1px solid var(--line); color: var(--muted); }
 .topic h3 { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
-/* Art : carrousel, la carte active se lève et dévoile sa légende */
-.art { position: relative; margin: 60px calc(-1 * var(--bleed-r, 0px)) 0 calc(-1 * var(--bleed-l, 0px)); overflow: hidden; touch-action: pan-y;
-       mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-.art__track { display: flex; align-items: center; gap: 16px; width: max-content; height: 330px; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
-.art__card { position: relative; flex: 0 0 200px; cursor: pointer; outline: none; transition: translate .6s cubic-bezier(.2, .8, .2, 1); }
-.art__card.is-active { translate: 0 -40px; cursor: default; }
-.art__media { position: relative; display: block; height: 230px; border-radius: 14px; overflow: hidden; background: #f4f4f4; }
+/* Art : les 4 images en rang, la carte active se lève et dévoile sa légende */
+.art { margin-top: 60px; touch-action: pan-y; }
+.art__track { display: flex; justify-content: center; gap: 16px; padding: 24px 0 56px; }
+.art__card { position: relative; flex: 1 1 0; max-width: 200px; cursor: pointer; outline: none; transition: translate .6s cubic-bezier(.2, .8, .2, 1); }
+.art__card.is-active { translate: 0 -24px; cursor: default; }
+.art__media { position: relative; display: block; aspect-ratio: 20 / 23; border-radius: 14px; overflow: hidden; background: #f4f4f4; }
 .art__media img { display: block; width: 100%; height: 100%; object-fit: cover; scale: var(--z, 1); transform-origin: var(--o, 50% 50%); }
 .art__tag { position: absolute; top: 10px; right: 10px; padding: 5px 10px; border-radius: 99px; background: rgba(0, 0, 0, .06); color: var(--faint);
             font: 500 11px/1 var(--display); font-style: normal; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .4s, color .4s; }
 .art__card.is-active .art__tag { background: rgba(0, 0, 0, .55); color: #fff; }
-.art__card figcaption { position: absolute; top: calc(100% + 10px); left: 0; right: 0; opacity: 0; translate: 0 -6px; transition: opacity .35s, translate .5s cubic-bezier(.2, .8, .2, 1); }
+.art__card figcaption { position: absolute; top: calc(100% + 10px); left: 0; width: max(100%, 200px); opacity: 0; translate: 0 -6px; transition: opacity .35s, translate .5s cubic-bezier(.2, .8, .2, 1); }
+.art__card:last-child figcaption { left: auto; right: 0; text-align: right; }
 .art__card.is-active figcaption { opacity: 1; translate: 0 0; transition-delay: .2s; }
 .art__card figcaption b { display: block; font: 500 15px/1.2 var(--display); letter-spacing: -.02em; color: #000; }
 .art__card figcaption span { display: block; margin-top: 3px; font-size: 13px; color: var(--faint); }
@@ -280,10 +280,10 @@ img { display: block; max-width: 100%; }
   .wall__col:nth-child(n+3) { display: none; }
   .crumb { padding-top: 30px; }
   .marquee { margin-right: -16px; }
-  .art { mask: none; }
-  .art__track { height: 290px; gap: 12px; }
-  .art__card { flex-basis: 160px; }
-  .art__media { height: 190px; }
+  .art__track { gap: 8px; }
+  .art__tag { top: 6px; right: 6px; padding: 4px 7px; font-size: 9px; }
+  .art__card figcaption b { font-size: 13px; }
+  .art__card figcaption span { font-size: 11px; }
   .marquee[data-bleed] { mask: none; }
   .issue-item { grid-template-columns: 30px 1fr; }
   .lvl { grid-column: 2; justify-self: start; }

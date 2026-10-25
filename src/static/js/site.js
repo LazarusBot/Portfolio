@@ -416,39 +416,20 @@ const bleed = () => bleeds.forEach(el => {
 });
 if (bleeds.length) { bleed(); addEventListener('resize', bleed); }
 
-// Art (About) : carrousel en boucle, la carte au centre est active.
-// Trois copies de la série ; après chaque transition on revient sans bruit dans la copie du milieu.
+// Art (About) : la carte active se lève et montre sa légende ; on passe à la suivante toutes les 3,5 s
 document.querySelectorAll('.art').forEach(art => {
-  const track = art.querySelector('.art__track');
-  const n = track.children.length;
-  const set = [...track.children];
-  [0, 1].forEach(k => set.forEach(c => {
-    const copy = c.cloneNode(true);
-    copy.setAttribute('aria-hidden', 'true');
-    k ? track.append(copy) : track.prepend(copy);
-  }));
-  const cards = [...track.children];
-  cards.forEach(c => { c.tabIndex = c.hasAttribute('aria-hidden') ? -1 : 0; });
+  const cards = [...art.querySelectorAll('.art__card')];
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let i = n;
-  const place = (animate = true) => {
-    if (!animate) track.style.transition = 'none';
-    const c = cards[i];
-    track.style.transform = `translateX(${art.clientWidth / 2 - c.offsetLeft - c.offsetWidth / 2}px)`;
-    cards.forEach((el, k) => el.classList.toggle('is-active', k === i));
-    if (!animate) { void track.offsetWidth; track.style.transition = ''; }
-  };
-  // Retour dans la copie du milieu ; aussi fait avant chaque déplacement, au cas où transitionend n'est pas arrivé
-  const wrap = () => { const off = i < n || i >= 2 * n ? n + (i % n) - i : 0; if (off) { i += off; place(false); } return off; };
-  const go = k => { k += wrap(); i = k; place(!calm); };
-  track.addEventListener('transitionend', e => { if (e.target === track) wrap(); });
-  track.addEventListener('click', e => {
+  let i = 0;
+  const go = k => { i = (k + cards.length) % cards.length; cards.forEach((c, n) => c.classList.toggle('is-active', n === i)); };
+  cards.forEach(c => { c.tabIndex = 0; });
+  art.addEventListener('click', e => {
     const c = e.target.closest('.art__card');
     if (c && cards.indexOf(c) !== i) { go(cards.indexOf(c)); sound.play('select', { vol: .7 }); }
   });
   art.addEventListener('keydown', e => {
     if (e.key === 'Enter' && e.target.closest('.art__card')) e.target.click();
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); go(i + (e.key === 'ArrowRight' ? 1 : -1)); }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(i + (e.key === 'ArrowRight' ? 1 : -1)); }
   });
   // Glisser (doigt ou souris) pour passer à la suivante / précédente
   let x0 = null;
@@ -463,9 +444,7 @@ document.querySelectorAll('.art').forEach(art => {
   art.addEventListener('pointerenter', () => { hover = true; });
   art.addEventListener('pointerleave', () => { hover = false; x0 = null; });
   if (!calm) setInterval(() => { if (!hover && !document.hidden) go(i + 1); }, 3500);
-  place(false);
-  addEventListener('resize', () => place(false));
-  addEventListener('load', () => place(false));
+  go(0);
 });
 
 // Robots (About) : un clic ouvre la fiche du robot : liste des composants, design industriel et caractéristiques mécaniques
