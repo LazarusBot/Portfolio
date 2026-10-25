@@ -347,8 +347,8 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     crown.innerHTML = '<svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 8.2h10L11.6 2 8.4 4.6 6 .8 3.6 4.6.4 2z" fill="currentColor"/></svg>';
     // (positions mesurées à l'écran : un élément SVG n'a pas d'offsetLeft/offsetTop)
     const kr = knight.getBoundingClientRect(), lr = line.getBoundingClientRect();
-    crown.style.left = `${kr.left - lr.left + kr.width / 2 - 5}px`;
-    crown.style.top = `${kr.top - lr.top - 8}px`;
+    crown.style.left = `${kr.left - lr.left + kr.width / 2 - 3}px`;
+    crown.style.top = `${kr.top - lr.top - 5}px`;
     line.append(crown);
     crown.addEventListener('animationend', () => crown.remove());
     pill.classList.remove('is-record'); void pill.offsetWidth; pill.classList.add('is-record');
