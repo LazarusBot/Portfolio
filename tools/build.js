@@ -54,6 +54,9 @@ const photos = JSON.parse(read(path.join(SRC, 'static', 'data', 'photos.json')))
 
 const globals = {
   lang: 'en',
+  // Aperçu sur les réseaux (og:video / og:image) : adresse absolue du site, chaque page y ajoute son chemin
+  site: 'https://maxence.fyi',
+  pagePath: '',
   description: 'Maxence Prioux — Product Designer based in Toulouse.',
   chessLine: '',
   projectNav: '',
@@ -276,7 +279,7 @@ async function main() {
   for (const f of fs.readdirSync(path.join(SRC, 'pages')).filter(f => f.endsWith('.html'))) {
     if (PROD && TEST_ONLY_PAGES.includes(f)) continue;
     const [meta, body] = pageMeta(read(path.join(SRC, 'pages', f)));
-    fs.writeFileSync(path.join(OUT, f), clean(render(body, { ...globals, chessLine: meta.chess ? chess : '', ...navVars(path.basename(f, '.html')), ...meta })));
+    fs.writeFileSync(path.join(OUT, f), clean(render(body, { ...globals, pagePath: f === 'index.html' ? '' : f, chessLine: meta.chess ? chess : '', ...navVars(path.basename(f, '.html')), ...meta, ogTitle: meta.ogTitle || meta.title })));
     written.push(f);
   }
 
@@ -287,9 +290,11 @@ async function main() {
     const html = render(template, {
       ...globals,
       title: `${esc(p.title)} — Maxence Prioux`,
+      ogTitle: `${esc(p.title)} — Maxence Prioux`,
       name: esc(p.title),
       description: esc(p.sections[0]?.text[0] || globals.description),
       sections: projectSections(p),
+      pagePath: `${p.slug}.html`,
       ...navVars(p.slug),
     });
     fs.writeFileSync(path.join(OUT, `${p.slug}.html`), clean(html));
