@@ -165,10 +165,10 @@ img { display: block; max-width: 100%; }
 /* Calé à gauche sur le texte, peut déborder à droite jusqu'au bord de l'écran (data-bleed), 16 px de marge */
 .art { margin: 60px calc(-1 * var(--bleed-r, 0px)) 0 0; padding: 0 16px 0 0; touch-action: pan-y; }
 .art__track { display: flex; justify-content: flex-start; gap: 16px; padding: 24px 0 56px; }
-.art__card { position: relative; flex: 0 1 190px; min-width: 0; cursor: pointer; outline: none; transition: translate .6s cubic-bezier(.2, .8, .2, 1); }
+.art__card { position: relative; flex: 0 1 250px; min-width: 0; cursor: pointer; outline: none; transition: translate .6s cubic-bezier(.2, .8, .2, 1); }
 .art__card.is-active { translate: 0 -24px; cursor: default; }
-.art__media { position: relative; display: block; aspect-ratio: 20 / 23; border-radius: 12px; overflow: hidden; background: #f4f4f4; }
-.art__media img { display: block; width: 100%; height: 100%; object-fit: cover; scale: var(--z, 1); transform-origin: var(--o, 50% 50%); }
+.art__media { position: relative; display: block; aspect-ratio: 5 / 4; border-radius: 12px; overflow: hidden; background: #f4f4f4; }
+.art__media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--p, 50% 50%); scale: var(--z, 1); transform-origin: var(--o, 50% 50%); }
 .art__tag { position: absolute; top: 8px; right: 8px; padding: 4px 8px; border-radius: 99px; background: rgba(0, 0, 0, .06); color: var(--faint);
             font: 500 10px/1 var(--display); font-style: normal; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .4s, color .4s; }
 .art__card.is-active .art__tag { background: rgba(0, 0, 0, .55); color: #fff; }
