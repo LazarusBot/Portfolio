@@ -161,17 +161,17 @@ img { display: block; max-width: 100%; }
 .sport__foot b { font-weight: 500; }
 .topic { padding: 20px 0 25px; border-bottom: 1px solid var(--line); color: var(--muted); }
 .topic h3 { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
-.fan { display: flex; padding: 25px 10px 5px; }
+.fan { display: flex; padding: 60px 10px 5px; }
 .fan figure { position: relative; margin-right: -50px; transition: margin .35s cubic-bezier(.2,.7,.2,1), transform .35s; }
-.fan:hover figure { margin-right: 8px; }
+.fan:hover figure { margin-right: 20px; }
 .fan figure:hover { transform: translateY(-6px); }
 .fan figcaption { position: absolute; top: -22px; left: 4px; font-size: 12px; }
 .fan img { width: 103px; height: 103px; object-fit: cover; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
-.marquee { overflow: hidden; margin: 20px -100px 0 0; mask: linear-gradient(90deg, #000 85%, transparent); }
+.marquee { overflow: hidden; margin: 60px -100px 0 0; mask: linear-gradient(90deg, #000 85%, transparent); }
 /* Pleine largeur de l'écran (site.js mesure l'écart entre la colonne et les bords) */
 .marquee[data-bleed] { margin-left: calc(-1 * var(--bleed-l, 0px)); margin-right: calc(-1 * var(--bleed-r, 0px));
                        mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-.marquee__track { display: flex; gap: 12px; width: max-content; animation: scroll 40s linear infinite; }
+.marquee__track { display: flex; gap: 20px; width: max-content; animation: scroll 40s linear infinite; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .marquee img { height: 219px; width: auto; }
 @keyframes scroll { to { transform: translateX(-50%); } }
