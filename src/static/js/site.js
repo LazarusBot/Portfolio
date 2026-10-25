@@ -384,13 +384,30 @@ if (robotsData) {
   sheet.setAttribute('aria-labelledby', 'robot-sheet-title');
   document.body.append(sheet);
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // Croquis de design industriel : photo du fabricant détourée et passée au crayon, sur un bloc de couleur,
+  // avec des lignes de construction et des notes manuscrites reliées aux pièces
+  const sketch = (key, r) => {
+    const k = r.sketch;
+    const guides = k.guides.map(y => `<i class="sk__guide" style="top:${y}%"></i>`).join('');
+    // Le texte se place juste à l'extérieur du croquis, du côté indiqué par la note, et déborde dans la marge
+    const side = ([x, , lx]) => (lx > x ? 106 : -6);
+    const notes = k.notes.map((n, i) => `<line x1="${n[0]}" y1="${n[1]}" x2="${side(n)}" y2="${n[3]}" style="--i:${i}"/>`).join('');
+    const labels = k.notes.map((n, i) => `<span class="sk__note${side(n) > 50 ? '' : ' is-left'}" style="left:${side(n)}%;top:${n[3]}%;--i:${i}">${esc(n[4])}</span>`).join('');
+    const [bx, by, bw, bh] = k.block;
+    return `<div class="sk" style="--ratio:${k.ratio}">
+        <i class="sk__block" style="left:${bx}%;top:${by}%;width:${bw}%;height:${bh}%"></i>${guides}<i class="sk__axis"></i>
+        <img src="assets/robots/${key}-sketch.webp" alt="Industrial design sketch of ${esc(r.name)}">
+        <svg class="sk__leaders" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${notes}</svg>${labels}
+        <span class="sk__view">${esc(k.view)}</span>
+      </div>`;
+  };
   const open = key => {
     const r = robots[key];
     sheet.innerHTML = `
       <button class="robot-sheet__close" aria-label="Close">×</button>
-      <figure class="robot-sheet__visual">
-        <img src="${r.visual}" alt="${esc(r.name)}, ${esc(r.maker)}: ${esc(r.caption)}" style="object-position:${r.pos}">
-        <figcaption><span>${esc(r.caption)}</span><span>Image: ${esc(r.credit)}</span></figcaption>
+      <figure class="robot-sheet__visual robot-sheet__visual--sketch">
+        ${sketch(key, r)}
+        <figcaption><span></span><span>Sketch after a photo by ${esc(r.credit)}</span></figcaption>
       </figure>
       <div class="robot-sheet__body">
         <p class="robot-sheet__maker">${esc(r.maker)} <span>${esc(r.year)}</span></p>
@@ -399,22 +416,29 @@ if (robotsData) {
         <p class="robot-sheet__design">${esc(r.design)}</p>
         <p class="robot-sheet__kicker">Mechanical properties</p>
         <dl class="robot-sheet__specs">${r.specs.map(([k, v], i) => `<div style="--i:${i}"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-        <p class="robot-sheet__note">Figures and image published by the maker.</p>
+        <p class="robot-sheet__note">Figures published by the maker. Sketch drawn from the maker's photo.</p>
       </div>`;
     sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
     sheet.showModal();
     sound.play('select');
   };
+  // Après la fermeture, le robot cliqué garde le focus et sa bulle resterait affichée par-dessus les autres :
+  // on le libère si la fiche a été ouverte à la souris (au clavier, on garde le focus pour la navigation)
+  let byMouse = false;
   const close = () => {
     sheet.classList.add('is-closing');
-    setTimeout(() => { sheet.close(); sheet.classList.remove('is-closing'); }, 220);
+    setTimeout(() => {
+      sheet.close();
+      sheet.classList.remove('is-closing');
+      if (byMouse) document.activeElement?.blur();
+    }, 220);
   };
   // Un clic sur le fond (en dehors de la fiche) la ferme, Échap aussi
   sheet.addEventListener('click', e => e.target === sheet && close());
   sheet.addEventListener('cancel', e => { e.preventDefault(); close(); });
   document.querySelectorAll('[data-robot]').forEach(el => {
-    el.addEventListener('click', () => open(el.dataset.robot));
-    el.addEventListener('keydown', e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), open(el.dataset.robot)));
+    el.addEventListener('click', e => { byMouse = e.detail > 0; open(el.dataset.robot); });
+    el.addEventListener('keydown', e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), byMouse = false, open(el.dataset.robot)));
   });
 }
 

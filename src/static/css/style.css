@@ -168,6 +168,8 @@ img { display: block; max-width: 100%; }
 /* La bulle part du centre de la photo vers la droite ; sa pointe reste sur la photo */
 .robot__name::after { content: ""; position: absolute; left: 24px; top: 100%; width: 8px; height: 8px; margin: -5px 0 0 -4px; background: #111; rotate: 45deg; border-radius: 1px; }
 .robot:hover .robot__name, .robot:focus-visible .robot__name { opacity: 1; translate: -24px 0; scale: 1; }
+.robots:hover .robot:not(:hover) .robot__name { opacity: 0; }
+.robots:hover .robot:not(:hover) img { transform: none; box-shadow: none; }
 
 /* ---------- Études de cas (générées depuis src/projects) ---------- */
 .project { padding-bottom: 120px; }
@@ -1014,8 +1016,26 @@ video::-webkit-media-controls { display: none !important; }
 .robot-sheet__visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: visual-in .9s cubic-bezier(.2, .8, .2, 1); }
 @keyframes visual-in { from { scale: 1.06; opacity: 0; } }
 .robot-sheet__visual figcaption { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; justify-content: space-between; gap: 8px; font-size: 11px; }
-.robot-sheet__visual figcaption span { padding: 5px 10px; border-radius: 99px; background: rgba(255, 255, 255, .82); color: #000; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.robot-sheet__visual figcaption span { padding: 5px 0; color: #000; }
+.robot-sheet__visual figcaption span:empty { display: none; }
 .robot-sheet__visual figcaption span + span { color: var(--muted); }
+/* Croquis de design industriel (référence : planches de croquis de robots) : trait gris sur blanc, bloc jaune,
+   lignes de construction, notes manuscrites en capitales reliées aux pièces */
+.robot-sheet__visual--sketch { display: grid; place-items: center; height: 540px; background: #fff; }
+.sk { position: relative; width: min(40%, calc(540px * .72 * var(--ratio))); aspect-ratio: var(--ratio); }
+.sk img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; animation: sk-in .9s cubic-bezier(.2, .8, .2, 1); }
+.sk__block { position: absolute; z-index: 0; background: #ffd64a; animation: sk-block .6s cubic-bezier(.2, .8, .2, 1) both; transform-origin: left; }
+.sk__guide { position: absolute; left: -90%; right: -90%; height: 1px; background: rgba(0, 0, 0, .12); z-index: 2; animation: sk-guide .9s cubic-bezier(.6, 0, .2, 1) both; transform-origin: left; }
+.sk__axis { position: absolute; z-index: 2; left: 50%; top: -4%; bottom: -3%; width: 1px; background: rgba(0, 0, 0, .1); }
+.sk__leaders { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.sk__leaders line { stroke: #2b2b2b; stroke-width: 1; vector-effect: non-scaling-stroke; opacity: 0; animation: fade-in-op .3s ease forwards; animation-delay: calc(.7s + var(--i) * .12s); }
+.sk__note { position: absolute; z-index: 3; translate: 6px -50%; font: 12px/1 "Architects Daughter", "Comic Sans MS", cursive; text-transform: uppercase; letter-spacing: .04em;
+            color: #2b2b2b; white-space: nowrap; opacity: 0; animation: fade-in-op .35s ease forwards; animation-delay: calc(.75s + var(--i) * .12s); }
+.sk__note.is-left { translate: calc(-100% - 6px) -50%; }
+.sk__view { position: absolute; z-index: 3; right: -40%; top: -7%; padding: 4px 7px; border: 1px solid #2b2b2b; font: 12px/1.1 "Architects Daughter", cursive; text-transform: uppercase; color: #2b2b2b; }
+@keyframes sk-in { from { opacity: 0; translate: 0 10px; } }
+@keyframes sk-block { from { scale: 0 1; } }
+@keyframes sk-guide { from { scale: 0 1; } }
 .robot-sheet__body { padding: 34px 34px 28px; overflow-y: auto; }
 .robot-sheet__close { position: absolute; right: 14px; top: 14px; z-index: 1; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .06);
                       font-size: 20px; line-height: 1; color: #000; cursor: pointer; transition: background .2s, rotate .3s cubic-bezier(.34, 1.56, .64, 1); }
@@ -1036,8 +1056,11 @@ video::-webkit-media-controls { display: none !important; }
 .robot { cursor: pointer; }
 @media (max-width: 809px) {
   .robot-sheet { grid-template-columns: 1fr; margin: auto 0 0; width: 100%; max-height: 88vh; border-radius: 20px 20px 0 0; overflow-y: auto; }
-  .robot-sheet__visual { min-height: 280px; }
+  .robot-sheet__visual { min-height: 330px; }
+  .robot-sheet__visual--sketch { height: 380px; }
+  .sk__note { font-size: 10px; }
+  .sk__view { display: none; }
   .robot-sheet__body { padding: 24px 20px 30px; overflow: visible; }
   .robot-sheet h3 { font-size: 28px; }
 }
-@media (prefers-reduced-motion: reduce) { .robot-sheet, .robot-sheet__specs div, .robot-sheet::backdrop, .robot-sheet__visual img { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .robot-sheet, .robot-sheet__specs div, .robot-sheet::backdrop, .robot-sheet__visual img, .sk * { animation: none !important; opacity: 1 !important; } }
