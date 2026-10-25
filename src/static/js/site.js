@@ -315,7 +315,7 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
 
 // Meilleurs classements Chess.com. Le premier défile depuis 0 au chargement ; chaque survol (ou toucher,
 // sur mobile) passe au suivant : Rapid → Blitz → Puzzles. Un record de moins de 7 jours est fêté : le cavalier
-// fait son déplacement en L, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « PB » reste.
+// reçoit une couronne, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « PB » reste.
 // Les valeurs enregistrées au build sont remplacées par celles du moment dès que Chess.com répond.
 document.querySelectorAll('[data-chess]').forEach(line => {
   const pill = line.querySelector('.chess__elo'), knight = line.querySelector('.chess__icon');
@@ -340,7 +340,17 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     const g = gain(v);
     if (calm) return;
     countUp(b, g ? v[3] : 0, v[1]);
-    knight.classList.remove('is-hop'); void knight.offsetWidth; knight.classList.add('is-hop');
+    // Couronne posée sur la tête du cavalier, légèrement penchée
+    line.querySelector('.chess__crown')?.remove();
+    const crown = document.createElement('span');
+    crown.className = 'chess__crown';
+    crown.innerHTML = '<svg viewBox="0 0 12 9" aria-hidden="true"><path d="M1 8.2h10L11.6 2 8.4 4.6 6 .8 3.6 4.6.4 2z" fill="currentColor"/></svg>';
+    // (positions mesurées à l'écran : un élément SVG n'a pas d'offsetLeft/offsetTop)
+    const kr = knight.getBoundingClientRect(), lr = line.getBoundingClientRect();
+    crown.style.left = `${kr.left - lr.left + kr.width / 2 - 5}px`;
+    crown.style.top = `${kr.top - lr.top - 8}px`;
+    line.append(crown);
+    crown.addEventListener('animationend', () => crown.remove());
     pill.classList.remove('is-record'); void pill.offsetWidth; pill.classList.add('is-record');
     if (g) {
       const plus = document.createElement('span');
