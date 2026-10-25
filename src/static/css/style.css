@@ -1012,9 +1012,10 @@ video::-webkit-media-controls { display: none !important; }
 @keyframes sheet-out { to { opacity: 0; scale: .97; translate: 0 8px; } }
 @keyframes fade-in { from { opacity: 0; } }
 /* Nomenclature du robot : une carte par composant, pictogramme au trait, quantité en gros */
-/* La hauteur de la fiche vient de la colonne de droite : la liste n'en impose aucune (contain: size)
-   et défile à l'intérieur si elle est plus longue */
-.robot-bom { contain: size; padding: 22px 22px 18px; overflow-y: auto; background: #f7f7f7; scrollbar-width: thin; }
+/* La hauteur de la fiche vient de la colonne de droite : la liste est dans un calque en position absolue,
+   qui n'impose aucune hauteur (dans tous les navigateurs) et défile s'il est plus long */
+.robot-bom { position: relative; background: #f7f7f7; }
+.robot-bom__scroll { position: absolute; inset: 0; padding: 22px 22px 18px; overflow-y: auto; scrollbar-width: thin; }
 .robot-bom__head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .robot-bom__head img { width: 46px; height: 46px; border-radius: 12px; object-fit: cover; }
 .robot-bom__head p { font-size: 11px; color: var(--faint); }
@@ -1030,7 +1031,7 @@ video::-webkit-media-controls { display: none !important; }
 .robot-bom__text small { display: block; margin-top: 3px; font-size: 11px; line-height: 1.25; color: var(--faint); }
 .robot-bom__qty { font: 500 18px/1 var(--display); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .robot-sheet__note a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-.robot-sheet__body { padding: 34px 34px 28px; overflow-y: auto; }
+.robot-sheet__body { padding: 30px 32px 22px; overflow-y: auto; }
 .robot-sheet__close { position: absolute; right: 14px; top: 14px; z-index: 1; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .06);
                       font-size: 20px; line-height: 1; color: #000; cursor: pointer; transition: background .2s, rotate .3s cubic-bezier(.34, 1.56, .64, 1); }
 .robot-sheet__close:hover { background: rgba(0, 0, 0, .12); rotate: 90deg; }
@@ -1046,11 +1047,11 @@ video::-webkit-media-controls { display: none !important; }
 .robot-sheet__specs dt { font-size: 11px; color: var(--faint); }
 .robot-sheet__specs dd { margin-top: 3px; font-size: 14px; font-weight: 500; }
 @keyframes spec-in { from { opacity: 0; translate: 0 8px; } }
-.robot-sheet__note { margin-top: 16px; font-size: 11px; color: var(--faint); }
+.robot-sheet__note { margin-top: 14px; font-size: 11px; color: var(--faint); }
 .robot { cursor: pointer; }
 @media (max-width: 809px) {
   .robot-sheet { grid-template-columns: 1fr; margin: auto 0 0; width: 100%; max-height: 88vh; border-radius: 20px 20px 0 0; overflow-y: auto; }
-  .robot-bom { contain: none; height: auto; overflow: visible; padding: 18px 16px; }
+  .robot-bom__scroll { position: static; overflow: visible; padding: 18px 16px; }
   .robot-bom__list { grid-template-columns: 1fr; }
   .robot-sheet__body { padding: 24px 20px 30px; overflow: visible; }
   .robot-sheet h3 { font-size: 28px; }

@@ -386,14 +386,14 @@ if (robotsData) {
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   // Liste des composants (nomenclature) : pictogramme au trait (parts.js), quantité, nom et détail
   const icon = name => `<svg viewBox="0 0 24 24" aria-hidden="true">${(window.PART_ICONS || {})[name] || ''}</svg>`;
-  const bom = r => `<section class="robot-bom" aria-label="Components">
+  const bom = r => `<section class="robot-bom" aria-label="Components"><div class="robot-bom__scroll">
         <header class="robot-bom__head"><img src="assets/img/${r.img}" alt=""><div><p>Bill of materials</p><b>${r.parts.length} components</b></div></header>
         <ul class="robot-bom__list">${r.parts.map(([ic, name, qty, detail], i) => `
           <li style="--i:${i}"><span class="robot-bom__icon">${icon(ic)}</span>
             <span class="robot-bom__text"><b>${esc(name)}</b>${detail ? `<small>${esc(detail)}</small>` : ''}</span>
             <span class="robot-bom__qty">${qty == null ? '' : `×${esc(qty)}`}</span></li>`).join('')}
         </ul>
-      </section>`;
+      </div></section>`;
   const open = key => {
     const r = robots[key];
     sheet.innerHTML = `
