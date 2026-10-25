@@ -375,7 +375,7 @@ const bleed = () => bleeds.forEach(el => {
 });
 if (bleeds.length) { bleed(); addEventListener('resize', bleed); }
 
-// Robots (About) : un clic ouvre la fiche du robot (design industriel et caractéristiques mécaniques)
+// Robots (About) : un clic ouvre la fiche du robot : schéma technique (robots.js), design industriel et caractéristiques mécaniques
 const robotsData = document.getElementById('robots-data');
 if (robotsData) {
   const robots = JSON.parse(robotsData.textContent);
@@ -388,7 +388,11 @@ if (robotsData) {
     const r = robots[key];
     sheet.innerHTML = `
       <button class="robot-sheet__close" aria-label="Close">×</button>
-      <img class="robot-sheet__img" src="assets/img/${r.img}" alt="${esc(r.name)}, ${esc(r.maker)}">
+      <figure class="robot-sheet__draw">
+        ${window.robotDrawing ? window.robotDrawing(key) : `<img src="assets/img/${r.img}" alt="">`}
+        <figcaption><span><i></i>Joint</span><span>${key === 'digit' ? 'Side view' : 'Front view'} · same scale for all four</span></figcaption>
+        <img class="robot-sheet__thumb" src="assets/img/${r.img}" alt="${esc(r.name)}, ${esc(r.maker)}">
+      </figure>
       <div class="robot-sheet__body">
         <p class="robot-sheet__maker">${esc(r.maker)} <span>${esc(r.year)}</span></p>
         <h3 id="robot-sheet-title">${esc(r.name)}</h3>
@@ -396,7 +400,7 @@ if (robotsData) {
         <p class="robot-sheet__design">${esc(r.design)}</p>
         <p class="robot-sheet__kicker">Mechanical properties</p>
         <dl class="robot-sheet__specs">${r.specs.map(([k, v], i) => `<div style="--i:${i}"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-        <p class="robot-sheet__note">Figures published by the maker.</p>
+        <p class="robot-sheet__note">Figures published by the maker. Schematic drawn from them, not an official drawing.</p>
       </div>`;
     sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
     sheet.showModal();
