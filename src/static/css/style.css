@@ -89,7 +89,7 @@ img { display: block; max-width: 100%; }
 .chess__value.is-in { translate: 0 100%; opacity: 0; }
 .chess:hover .chess__elo { background: #e4e4e4; }
 /* Record de moins de 7 jours : étiquette « PB », anneau vert, « +N » qui s'envole, couronne sur le cavalier */
-.chess__new { align-self: center; display: inline-grid; place-items: center; height: 16px; margin-left: 8px; padding: 0 6px; border-radius: 99px; background: #dff8e3; color: #1f9d3a;
+.chess__new { align-self: center; display: inline-grid; place-items: center; height: 16px; margin-left: 8px; padding: 0 6px 1px; border-radius: 99px; background: #dff8e3; color: #1f9d3a;
               font: 600 10px/1 var(--display, sans-serif); font-style: normal; letter-spacing: .04em; text-transform: uppercase; }
 /* Avec le tag PB : il se loge au bout de la pastille, 3 px du bord comme en haut et en bas */
 .chess__elo:has(.chess__new) { padding-right: 3px; }
