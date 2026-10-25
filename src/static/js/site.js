@@ -375,7 +375,7 @@ const bleed = () => bleeds.forEach(el => {
 });
 if (bleeds.length) { bleed(); addEventListener('resize', bleed); }
 
-// Robots (About) : un clic ouvre la fiche du robot : visuel technique du fabricant, design industriel et caractéristiques mécaniques
+// Robots (About) : un clic ouvre la fiche du robot : liste des composants, design industriel et caractéristiques mécaniques
 const robotsData = document.getElementById('robots-data');
 if (robotsData) {
   const robots = JSON.parse(robotsData.textContent);
@@ -384,38 +384,21 @@ if (robotsData) {
   sheet.setAttribute('aria-labelledby', 'robot-sheet-title');
   document.body.append(sheet);
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  // Croquis de design industriel : photo du fabricant détourée et passée au crayon, sur un bloc de couleur,
-  // avec des lignes de construction et des notes manuscrites reliées aux pièces
-  const sketch = (key, r) => {
-    const k = r.sketch;
-    const guides = k.guides.map(y => `<i class="sk__guide" style="top:${y}%"></i>`).join('');
-    // Le texte se place juste à l'extérieur du croquis, du côté indiqué par la note, et déborde dans la marge
-    const side = ([x, , lx]) => (lx > x ? 106 : -6);
-    const notes = k.notes.map((n, i) => `<line x1="${n[0]}" y1="${n[1]}" x2="${side(n)}" y2="${n[3]}" style="--i:${i}"/>`).join('');
-    const labels = k.notes.map((n, i) => `<span class="sk__note${side(n) > 50 ? '' : ' is-left'}" style="left:${side(n)}%;top:${n[3]}%;--i:${i}">${esc(n[4])}</span>`).join('');
-    const [bx, by, bw, bh] = k.block;
-    return `<div class="sk" style="--ratio:${k.ratio}">
-        <i class="sk__block" style="left:${bx}%;top:${by}%;width:${bw}%;height:${bh}%"></i>${guides}<i class="sk__axis"></i>
-        <img src="assets/robots/${key}-sketch.webp" alt="Industrial design sketch of ${esc(r.name)}">
-        <svg class="sk__leaders" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${notes}</svg>${labels}
-        <span class="sk__view">${esc(k.view)}</span>
-      </div>`;
-  };
-  // Figures techniques publiées par le fabricant (Sprout : Fig. 2 de l'article arXiv), avec un sélecteur de vue
-  const figures = r => `<figure class="robot-sheet__visual robot-sheet__visual--figs" data-figs>
-        <div class="figs__tabs" role="tablist" aria-label="View">${r.figures.map(([, label], i) =>
-          `<button role="tab" aria-selected="${!i}" data-fig="${i}">${esc(label)}</button>`).join('')}</div>
-        ${r.figures.map(([src, label], i) => `<img class="figs__img${i ? '' : ' is-on'}" src="${src}" alt="${esc(r.name)}: ${esc(label)} view with technical callouts" ${i ? 'loading="lazy"' : ''}>`).join('')}
-        <figcaption><span></span><a href="${r.source.url}" target="_blank" rel="noopener">${esc(r.source.text)}</a></figcaption>
-      </figure>`;
+  // Liste des composants (nomenclature) : pictogramme au trait (parts.js), quantité, nom et détail
+  const icon = name => `<svg viewBox="0 0 24 24" aria-hidden="true">${(window.PART_ICONS || {})[name] || ''}</svg>`;
+  const bom = r => `<section class="robot-bom" aria-label="Components">
+        <header class="robot-bom__head"><img src="assets/img/${r.img}" alt=""><div><p>Bill of materials</p><b>${r.parts.length} components</b></div></header>
+        <ul class="robot-bom__list">${r.parts.map(([ic, name, qty, detail], i) => `
+          <li style="--i:${i}"><span class="robot-bom__icon">${icon(ic)}</span>
+            <span class="robot-bom__text"><b>${esc(name)}</b>${detail ? `<small>${esc(detail)}</small>` : ''}</span>
+            <span class="robot-bom__qty">${qty == null ? '' : `×${esc(qty)}`}</span></li>`).join('')}
+        </ul>
+      </section>`;
   const open = key => {
     const r = robots[key];
     sheet.innerHTML = `
       <button class="robot-sheet__close" aria-label="Close">×</button>
-      ${r.figures ? figures(r) : `<figure class="robot-sheet__visual robot-sheet__visual--sketch">
-        ${sketch(key, r)}
-        <figcaption><span></span><span>Sketch after a photo by ${esc(r.credit)}</span></figcaption>
-      </figure>`}
+      ${bom(r)}
       <div class="robot-sheet__body">
         <p class="robot-sheet__maker">${esc(r.maker)} <span>${esc(r.year)}</span></p>
         <h3 id="robot-sheet-title">${esc(r.name)}</h3>
@@ -423,14 +406,10 @@ if (robotsData) {
         <p class="robot-sheet__design">${esc(r.design)}</p>
         <p class="robot-sheet__kicker">Mechanical properties</p>
         <dl class="robot-sheet__specs">${r.specs.map(([k, v], i) => `<div style="--i:${i}"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-        <p class="robot-sheet__note">${r.figures ? 'Figures and views from the maker\'s research paper.' : 'Figures published by the maker. Sketch drawn from the maker\'s photo.'}</p>
+        <p class="robot-sheet__note">${r.source ? `Figures from the maker's research paper (<a href="${r.source.url}" target="_blank" rel="noopener">${esc(r.source.text)}</a>).` : 'Figures published by the maker. Quantities left blank are not published.'}</p>
       </div>`;
     sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
-    sheet.querySelectorAll('[data-fig]').forEach(b => b.addEventListener('click', () => {
-      sheet.querySelectorAll('[data-fig]').forEach(o => o.setAttribute('aria-selected', o === b));
-      sheet.querySelectorAll('.figs__img').forEach((img, i) => img.classList.toggle('is-on', i === +b.dataset.fig));
-      sound.play('select', { vol: .7 });
-    }));
+
     sheet.showModal();
     sound.play('select');
   };
