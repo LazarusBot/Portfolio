@@ -164,6 +164,7 @@ img { display: block; max-width: 100%; }
 .robot__name { position: absolute; left: 50%; bottom: calc(100% + 14px); z-index: 2; padding: 6px 11px; border-radius: 99px; background: #111; color: #fff;
                font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0; translate: -50% 6px; scale: .9;
                transition: opacity .18s, translate .35s cubic-bezier(.34, 1.56, .64, 1), scale .35s cubic-bezier(.34, 1.56, .64, 1); }
+.robot__name small { font-size: inherit; color: #9a9a9a; }
 .robot__name::after { content: ""; position: absolute; left: 50%; top: 100%; width: 8px; height: 8px; margin: -5px 0 0 -4px; background: #111; rotate: 45deg; border-radius: 1px; }
 .robot:hover .robot__name, .robot:focus-visible .robot__name { opacity: 1; translate: -50% 0; scale: 1; }
 
