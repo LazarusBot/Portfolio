@@ -348,7 +348,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     // (positions mesurées à l'écran : un élément SVG n'a pas d'offsetLeft/offsetTop)
     const kr = knight.getBoundingClientRect(), lr = line.getBoundingClientRect();
     crown.style.left = `${kr.left - lr.left + kr.width / 2 - 3}px`;
-    crown.style.top = `${kr.top - lr.top - 5}px`;
+    crown.style.top = `${kr.top - lr.top - 4}px`;
     line.append(crown);
     crown.addEventListener('animationend', () => crown.remove());
     pill.classList.remove('is-record'); void pill.offsetWidth; pill.classList.add('is-record');
