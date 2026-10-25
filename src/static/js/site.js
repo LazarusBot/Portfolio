@@ -709,3 +709,129 @@ document.querySelectorAll('[data-drag]').forEach(rail => {
     rail.classList.remove('is-dragging');
   });
 });
+
+// Signature personnalisable : un clic sur « Bosoveille » ouvre une fenêtre où l'on écrit un mot ou dessine
+// quelque chose ; le résultat remplace la signature dans l'en-tête, pour ce visiteur seulement (gardé dans le navigateur).
+document.querySelectorAll('.logo').forEach(logo => {
+  const KEY = 'logo-swap';
+  // La signature est un masque : on lui donne l'image du visiteur, et une largeur à son format (17 px de haut)
+  const apply = (url, ratio) => {
+    logo.style.setProperty('--logo', url ? `url("${url}")` : '');
+    logo.style.width = url ? `${Math.round(Math.min(110, Math.max(24, 17 * ratio)))}px` : '';
+  };
+  try { const saved = JSON.parse(localStorage.getItem(KEY)); if (saved?.url) apply(saved.url, saved.ratio); } catch {}
+  logo.setAttribute('aria-haspopup', 'dialog');
+  logo.title = 'Make it yours';
+
+  const sheet = document.createElement('dialog');
+  sheet.className = 'logo-sheet';
+  sheet.setAttribute('aria-labelledby', 'logo-sheet-title');
+  sheet.innerHTML = `
+    <button class="robot-sheet__close" aria-label="Close">×</button>
+    <h3 id="logo-sheet-title">Make it yours</h3>
+    <p class="logo-sheet__hint">Write a word or draw something. It takes the place of my signature, just for you.</p>
+    <div class="logo-sheet__tabs" role="tablist">
+      <button role="tab" data-mode="write" aria-selected="true">Write</button>
+      <button role="tab" data-mode="draw" aria-selected="false">Draw</button>
+    </div>
+    <div class="logo-sheet__pad" data-mode="write">
+      <input class="logo-sheet__input" type="text" maxlength="18" placeholder="Your word" aria-label="Your word" autocomplete="off" spellcheck="false">
+      <canvas class="logo-sheet__canvas" aria-label="Drawing area"></canvas>
+      <button class="logo-sheet__clear" type="button">Clear</button>
+    </div>
+    <div class="logo-sheet__actions">
+      <button class="logo-sheet__reset" type="button">Bring back Bosoveille</button>
+      <button class="logo-sheet__ok" type="button" disabled>Swap</button>
+    </div>`;
+  document.body.append(sheet);
+  const pad = sheet.querySelector('.logo-sheet__pad'), input = sheet.querySelector('input');
+  const canvas = sheet.querySelector('canvas'), ctx = canvas.getContext('2d'), ok = sheet.querySelector('.logo-sheet__ok');
+  let mode = 'write', drawn = false;
+  const ready = () => { ok.disabled = mode === 'write' ? !input.value.trim() : !drawn; };
+
+  const setMode = m => {
+    mode = m; pad.dataset.mode = m;
+    sheet.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected', b.dataset.mode === m));
+    if (m === 'draw') size(); else input.focus();
+    ready();
+  };
+  sheet.querySelectorAll('[role="tab"]').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  input.addEventListener('input', ready);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && !ok.disabled) ok.click(); });
+
+  // Dessin : trait noir arrondi, lissé entre les points
+  const size = () => {
+    const r = canvas.getBoundingClientRect(), dpr = devicePixelRatio || 1;
+    if (canvas.width === Math.round(r.width * dpr)) return;
+    canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); drawn = false; ready();
+  };
+  let last = null;
+  const at = e => { const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  canvas.addEventListener('pointerdown', e => {
+    canvas.setPointerCapture(e.pointerId); last = at(e);
+    ctx.lineWidth = 4; ctx.lineCap = ctx.lineJoin = 'round'; ctx.strokeStyle = '#000';
+    ctx.beginPath(); ctx.arc(last[0], last[1], 2, 0, Math.PI * 2); ctx.fillStyle = '#000'; ctx.fill();
+    drawn = true; ready();
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!last) return;
+    const p = at(e), mid = [(last[0] + p[0]) / 2, (last[1] + p[1]) / 2];
+    ctx.beginPath(); ctx.moveTo(...(last.mid || last)); ctx.quadraticCurveTo(last[0], last[1], ...mid); ctx.stroke();
+    last = Object.assign(p, { mid });
+  });
+  ['pointerup', 'pointercancel'].forEach(ev => canvas.addEventListener(ev, () => { last = null; }));
+  sheet.querySelector('.logo-sheet__clear').addEventListener('click', () => {
+    if (mode === 'write') { input.value = ''; input.focus(); }
+    else { ctx.clearRect(0, 0, canvas.width, canvas.height); drawn = false; }
+    ready();
+  });
+
+  // Image finale, recadrée au plus près : le mot (écrit à la main, en Caveat) ou le dessin
+  const crop = src => {
+    const { width: w, height: h } = src, data = src.getContext('2d').getImageData(0, 0, w, h).data;
+    let x0 = w, y0 = h, x1 = -1, y1 = -1;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (data[(y * w + x) * 4 + 3] > 8) {
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+    if (x1 < 0) return null;
+    const m = 4, out = document.createElement('canvas');
+    out.width = x1 - x0 + 1 + m * 2; out.height = y1 - y0 + 1 + m * 2;
+    out.getContext('2d').drawImage(src, x0 - m, y0 - m, out.width, out.height, 0, 0, out.width, out.height);
+    return { url: out.toDataURL('image/png'), ratio: out.width / out.height };
+  };
+  const render = async () => {
+    if (mode === 'draw') return crop(canvas);
+    await document.fonts.load('120px Caveat');
+    const c = document.createElement('canvas'), x = c.getContext('2d'), text = input.value.trim();
+    x.font = '120px Caveat'; c.width = Math.ceil(x.measureText(text).width) + 40; c.height = 190;
+    x.font = '120px Caveat'; x.textBaseline = 'middle'; x.fillStyle = '#000'; x.fillText(text, 20, 95);
+    return crop(c);
+  };
+
+  // Échange : la signature s'efface en flou, la nouvelle apparaît avec un petit rebond
+  const swap = (img) => {
+    const out = logo.animate([{}, { opacity: 0, filter: 'blur(4px)', scale: .7 }], { duration: 180, easing: 'ease-in', fill: 'forwards' });
+    // (minuterie plutôt que onfinish : l'échange se fait même si l'onglet ne dessine pas d'images)
+    setTimeout(() => {
+      apply(img?.url, img?.ratio); out.cancel();
+      logo.animate([{ opacity: 0, filter: 'blur(4px)', scale: .7 }, { opacity: 1, filter: 'blur(0)', scale: 1.12, offset: .6 }, { scale: 1 }],
+        { duration: 420, easing: 'cubic-bezier(.34, 1.56, .64, 1)' });
+    }, 180);
+    try { img ? localStorage.setItem(KEY, JSON.stringify(img)) : localStorage.removeItem(KEY); } catch {}
+  };
+  ok.addEventListener('click', async () => { const img = await render(); if (img) { close(); setTimeout(() => swap(img), 240); } });
+  sheet.querySelector('.logo-sheet__reset').addEventListener('click', () => { close(); setTimeout(() => swap(null), 240); });
+
+  const close = () => {
+    sheet.classList.add('is-closing');
+    setTimeout(() => { sheet.close(); sheet.classList.remove('is-closing'); }, 220);
+  };
+  sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
+  sheet.addEventListener('click', e => e.target === sheet && close());
+  sheet.addEventListener('cancel', e => { e.preventDefault(); close(); });
+  logo.addEventListener('click', e => {
+    e.preventDefault();
+    sheet.showModal(); setMode(mode);
+  });
+});

@@ -31,7 +31,7 @@ img { display: block; max-width: 100%; }
 
 /* ---------- Header ---------- */
 .header { display: flex; justify-content: space-between; align-items: center; height: 130px; }
-.logo { width: 75px; height: 17px; background: #000; -webkit-mask: url(../assets/signature.svg) center/contain no-repeat; mask: url(../assets/signature.svg) center/contain no-repeat; }
+.logo { width: 75px; height: 17px; background: #000; -webkit-mask: var(--logo, url(../assets/signature.svg)) center/contain no-repeat; mask: var(--logo, url(../assets/signature.svg)) center/contain no-repeat; }
 .nav { display: flex; gap: 40px; font-size: 12px; }
 .nav a { color: var(--faint); transition: color .2s; }
 .nav a:hover, .nav a[aria-current] { color: #000; }
@@ -1058,6 +1058,31 @@ video::-webkit-media-controls { display: none !important; }
 .robot-sheet::backdrop { background: rgba(255, 255, 255, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: fade-in .3s ease; }
 .robot-sheet.is-closing { animation: sheet-out .22s ease forwards; }
 .robot-sheet.is-closing::backdrop { animation: fade-in .22s ease reverse forwards; }
+/* Signature personnalisable : même fenêtre que les fiches robots, en plus petit */
+.logo-sheet { width: min(420px, calc(100% - 32px)); max-width: none; margin: auto; padding: 30px 28px 24px; border: 0; border-radius: 20px; background: #fff; color: #000;
+              box-shadow: 0 30px 80px rgba(0, 0, 0, .25); animation: sheet-in .5s cubic-bezier(.34, 1.4, .64, 1); }
+.logo-sheet:not([open]) { display: none; }
+.logo-sheet::backdrop { background: rgba(255, 255, 255, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: fade-in .3s ease; }
+.logo-sheet.is-closing { animation: sheet-out .22s ease forwards; }
+.logo-sheet.is-closing::backdrop { animation: fade-in .22s ease reverse forwards; }
+.logo-sheet h3 { font: 500 26px/1 var(--display); letter-spacing: -.05em; }
+.logo-sheet__hint { margin-top: 10px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+.logo-sheet__tabs { display: inline-flex; gap: 2px; margin-top: 20px; padding: 3px; border-radius: 99px; background: #efefef; }
+.logo-sheet__tabs button { height: 28px; padding: 0 14px; border: 0; border-radius: 99px; background: none; font: 500 12px/1 var(--display); color: var(--faint); cursor: pointer; transition: background .2s, color .2s; }
+.logo-sheet__tabs [aria-selected="true"] { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0, 0, 0, .08); }
+.logo-sheet__pad { position: relative; height: 140px; margin-top: 12px; border-radius: 14px; background: #f5f5f5; overflow: hidden; }
+.logo-sheet__input { position: absolute; inset: 0; width: 100%; border: 0; background: none; outline: none; text-align: center; font: 400 46px/1 "Caveat", cursive; color: #000; }
+.logo-sheet__input::placeholder { color: #cfcfcf; }
+.logo-sheet__canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+.logo-sheet__pad[data-mode="write"] .logo-sheet__canvas, .logo-sheet__pad[data-mode="draw"] .logo-sheet__input { display: none; }
+.logo-sheet__clear { position: absolute; right: 8px; bottom: 8px; height: 24px; padding: 0 10px; border: 0; border-radius: 99px; background: rgba(0, 0, 0, .06); font: 500 11px/1 var(--display); color: var(--muted); cursor: pointer; }
+.logo-sheet__clear:hover { background: rgba(0, 0, 0, .12); color: #000; }
+.logo-sheet__actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; }
+.logo-sheet__reset { border: 0; background: none; padding: 0; font: 400 12px/1 var(--display); color: var(--faint); cursor: pointer; transition: color .2s; }
+.logo-sheet__reset:hover { color: #000; }
+.logo-sheet__ok { height: 40px; padding: 0 22px; border: 0; border-radius: 99px; background: #000; color: #fff; font: 500 14px/1 var(--display); cursor: pointer; transition: opacity .2s, scale .2s; }
+.logo-sheet__ok:disabled { opacity: .25; cursor: default; }
+.logo-sheet__ok:not(:disabled):active { scale: .96; }
 @keyframes sheet-in { from { opacity: 0; scale: .94; translate: 0 16px; } }
 @keyframes sheet-out { to { opacity: 0; scale: .97; translate: 0 8px; } }
 @keyframes fade-in { from { opacity: 0; } }
