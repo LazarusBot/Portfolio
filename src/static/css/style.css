@@ -162,9 +162,9 @@ img { display: block; max-width: 100%; }
 .topic { padding: 20px 0 25px; border-bottom: 1px solid var(--line); color: var(--muted); }
 .topic h3 { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
 /* Art : les 4 images en rang, la carte active se lève et dévoile sa légende */
-/* Plus large que la colonne : centré sur l'écran (data-bleed), avec une marge de 16 px sur les bords */
-.art { margin: 60px calc(-1 * var(--bleed-r, 0px)) 0 calc(-1 * var(--bleed-l, 0px)); padding: 0 16px; touch-action: pan-y; }
-.art__track { display: flex; justify-content: center; gap: 16px; padding: 24px 0 56px; }
+/* Calé à gauche sur le texte, peut déborder à droite jusqu'au bord de l'écran (data-bleed), 16 px de marge */
+.art { margin: 60px calc(-1 * var(--bleed-r, 0px)) 0 0; padding: 0 16px 0 0; touch-action: pan-y; }
+.art__track { display: flex; justify-content: flex-start; gap: 16px; padding: 24px 0 56px; }
 .art__card { position: relative; flex: 0 1 190px; min-width: 0; cursor: pointer; outline: none; transition: translate .6s cubic-bezier(.2, .8, .2, 1); }
 .art__card.is-active { translate: 0 -24px; cursor: default; }
 .art__media { position: relative; display: block; aspect-ratio: 20 / 23; border-radius: 12px; overflow: hidden; background: #f4f4f4; }
