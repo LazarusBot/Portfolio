@@ -315,7 +315,7 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
 
 // Meilleurs classements Chess.com. Le premier défile depuis 0 au chargement ; chaque survol (ou toucher,
 // sur mobile) passe au suivant : Rapid → Blitz → Puzzles. Un record de moins de 7 jours est fêté : le cavalier
-// saute, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « PB » reste.
+// tombe à la renverse, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « PB » reste.
 // Les valeurs enregistrées au build sont remplacées par celles du moment dès que Chess.com répond.
 document.querySelectorAll('[data-chess]').forEach(line => {
   const pill = line.querySelector('.chess__elo'), knight = line.querySelector('.chess__icon');
