@@ -85,6 +85,8 @@ const sound = (() => {
   // (mail, WhatsApp, X, LinkedIn). Ces éléments n'ont pas de son au clic, pour ne jamais doubler.
   const HOVER = '.nav a, .contact__mail, .contact__btn, .profile__job';
   let hovered = null;
+  // Robots (About) : leur propre son, le « robot », une fois par survol
+  document.querySelectorAll('.robot').forEach(r => r.addEventListener('pointerenter', e => e.pointerType === 'mouse' && play('robot', { vol: 1.3, gap: 250 })));
   addEventListener('pointerover', e => {
     if (e.pointerType !== 'mouse') return;
     const el = e.target.closest(HOVER);

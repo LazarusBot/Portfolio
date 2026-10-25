@@ -156,9 +156,16 @@ img { display: block; max-width: 100%; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .marquee img { height: 219px; width: auto; }
 @keyframes scroll { to { transform: translateX(-50%); } }
-.robots { display: flex; gap: 10px; padding: 20px 10px 0; }
-.robots img { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; transition: transform .25s; }
-.robots img:hover { transform: scale(1.1); }
+.robots { display: flex; gap: 10px; padding: 46px 10px 0; }
+.robot { position: relative; display: block; border-radius: 50%; outline: none; }
+.robots img { display: block; width: 75px; height: 75px; border-radius: 50%; object-fit: cover; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s; }
+/* Survol : contour noir (séparé de la photo par un fin liseré blanc) et nom dans une bulle au-dessus */
+.robot:hover img, .robot:focus-visible img { transform: scale(1.1); box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000; }
+.robot__name { position: absolute; left: 50%; bottom: calc(100% + 14px); z-index: 2; padding: 6px 11px; border-radius: 99px; background: #111; color: #fff;
+               font-size: 12px; white-space: nowrap; pointer-events: none; opacity: 0; translate: -50% 6px; scale: .9;
+               transition: opacity .18s, translate .35s cubic-bezier(.34, 1.56, .64, 1), scale .35s cubic-bezier(.34, 1.56, .64, 1); }
+.robot__name::after { content: ""; position: absolute; left: 50%; top: 100%; width: 8px; height: 8px; margin: -5px 0 0 -4px; background: #111; rotate: 45deg; border-radius: 1px; }
+.robot:hover .robot__name, .robot:focus-visible .robot__name { opacity: 1; translate: -50% 0; scale: 1; }
 
 /* ---------- Études de cas (générées depuis src/projects) ---------- */
 .project { padding-bottom: 120px; }
