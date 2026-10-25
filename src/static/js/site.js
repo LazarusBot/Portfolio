@@ -710,7 +710,7 @@ document.querySelectorAll('[data-drag]').forEach(rail => {
   });
 });
 
-// Signature personnalisable : un clic sur « Bosoveille » ouvre une fenêtre où l'on écrit un mot ou dessine
+// Signature personnalisable : un clic sur « Bosoveille » ouvre une fenêtre où l'on dessine ou écrit un mot
 // quelque chose ; le résultat remplace la signature dans l'en-tête, pour ce visiteur seulement (gardé dans le navigateur).
 document.querySelectorAll('.logo').forEach(logo => {
   const KEY = 'logo-swap';
@@ -729,12 +729,12 @@ document.querySelectorAll('.logo').forEach(logo => {
   sheet.innerHTML = `
     <button class="robot-sheet__close" aria-label="Close">×</button>
     <h3 id="logo-sheet-title">Make it yours</h3>
-    <p class="logo-sheet__hint">Write a word or draw something. It takes the place of my signature, just for you.</p>
+    <p class="logo-sheet__hint">Draw something or write a word. It takes the place of my signature, just for you.</p>
     <div class="logo-sheet__tabs" role="tablist">
-      <button role="tab" data-mode="write" aria-selected="true">Write</button>
-      <button role="tab" data-mode="draw" aria-selected="false">Draw</button>
+      <button role="tab" data-mode="draw" aria-selected="true">Draw</button>
+      <button role="tab" data-mode="write" aria-selected="false">Write</button>
     </div>
-    <div class="logo-sheet__pad" data-mode="write">
+    <div class="logo-sheet__pad" data-mode="draw">
       <input class="logo-sheet__input" type="text" maxlength="18" placeholder="Your word" aria-label="Your word" autocomplete="off" spellcheck="false">
       <canvas class="logo-sheet__canvas" aria-label="Drawing area"></canvas>
       <button class="logo-sheet__clear" type="button">Clear</button>
@@ -746,7 +746,7 @@ document.querySelectorAll('.logo').forEach(logo => {
   document.body.append(sheet);
   const pad = sheet.querySelector('.logo-sheet__pad'), input = sheet.querySelector('input');
   const canvas = sheet.querySelector('canvas'), ctx = canvas.getContext('2d'), ok = sheet.querySelector('.logo-sheet__ok');
-  let mode = 'write', drawn = false;
+  let mode = 'draw', drawn = false;
   const ready = () => { ok.disabled = mode === 'write' ? !input.value.trim() : !drawn; };
 
   const setMode = m => {
