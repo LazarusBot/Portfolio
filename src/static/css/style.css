@@ -1043,7 +1043,7 @@ video::-webkit-media-controls { display: none !important; }
 
 /* Fiche d'un robot (About) : grande photo, design industriel, caractéristiques mécaniques */
 /* height: fit-content : Safari ne dimensionne pas une boîte de dialogue à son contenu (elle s'étirait sur toute la hauteur) */
-.robot-sheet { width: min(860px, calc(100% - 32px)); max-width: none; height: -webkit-fit-content; height: fit-content; max-height: calc(100% - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #000;
+.robot-sheet { width: min(860px, calc(100% - 32px)); max-width: none; height: 400px; max-height: calc(100% - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #000;
                display: grid; grid-template-columns: 1.1fr 1fr; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
                animation: sheet-in .5s cubic-bezier(.34, 1.4, .64, 1); }
 .robot-sheet:not([open]) { display: none; }
@@ -1092,7 +1092,7 @@ video::-webkit-media-controls { display: none !important; }
 .robot-sheet__note { margin-top: 14px; font-size: 11px; color: var(--faint); }
 .robot { cursor: pointer; }
 @media (max-width: 809px) {
-  .robot-sheet { grid-template-columns: 1fr; margin: auto 0 0; width: 100%; max-height: 88vh; border-radius: 20px 20px 0 0; overflow-y: auto; }
+  .robot-sheet { grid-template-columns: 1fr; margin: auto 0 0; width: 100%; height: auto; max-height: 88vh; border-radius: 20px 20px 0 0; overflow-y: auto; }
   .robot-bom__scroll { position: static; overflow: visible; padding: 18px 16px; }
   .robot-bom__list { grid-template-columns: 1fr; }
   .robot-sheet__body { padding: 24px 20px 30px; overflow: visible; }
