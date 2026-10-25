@@ -56,7 +56,7 @@ const sound = (() => {
   // Par défaut, tout lien sonne « select » (on se déplace) et tout bouton « pop » (on agit).
   // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
-    ['.bag__pouch, .pz-chars__card, .chess, .nav a, .contact, .profile__job, .robot', null],
+    ['.bag__pouch, .pz-chars__card, .chess, .nav a, .contact, .profile__job, .robot, .art', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
     ['.logo', 'select', { rate: 1.08 }],
@@ -415,6 +415,58 @@ const bleed = () => bleeds.forEach(el => {
   el.style.setProperty('--bleed-r', `${Math.max(0, w - r.right)}px`);
 });
 if (bleeds.length) { bleed(); addEventListener('resize', bleed); }
+
+// Art (About) : carrousel en boucle, la carte au centre est active.
+// Trois copies de la série ; après chaque transition on revient sans bruit dans la copie du milieu.
+document.querySelectorAll('.art').forEach(art => {
+  const track = art.querySelector('.art__track');
+  const n = track.children.length;
+  const set = [...track.children];
+  [0, 1].forEach(k => set.forEach(c => {
+    const copy = c.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    k ? track.append(copy) : track.prepend(copy);
+  }));
+  const cards = [...track.children];
+  cards.forEach(c => { c.tabIndex = c.hasAttribute('aria-hidden') ? -1 : 0; });
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i = n;
+  const place = (animate = true) => {
+    if (!animate) track.style.transition = 'none';
+    const c = cards[i];
+    track.style.transform = `translateX(${art.clientWidth / 2 - c.offsetLeft - c.offsetWidth / 2}px)`;
+    cards.forEach((el, k) => el.classList.toggle('is-active', k === i));
+    if (!animate) { void track.offsetWidth; track.style.transition = ''; }
+  };
+  // Retour dans la copie du milieu ; aussi fait avant chaque déplacement, au cas où transitionend n'est pas arrivé
+  const wrap = () => { const off = i < n || i >= 2 * n ? n + (i % n) - i : 0; if (off) { i += off; place(false); } return off; };
+  const go = k => { k += wrap(); i = k; place(!calm); };
+  track.addEventListener('transitionend', e => { if (e.target === track) wrap(); });
+  track.addEventListener('click', e => {
+    const c = e.target.closest('.art__card');
+    if (c && cards.indexOf(c) !== i) { go(cards.indexOf(c)); sound.play('select', { vol: .7 }); }
+  });
+  art.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.closest('.art__card')) e.target.click();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); go(i + (e.key === 'ArrowRight' ? 1 : -1)); }
+  });
+  // Glisser (doigt ou souris) pour passer à la suivante / précédente
+  let x0 = null;
+  art.addEventListener('pointerdown', e => { x0 = e.clientX; });
+  art.addEventListener('pointerup', e => {
+    if (x0 === null) return;
+    const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+  });
+  // Défilement automatique, en pause au survol
+  let hover = false;
+  art.addEventListener('pointerenter', () => { hover = true; });
+  art.addEventListener('pointerleave', () => { hover = false; x0 = null; });
+  if (!calm) setInterval(() => { if (!hover && !document.hidden) go(i + 1); }, 3500);
+  place(false);
+  addEventListener('resize', () => place(false));
+  addEventListener('load', () => place(false));
+});
 
 // Robots (About) : un clic ouvre la fiche du robot : liste des composants, design industriel et caractéristiques mécaniques
 const robotsData = document.getElementById('robots-data');

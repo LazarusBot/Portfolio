@@ -45,13 +45,16 @@
         <summary>Things of interest</summary>
         <div class="acc__body">
           <div class="topic">
-            <h3 class="u">Topics: Art <span class="issue" title="Éventail recodé en CSS (survol)">#9</span></h3>
+            <h3 class="u">Topics: Art <span class="issue" title="Carrousel recodé (clic, glisser)">#9</span></h3>
             <p>This is everywhere, from a little touch of red on a painting to a spatial turbine piece.</p>
-            <div class="fan">
-              <figure><figcaption>(1)</figcaption><img src="assets/img/DAkowFJZXowYyjt18Cf18qX7pBU.jpg" alt=""></figure>
-              <figure><figcaption>(2)</figcaption><img src="assets/img/TIL3po9cFJKGmrLLXOPNJwUS4N8.jpg" alt=""></figure>
-              <figure><figcaption>(3)</figcaption><img src="assets/img/fcFSEtR4zArpgD4I0hBVsW2J9R8.jpg" alt=""></figure>
-              <figure><figcaption>(4)</figcaption><img src="assets/img/VtQw3mBDaHxQVAsekb8MbuqN0KQ.jpeg" alt=""></figure>
+            <!-- Carrousel : la carte du milieu se lève et montre sa légende ; clic, glisser ou flèches pour changer (site.js) -->
+            <div class="art" data-bleed>
+              <div class="art__track">
+                <figure class="art__card"><span class="art__media"><img src="assets/img/DAkowFJZXowYyjt18Cf18qX7pBU.jpg" alt="iPod, Apple, first generation, 2001"><em class="art__tag">Product</em></span><figcaption><b>iPod</b><span>Apple, first generation, 2001</span></figcaption></figure>
+                <figure class="art__card"><span class="art__media"><img src="assets/img/TIL3po9cFJKGmrLLXOPNJwUS4N8.jpg" alt="Eames Shell Armchair, Charles &amp; Ray Eames, Herman Miller"><em class="art__tag">Furniture</em></span><figcaption><b>Eames Shell Armchair</b><span>Charles &amp; Ray Eames, Herman Miller</span></figcaption></figure>
+                <figure class="art__card" style="--z:1.8;--o:36% 50%"><span class="art__media"><img src="assets/img/fcFSEtR4zArpgD4I0hBVsW2J9R8.jpg" alt="White Angora Cat, Jean-Jacques Bachelier, 1761"><em class="art__tag">Painting</em></span><figcaption><b>White Angora Cat</b><span>Jean-Jacques Bachelier, 1761</span></figcaption></figure>
+                <figure class="art__card"><span class="art__media"><img src="assets/img/VtQw3mBDaHxQVAsekb8MbuqN0KQ.jpeg" alt="Defender 90, Land Rover, the boxy icon"><em class="art__tag">Automotive</em></span><figcaption><b>Defender 90</b><span>Land Rover, the boxy icon</span></figcaption></figure>
+              </div>
             </div>
           </div>
 
