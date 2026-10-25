@@ -56,7 +56,7 @@ const sound = (() => {
   // Par défaut, tout lien sonne « select » (on se déplace) et tout bouton « pop » (on agit).
   // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
-    ['.bag__pouch, .pz-chars__card, .chess, .nav a, .contact, .profile__job', null],
+    ['.bag__pouch, .pz-chars__card, .chess, .nav a, .contact, .profile__job, .robot', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
     ['.logo', 'select', { rate: 1.08 }],
@@ -374,6 +374,46 @@ const bleed = () => bleeds.forEach(el => {
   el.style.setProperty('--bleed-r', `${Math.max(0, w - r.right)}px`);
 });
 if (bleeds.length) { bleed(); addEventListener('resize', bleed); }
+
+// Robots (About) : un clic ouvre la fiche du robot (design industriel et caractéristiques mécaniques)
+const robotsData = document.getElementById('robots-data');
+if (robotsData) {
+  const robots = JSON.parse(robotsData.textContent);
+  const sheet = document.createElement('dialog');
+  sheet.className = 'robot-sheet';
+  sheet.setAttribute('aria-labelledby', 'robot-sheet-title');
+  document.body.append(sheet);
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const open = key => {
+    const r = robots[key];
+    sheet.innerHTML = `
+      <button class="robot-sheet__close" aria-label="Close">×</button>
+      <img class="robot-sheet__img" src="assets/img/${r.img}" alt="${esc(r.name)}, ${esc(r.maker)}">
+      <div class="robot-sheet__body">
+        <p class="robot-sheet__maker">${esc(r.maker)} <span>${esc(r.year)}</span></p>
+        <h3 id="robot-sheet-title">${esc(r.name)}</h3>
+        <p class="robot-sheet__kicker">Industrial design</p>
+        <p class="robot-sheet__design">${esc(r.design)}</p>
+        <p class="robot-sheet__kicker">Mechanical properties</p>
+        <dl class="robot-sheet__specs">${r.specs.map(([k, v], i) => `<div style="--i:${i}"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+        <p class="robot-sheet__note">Figures published by the maker.</p>
+      </div>`;
+    sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
+    sheet.showModal();
+    sound.play('select');
+  };
+  const close = () => {
+    sheet.classList.add('is-closing');
+    setTimeout(() => { sheet.close(); sheet.classList.remove('is-closing'); }, 220);
+  };
+  // Un clic sur le fond (en dehors de la fiche) la ferme, Échap aussi
+  sheet.addEventListener('click', e => e.target === sheet && close());
+  sheet.addEventListener('cancel', e => { e.preventDefault(); close(); });
+  document.querySelectorAll('[data-robot]').forEach(el => {
+    el.addEventListener('click', () => open(el.dataset.robot));
+    el.addEventListener('keydown', e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), open(el.dataset.robot)));
+  });
+}
 
 // Afficher / masquer les annotations de test
 const toggle = document.querySelector('[data-toggle-issues]');

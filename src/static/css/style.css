@@ -997,3 +997,41 @@ video::-webkit-media-controls { display: none !important; }
 .sound-toggle__off { opacity: 0; }
 .sound-toggle.is-off .sound-toggle__waves { opacity: 0; }
 .sound-toggle.is-off .sound-toggle__off { opacity: 1; }
+
+/* Fiche d'un robot (About) : grande photo, design industriel, caractéristiques mécaniques */
+.robot-sheet { width: min(860px, calc(100% - 32px)); max-width: none; max-height: calc(100% - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #000;
+               display: grid; grid-template-columns: 1fr 1.15fr; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+               animation: sheet-in .5s cubic-bezier(.34, 1.4, .64, 1); }
+.robot-sheet:not([open]) { display: none; }
+.robot-sheet::backdrop { background: rgba(255, 255, 255, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: fade-in .3s ease; }
+.robot-sheet.is-closing { animation: sheet-out .22s ease forwards; }
+.robot-sheet.is-closing::backdrop { animation: fade-in .22s ease reverse forwards; }
+@keyframes sheet-in { from { opacity: 0; scale: .94; translate: 0 16px; } }
+@keyframes sheet-out { to { opacity: 0; scale: .97; translate: 0 8px; } }
+@keyframes fade-in { from { opacity: 0; } }
+.robot-sheet__img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; background: var(--card); }
+.robot-sheet__body { padding: 34px 34px 28px; overflow-y: auto; }
+.robot-sheet__close { position: absolute; right: 14px; top: 14px; z-index: 1; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .06);
+                      font-size: 20px; line-height: 1; color: #000; cursor: pointer; transition: background .2s, rotate .3s cubic-bezier(.34, 1.56, .64, 1); }
+.robot-sheet__close:hover { background: rgba(0, 0, 0, .12); rotate: 90deg; }
+.robot-sheet__maker { font-size: 12px; color: var(--faint); }
+.robot-sheet__maker span { margin-left: 6px; padding: 2px 8px; border-radius: 99px; background: #efefef; color: var(--muted); }
+.robot-sheet h3 { margin-top: 10px; font: 500 34px/1 var(--display); letter-spacing: -.05em; }
+.robot-sheet__kicker { margin-top: 26px; font-size: 12px; font-weight: 500; color: #000; }
+.robot-sheet__design { margin-top: 8px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+.robot-sheet__specs { display: grid; grid-template-columns: 1fr 1fr; margin-top: 10px; border-top: 1px solid var(--line); }
+.robot-sheet__specs div { padding: 11px 0; border-bottom: 1px solid var(--line); animation: spec-in .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.15s + var(--i) * .04s); }
+.robot-sheet__specs div:nth-child(odd) { padding-right: 14px; }
+.robot-sheet__specs div:nth-child(even) { padding-left: 14px; border-left: 1px solid var(--line); }
+.robot-sheet__specs dt { font-size: 11px; color: var(--faint); }
+.robot-sheet__specs dd { margin-top: 3px; font-size: 14px; font-weight: 500; }
+@keyframes spec-in { from { opacity: 0; translate: 0 8px; } }
+.robot-sheet__note { margin-top: 16px; font-size: 11px; color: var(--faint); }
+.robot { cursor: pointer; }
+@media (max-width: 809px) {
+  .robot-sheet { grid-template-columns: 1fr; margin: auto 0 0; width: 100%; max-height: 88vh; border-radius: 20px 20px 0 0; overflow-y: auto; }
+  .robot-sheet__img { min-height: 0; height: 240px; }
+  .robot-sheet__body { padding: 24px 20px 30px; overflow: visible; }
+  .robot-sheet h3 { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) { .robot-sheet, .robot-sheet__specs div, .robot-sheet::backdrop { animation: none; } }
