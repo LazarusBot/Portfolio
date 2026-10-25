@@ -9,7 +9,7 @@
   },
   "updated": "2026-10-25",
   "blitz": 1036,
-  "puzzles": 1426,
+  "puzzles": 1435,
   "records": {
     "rapid": {
       "best": 1085,
@@ -22,9 +22,9 @@
       "prev": null
     },
     "puzzles": {
-      "best": 1426,
-      "date": 1792929342,
-      "prev": 1412
+      "best": 1435,
+      "date": 1792961124,
+      "prev": 1426
     }
   }
 }
