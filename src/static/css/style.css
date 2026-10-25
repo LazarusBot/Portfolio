@@ -1043,7 +1043,7 @@ video::-webkit-media-controls { display: none !important; }
 
 /* Fiche d'un robot (About) : grande photo, design industriel, caractéristiques mécaniques */
 /* height: fit-content : Safari ne dimensionne pas une boîte de dialogue à son contenu (elle s'étirait sur toute la hauteur) */
-.robot-sheet { width: min(860px, calc(100% - 32px)); max-width: none; height: 400px; max-height: calc(100% - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #000;
+.robot-sheet { width: min(860px, calc(100% - 32px)); max-width: none; height: 575px; max-height: calc(100% - 48px); margin: auto; padding: 0; border: 0; border-radius: 20px; background: #fff; color: #000;
                display: grid; grid-template-columns: 1.1fr 1fr; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
                animation: sheet-in .5s cubic-bezier(.34, 1.4, .64, 1); }
 .robot-sheet:not([open]) { display: none; }
