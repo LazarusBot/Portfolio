@@ -1012,7 +1012,8 @@ video::-webkit-media-controls { display: none !important; }
 @keyframes sheet-out { to { opacity: 0; scale: .97; translate: 0 8px; } }
 @keyframes fade-in { from { opacity: 0; } }
 /* Nomenclature du robot : une carte par composant, pictogramme au trait, quantité en gros */
-.robot-bom { height: 560px; padding: 22px 22px 18px; overflow-y: auto; background: #f7f7f7; scrollbar-width: thin; }
+/* La fiche prend la hauteur de son contenu ; la liste ne défile que si elle dépasse l'écran */
+.robot-bom { max-height: calc(100vh - 96px); padding: 22px 22px 18px; overflow-y: auto; background: #f7f7f7; scrollbar-width: thin; }
 .robot-bom__head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .robot-bom__head img { width: 46px; height: 46px; border-radius: 12px; object-fit: cover; }
 .robot-bom__head p { font-size: 11px; color: var(--faint); }
