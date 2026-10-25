@@ -73,9 +73,22 @@ async function chessData() {
     });
     const d = await res.json(), r = d.chess_rapid;
     if (!r?.last?.rating) throw new Error('pas de partie rapide');
+    // Records par catégorie, avec leur date et le record d'avant (pour afficher le gain quand il est récent).
+    // Chess.com ne donne pas l'ancien record : on le retient nous-mêmes quand un build voit le record monter.
+    const record = (key, best, date) => {
+      const before = saved.records?.[key];
+      if (!best) return before ?? null;
+      const prev = before && best > before.best ? before.best : before && best === before.best ? before.prev ?? null : null;
+      return { best, date: date ?? before?.date ?? null, prev };
+    };
     const fresh = { ...saved, rapid: { rating: r.last.rating, best: r.best?.rating ?? null, win: r.record.win, loss: r.record.loss, draw: r.record.draw },
       blitz: d.chess_blitz?.best?.rating ?? d.chess_blitz?.last?.rating ?? saved.blitz ?? null,
       puzzles: d.tactics?.highest?.rating ?? saved.puzzles ?? null,
+      records: {
+        rapid: record('rapid', r.best?.rating, r.best?.date),
+        blitz: record('blitz', d.chess_blitz?.best?.rating, d.chess_blitz?.best?.date),
+        puzzles: record('puzzles', d.tactics?.highest?.rating, d.tactics?.highest?.date),
+      },
       updated: new Date().toISOString().slice(0, 10) };
     fs.writeFileSync(CHESS_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
@@ -87,7 +100,9 @@ async function chessData() {
 // Le chiffre change de catégorie à chaque survol : Rapid → Blitz → Puzzles (meilleurs scores)
 function chessLine(c) {
   const best = c.rapid.best ?? c.rapid.rating;
-  const values = [['Rapid', best], ['Blitz', c.blitz], ['Puzzles', c.puzzles]].filter(([, v]) => v);
+  // [libellé, valeur, date du record (s), record précédent] : la page fête un record de moins de 7 jours
+  const rec = k => [c.records?.[k]?.date ?? null, c.records?.[k]?.prev ?? null];
+  const values = [['Rapid', best, ...rec('rapid')], ['Blitz', c.blitz, ...rec('blitz')], ['Puzzles', c.puzzles, ...rec('puzzles')]].filter(([, v]) => v);
   return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}'>
           <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.8 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
           <span class="chess__label">Currently playing on Chess.com</span>

@@ -313,36 +313,61 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   addEventListener('resize', apply);
 });
 
-// Meilleurs classements Chess.com. Le premier (Rapid) défile depuis 0 au chargement ; chaque survol
-// (ou toucher, sur mobile) passe au suivant : Rapid → Blitz → Puzzles. Les valeurs enregistrées au build
-// sont remplacées par celles du moment dès que Chess.com répond.
+// Meilleurs classements Chess.com. Le premier défile depuis 0 au chargement ; chaque survol (ou toucher,
+// sur mobile) passe au suivant : Rapid → Blitz → Puzzles. Un record de moins de 7 jours est fêté : le cavalier
+// saute, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « New best » reste.
+// Les valeurs enregistrées au build sont remplacées par celles du moment dès que Chess.com répond.
 document.querySelectorAll('[data-chess]').forEach(line => {
-  const pill = line.querySelector('.chess__elo');
-  let values = JSON.parse(line.dataset.chessValues), i = 0, shown = 0, busy = false;
+  const pill = line.querySelector('.chess__elo'), knight = line.querySelector('.chess__icon');
+  // Chaque valeur : [libellé, record, date du record (s), record précédent]
+  let values = JSON.parse(line.dataset.chessValues), i = 0, busy = false;
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const countUp = (b, to) => {
+  const WEEK = 7 * 864e5;
+  const recent = v => v[2] && Date.now() - v[2] * 1000 < WEEK;
+  const gain = v => (recent(v) && v[3] && v[1] > v[3] ? v[1] - v[3] : 0);
+  const markup = v => `<small>${v[0]}</small> <b>${v[1]}</b>${recent(v) ? '<em class="chess__new">New best</em>' : ''}`;
+  const countUp = (b, from, to) => {
     const t0 = performance.now(), dur = 900;
     const step = t => {
       const k = Math.min(1, (t - t0) / dur);
-      shown = Math.round(to * (1 - Math.pow(1 - k, 3)));
-      b.textContent = shown;
+      b.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
       if (k < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   };
-  const first = pill.querySelector('b');
-  if (!calm) countUp(first, values[0][1]);
+  // Fête un record récent sur la valeur affichée
+  const celebrate = (v, b) => {
+    const g = gain(v);
+    if (calm) return;
+    countUp(b, g ? v[3] : 0, v[1]);
+    knight.classList.remove('is-hop'); void knight.offsetWidth; knight.classList.add('is-hop');
+    pill.classList.remove('is-record'); void pill.offsetWidth; pill.classList.add('is-record');
+    if (g) {
+      const plus = document.createElement('span');
+      plus.className = 'chess__gain';
+      plus.textContent = `+${g}`;
+      line.append(plus);
+      plus.addEventListener('animationend', () => plus.remove());
+      sound.play('select', { rate: 1.3, vol: .8 });
+    }
+  };
+  const show = (v, b) => (recent(v) ? celebrate(v, b) : calm || countUp(b, 0, v[1]));
+  // Au chargement, on commence par un record récent s'il y en a un, pour qu'il se voie
+  const start = Math.max(0, values.findIndex(recent));
+  i = start;
+  pill.querySelector('.chess__value').innerHTML = markup(values[i]);
+  show(values[i], pill.querySelector('b'));
   // L'ancienne valeur monte et s'efface, la nouvelle arrive par en dessous
   const next = () => {
     if (busy || values.length < 2) return;
     busy = true;
     sound.play('select', { vol: .6, rate: 1.1 });
     i = (i + 1) % values.length;
-    const [label, val] = values[i];
+    const v = values[i];
     const old = pill.querySelector('.chess__value');
     const neu = document.createElement('span');
     neu.className = 'chess__value is-in';
-    neu.innerHTML = `<small>${label}</small> <b>${val}</b>`;
+    neu.innerHTML = markup(v);
     pill.style.width = `${pill.offsetWidth}px`;
     pill.append(neu);
     old.classList.add('is-out');
@@ -350,6 +375,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       pill.style.width = `${neu.scrollWidth + 18}px`;
       neu.classList.remove('is-in');
     });
+    if (recent(v)) celebrate(v, neu.querySelector('b'));
     setTimeout(() => { old.remove(); pill.style.width = ''; busy = false; }, calm ? 0 : 320);
   };
   line.addEventListener('pointerenter', e => e.pointerType === 'mouse' && next());
@@ -357,11 +383,16 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   fetch(`https://api.chess.com/pub/player/${line.dataset.chess}/stats`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
     .then(({ chess_rapid: r, chess_blitz: b, tactics: t }) => {
-      const fresh = [['Rapid', r?.best?.rating ?? r?.last?.rating], ['Blitz', b?.best?.rating ?? b?.last?.rating], ['Puzzles', t?.highest?.rating]].filter(([, v]) => v);
-      if (!fresh.length) return;
-      values = fresh;
-      const cur = values.find(([l]) => l === pill.querySelector('small').textContent);
-      if (cur) pill.querySelector('b').textContent = cur[1];
+      const live = { Rapid: [r?.best?.rating ?? r?.last?.rating, r?.best?.date], Blitz: [b?.best?.rating ?? b?.last?.rating, b?.best?.date], Puzzles: [t?.highest?.rating, t?.highest?.date] };
+      const cur = values[i];
+      values = values.map(v => {
+        const [best, date] = live[v[0]] || [];
+        if (!best) return v;
+        // Record battu depuis le dernier build : l'ancien record est celui enregistré au build
+        return best > v[1] ? [v[0], best, date ?? v[2], v[1]] : [v[0], best, date ?? v[2], v[3]];
+      });
+      const now = values[i];
+      if (now[1] !== cur[1]) { pill.querySelector('.chess__value').innerHTML = markup(now); celebrate(now, pill.querySelector('b')); }
     })
     .catch(() => {});
 });
