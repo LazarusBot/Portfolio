@@ -114,7 +114,7 @@ img { display: block; max-width: 100%; }
 .card__hover, .card__badge { position: absolute; opacity: 0; transition: opacity .3s ease; pointer-events: none; }
 .card__hover { inset: 0; }
 /* Tag Figma : pastille ronde blanche, contour blanc à 50 % qui laisse voir l'image derrière */
-.card__media .card__badge { box-sizing: border-box; width: 34px; height: 34px; right: 12px; bottom: 12px; top: auto; left: auto; object-fit: cover; border-radius: 50%; background: #fff; border: 2px solid rgba(255, 255, 255, .5); background-clip: padding-box; }
+.card__media .card__badge { box-sizing: content-box; width: 24px; height: 24px; right: 12px; bottom: 12px; top: auto; left: auto; object-fit: cover; border-radius: 50%; background: #fff; border: 4px solid rgba(255, 255, 255, .5); background-clip: padding-box; }
 .card:hover .card__hover, .card:hover .card__badge { opacity: 1; }
 .card__caption { margin-top: 15px; color: var(--muted); }
 .micro-plus { width: 15px; height: 15px; background: #c2c2c2; -webkit-mask: url(../assets/micro-dot.svg) center/contain no-repeat; mask: url(../assets/micro-dot.svg) center/contain no-repeat; }
