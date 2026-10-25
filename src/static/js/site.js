@@ -401,14 +401,21 @@ if (robotsData) {
         <span class="sk__view">${esc(k.view)}</span>
       </div>`;
   };
+  // Figures techniques publiées par le fabricant (Sprout : Fig. 2 de l'article arXiv), avec un sélecteur de vue
+  const figures = r => `<figure class="robot-sheet__visual robot-sheet__visual--figs" data-figs>
+        <div class="figs__tabs" role="tablist" aria-label="View">${r.figures.map(([, label], i) =>
+          `<button role="tab" aria-selected="${!i}" data-fig="${i}">${esc(label)}</button>`).join('')}</div>
+        ${r.figures.map(([src, label], i) => `<img class="figs__img${i ? '' : ' is-on'}" src="${src}" alt="${esc(r.name)}: ${esc(label)} view with technical callouts" ${i ? 'loading="lazy"' : ''}>`).join('')}
+        <figcaption><span></span><a href="${r.source.url}" target="_blank" rel="noopener">${esc(r.source.text)}</a></figcaption>
+      </figure>`;
   const open = key => {
     const r = robots[key];
     sheet.innerHTML = `
       <button class="robot-sheet__close" aria-label="Close">×</button>
-      <figure class="robot-sheet__visual robot-sheet__visual--sketch">
+      ${r.figures ? figures(r) : `<figure class="robot-sheet__visual robot-sheet__visual--sketch">
         ${sketch(key, r)}
         <figcaption><span></span><span>Sketch after a photo by ${esc(r.credit)}</span></figcaption>
-      </figure>
+      </figure>`}
       <div class="robot-sheet__body">
         <p class="robot-sheet__maker">${esc(r.maker)} <span>${esc(r.year)}</span></p>
         <h3 id="robot-sheet-title">${esc(r.name)}</h3>
@@ -416,9 +423,14 @@ if (robotsData) {
         <p class="robot-sheet__design">${esc(r.design)}</p>
         <p class="robot-sheet__kicker">Mechanical properties</p>
         <dl class="robot-sheet__specs">${r.specs.map(([k, v], i) => `<div style="--i:${i}"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-        <p class="robot-sheet__note">Figures published by the maker. Sketch drawn from the maker's photo.</p>
+        <p class="robot-sheet__note">${r.figures ? 'Figures and views from the maker\'s research paper.' : 'Figures published by the maker. Sketch drawn from the maker\'s photo.'}</p>
       </div>`;
     sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
+    sheet.querySelectorAll('[data-fig]').forEach(b => b.addEventListener('click', () => {
+      sheet.querySelectorAll('[data-fig]').forEach(o => o.setAttribute('aria-selected', o === b));
+      sheet.querySelectorAll('.figs__img').forEach((img, i) => img.classList.toggle('is-on', i === +b.dataset.fig));
+      sound.play('select', { vol: .7 });
+    }));
     sheet.showModal();
     sound.play('select');
   };
