@@ -81,7 +81,7 @@ img { display: block; max-width: 100%; }
 .chess__label { transition: color .25s; }
 .chess__elo { position: relative; display: inline-flex; align-items: baseline; height: 22px; padding: 0 9px; overflow: hidden; border-radius: 99px; background: #efefef; color: var(--faint);
               transition: width .3s cubic-bezier(.34, 1.4, .64, 1), background .25s, color .25s; }
-.chess__value { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; line-height: 22px; transition: translate .3s cubic-bezier(.34, 1.4, .64, 1), opacity .2s; }
+.chess__value { display: inline-flex; align-items: baseline; gap: 5px; height: 22px; white-space: nowrap; line-height: 22px; transition: translate .3s cubic-bezier(.34, 1.4, .64, 1), opacity .2s; }
 .chess__value small { font-size: 11px; }
 .chess__value b { font-weight: 600; font-variant-numeric: tabular-nums; color: #000; }
 /* Pendant le changement, les deux valeurs se superposent : l'une sort par le haut, l'autre entre par le bas */
@@ -91,6 +91,8 @@ img { display: block; max-width: 100%; }
 /* Record de moins de 7 jours : étiquette « PB », anneau vert, « +N » qui s'envole, couronne sur le cavalier */
 .chess__new { align-self: center; display: inline-grid; place-items: center; height: 16px; margin-left: 8px; padding: 0 6px 1px; border-radius: 99px; background: #dff8e3; color: #1f9d3a;
               font: 600 10px/1 var(--display, sans-serif); font-style: normal; letter-spacing: .04em; text-transform: uppercase; }
+/* Lettres centrées sur leur hauteur de capitale, quelle que soit la police chargée (Safari 18+, Chrome 133+) */
+@supports (text-box: trim-both cap alphabetic) { .chess__new { padding-bottom: 0; text-box: trim-both cap alphabetic; } }
 /* Avec le tag PB : il se loge au bout de la pastille, 3 px du bord comme en haut et en bas */
 .chess__elo:has(.chess__new) { padding-right: 3px; }
 .chess__elo.is-record { animation: chess-ring 1.1s ease-out; }
