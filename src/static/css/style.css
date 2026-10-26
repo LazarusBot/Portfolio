@@ -225,12 +225,15 @@ img { display: block; max-width: 100%; }
   opacity: 0; transition: opacity .6s ease; }
 .origin__media > .is-on { opacity: 1; }
 .origin__media > .origin__fit { object-fit: contain; background: #e1e1e1; }
-.origin__bar { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
-.origin__arrow { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 1px solid #e4e4e4; border-radius: 50%; background: #fff; color: #000; cursor: pointer; transition: background .2s, border-color .2s; }
-.origin__arrow:hover { background: #f3f3f3; border-color: #d6d6d6; }
+/* Flèches et légende posées sur l'image, dans une pastille en verre dépoli */
+.origin__bar { position: absolute; left: 16px; bottom: 16px; z-index: 1; display: flex; align-items: center; gap: 4px; padding: 5px 16px 5px 5px; border-radius: 99px;
+  background: rgba(255, 255, 255, .55); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
+.origin__arrow { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .6); color: #000; cursor: pointer; transition: background .2s; }
+.origin__arrow:hover { background: #fff; }
 .origin__arrow svg { width: 14px; height: 14px; }
 .origin__label { margin: 0 0 0 8px; font-size: 13px; color: #000; }
-.origin__label small { margin-right: 6px; font: 500 10px/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.origin__label small { margin-right: 6px; font: 500 10px/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; color: rgba(0, 0, 0, .45); }
+@media (max-width: 809px) { .origin__bar { left: 10px; bottom: 10px; right: 10px; padding-right: 12px; } .origin__label { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
 @media (prefers-reduced-motion: reduce) { .origin__media > img, .origin__media > video { transition: none; } }
 .gallery { display: grid; grid-template-columns: repeat(var(--cols, 2), 1fr); gap: 20px; margin-top: 20px; align-items: start; }
 .gallery img, .gallery video { display: block; width: 100%; height: auto; background: var(--card); }
