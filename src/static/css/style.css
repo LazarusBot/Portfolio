@@ -225,12 +225,16 @@ img { display: block; max-width: 100%; }
   background: #fff; border: 9px solid #111; border-top: 0; border-radius: 0 0 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, .12); }
 .chat__thread { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; padding: 0 14px 6px;
   -webkit-mask: linear-gradient(transparent, #000 18%); mask: linear-gradient(transparent, #000 18%); }
-.chat__time { margin: 0 0 8px; text-align: center; font-size: 10px; color: #8e8e93; }
+.chat__time { margin: 0; padding-bottom: 8px; text-align: center; font-size: 10px; color: #8e8e93; }
 .chat__time b { font-weight: 600; }
-.msg { display: grid; grid-template-rows: 1fr; }
-.msg__in { min-height: 0; overflow: hidden; padding: 0 9px; margin: 0 -9px; }
-.msg p { position: relative; width: fit-content; max-width: 74%; margin: 2px 0 0; padding: 7px 12px; border-radius: 18px; font-size: 13px; line-height: 1.3; }
-.msg.tail p { margin-bottom: 6px; }
+/* (marge latérale : de la place pour les queues de bulle quand le message s'ouvre) */
+/* flex: none : quand le fil est plein, les messages ne se tassent pas, les plus anciens sortent par le haut */
+.msg, .chat__time { flex: none; }
+.msg { padding: 2px 9px 0; margin: 0 -9px; }
+.msg.tail { padding-bottom: 6px; }
+.msg.pic { padding-top: 6px; padding-bottom: 4px; }
+/* (tout l'espacement est en padding : rien ne dépasse du message, qui peut donc s'ouvrir à sa hauteur exacte) */
+.msg p { position: relative; width: fit-content; max-width: 74%; margin: 0; padding: 7px 12px; border-radius: 18px; font-size: 13px; line-height: 1.3; }
 .msg.them p { background: #e9e9eb; color: #000; }
 .msg.me p { margin-left: auto; background: #0b84ff; color: #fff; }
 /* Queue de bulle iOS, sur la dernière bulle d'un groupe */
@@ -239,28 +243,28 @@ img { display: block; max-width: 100%; }
 .msg.me.tail p::after { right: -26px; width: 26px; background: #fff; border-bottom-left-radius: 10px; }
 .msg.them.tail p::before { left: -7px; width: 20px; background: #e9e9eb; border-bottom-right-radius: 16px 14px; }
 .msg.them.tail p::after { left: -26px; width: 26px; background: #fff; border-bottom-right-radius: 10px; }
-.msg.pic img, .msg.pic video { display: block; width: 60%; aspect-ratio: 4 / 3; margin: 6px 0 4px auto; object-fit: cover; border-radius: 16px; background: #e9e9eb; }
+.msg.pic img, .msg.pic video { display: block; width: 60%; aspect-ratio: 4 / 3; margin: 0 0 0 auto; object-fit: cover; border-radius: 16px; background: #e9e9eb; }
 .msg.pic.tall img { width: 46%; aspect-ratio: 3 / 4; object-position: 50% 70%; }
 /* Pile de photos envoyées ensemble (iOS 17) : la première en grand, les autres dépassent à droite, « 5 Items » au-dessus */
 .msg.pic.doc img { aspect-ratio: 1000 / 776; }
-.msg.stack .msg__in { display: flex; flex-direction: column; align-items: flex-end; padding-top: 4px; }
+.msg.bunch .msg__in { display: flex; flex-direction: column; align-items: flex-end; padding-bottom: 18px; }
 .stack__count { align-self: flex-end; display: flex; align-items: center; gap: 4px; margin: 0 2px 6px 0; font-size: 10px; font-weight: 500; color: #0b84ff; }
 .stack__count i { width: 9px; height: 9px; background:
   linear-gradient(#0b84ff, #0b84ff) 0 0 / 4px 4px no-repeat, linear-gradient(#0b84ff, #0b84ff) 5px 0 / 4px 4px no-repeat,
   linear-gradient(#0b84ff, #0b84ff) 0 5px / 4px 4px no-repeat, linear-gradient(#0b84ff, #0b84ff) 5px 5px / 4px 4px no-repeat; border-radius: 1px; }
-.stack { position: relative; display: block; flex: none; align-self: flex-end; width: 132px; height: 176px; margin: 0 16px 6px 0; }
+.stack { position: relative; display: block; flex: none; align-self: flex-end; width: 132px; height: 176px; margin-right: 18px; }   /* marge : les photos penchées dépassent un peu */
 .msg.pic .stack img { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; aspect-ratio: auto; object-fit: cover; border-radius: 16px; background: #e9e9eb; }
 .stack > img { transform-origin: 0 100%; }
-.stack > img:nth-child(1) { rotate: 9deg; translate: 14px 0; filter: brightness(.9); }
-.stack > img:nth-child(2) { rotate: 6deg; translate: 10px 0; filter: brightness(.93); }
-.stack > img:nth-child(3) { rotate: 3deg; translate: 6px 0; filter: brightness(.96); }
+.stack > img:nth-child(1) { rotate: 6deg; translate: 14px 0; filter: brightness(.9); }
+.stack > img:nth-child(2) { rotate: 4deg; translate: 10px 0; filter: brightness(.93); }
+.stack > img:nth-child(3) { rotate: 2deg; translate: 6px 0; filter: brightness(.96); }
 .stack > img:nth-child(4) { rotate: 1deg; translate: 3px 0; }
 .stack__front { position: absolute; inset: 0; border-radius: 16px; overflow: hidden; box-shadow: -1px 0 3px rgba(0, 0, 0, .12); }
 .stack__play { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; translate: -50% -50%; border-radius: 50%; background: rgba(255, 255, 255, .55);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .stack__play::after { content: ""; position: absolute; left: 13px; top: 10px; border: solid transparent; border-width: 7px 0 7px 11px; border-left-color: #111; }
 /* Accusé : « Distribué » puis « Lu » sous le dernier message envoyé */
-.chat__receipt { margin: -2px 2px 4px auto; font-size: 10px; color: #8e8e93; }
+.chat__receipt { flex: none; margin: 0 2px 0 auto; padding-bottom: 6px; font-size: 10px; line-height: 12px; color: #8e8e93; }
 /* Champ de saisie et barre d'accueil */
 .chat__bar { display: flex; align-items: flex-end; gap: 8px; padding: 6px 12px 8px; }
 .chat__plus { display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 50%; background: #e9e9eb; color: #8e8e93; font-size: 20px; line-height: 1; }
@@ -274,11 +278,12 @@ img { display: block; max-width: 100%; }
 .chat__field.has-draft .chat__send { opacity: 1; scale: 1; }
 .chat__home { flex: none; align-self: center; width: 110px; height: 4px; margin: 2px 0 8px; border-radius: 4px; background: #111; }
 /* Lecture : un message caché ne prend pas de place ; à son tour il s'ouvre et la bulle apparaît avec un petit ressort */
-.chat.is-playing .msg { grid-template-rows: 0fr; transition: grid-template-rows .35s cubic-bezier(.2, .8, .2, 1); }
+.chat.is-playing .msg { max-height: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.2, .8, .2, 1), padding .35s cubic-bezier(.2, .8, .2, 1); }
+.chat.is-playing .msg:not(.is-in) { padding-top: 0; padding-bottom: 0; }
+.chat.is-playing .msg.is-open { overflow: visible; }
 .chat.is-playing .msg__in > * { opacity: 0; scale: .7; transition: opacity .2s ease, scale .45s cubic-bezier(.34, 1.56, .64, 1); }
 .chat.is-playing .msg.me .msg__in > * { transform-origin: 100% 100%; }
 .chat.is-playing .msg.them .msg__in > * { transform-origin: 0 100%; }
-.chat.is-playing .msg.is-in { grid-template-rows: 1fr; }
 .chat.is-playing .msg.is-in .msg__in > * { opacity: 1; scale: 1; }
 .chat.is-reset .chat__thread { opacity: 0; transition: opacity .4s ease; }
 .msg.typing p { display: flex; gap: 3px; padding: 10px 12px; }

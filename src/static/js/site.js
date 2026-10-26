@@ -900,21 +900,43 @@ document.querySelectorAll('.chat').forEach(chat => {
   const receipt = document.createElement('p');
   receipt.className = 'chat__receipt';
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  const open = el => { void el.offsetWidth; el.classList.add('is-in'); };
+  // Ouvre un message à sa vraie hauteur (mesurée), pour qu'il pousse les autres sans jamais les chevaucher
+  // (hauteur de mise en page, pas scrollHeight : la bulle encore réduite à 70 % fausserait la mesure)
+  const open = el => {
+    el.classList.add('is-in');
+    const cs = getComputedStyle(el);
+    el.style.maxHeight = `${el.firstElementChild.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)}px`;
+    setTimeout(() => { if (el.classList.contains('is-in')) { el.classList.add('is-open'); el.style.maxHeight = 'none'; } }, 380);
+  };
+  const shut = el => { el.classList.remove('is-in', 'is-open'); el.style.maxHeight = ''; };
+  // Après l'envoi de la pile : on la feuillette d'un coup de doigt, chaque carte part à gauche et la suivante vient devant
+  const swipe = async stack => {
+    const cards = [stack.querySelector('.stack__front'), ...[...stack.querySelectorAll(':scope > img')].reverse()];
+    const out = { translate: '-140px 0', rotate: '-12deg', opacity: 0 };
+    for (let k = 0; k < cards.length - 1; k++) {
+      cards[k].animate([{}, out], { duration: 260, easing: 'cubic-bezier(.4, 0, .6, 1)', fill: 'forwards' });
+      cards[k + 1].animate([{}, { translate: '0 0', rotate: '0deg', filter: 'none' }], { duration: 260, easing: 'ease-out', fill: 'forwards' });
+      await wait(330);
+    }
+    await wait(500);
+    // retour à la première, en fondu
+    cards.forEach(c => c.getAnimations().forEach(a => a.cancel()));
+    cards[0].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 250 });
+  };
   const clock = n => `09:${String(41 + n).padStart(2, '0')}`;
   let running = false;
   const play = async () => {
     if (running) return; running = true;
     while (true) {
       chat.classList.add('is-playing');
-      msgs.forEach(m => m.classList.remove('is-in'));
-      receipt.remove(); chat.querySelector('video')?.pause();
+      msgs.forEach(shut);
+      receipt.remove();
       await wait(700);
       let sent = 0;
       for (const m of msgs) {
         if (m.classList.contains('them')) {
           if (receipt.isConnected) { await wait(500); receipt.textContent = `Read ${clock(sent)}`; }
-          thread.insertBefore(typing, m); typing.classList.remove('is-in'); open(typing);
+          thread.insertBefore(typing, m); shut(typing); open(typing);
           await wait(1200);
           typing.remove();
           open(m);
@@ -934,9 +956,9 @@ document.querySelectorAll('.chat').forEach(chat => {
         draft.textContent = ''; field.classList.remove('has-draft');
         open(m);
         m.after(receipt); receipt.textContent = 'Delivered'; sent++;
-        const v = m.querySelector('video'); if (v) { v.currentTime = 0; v.play().catch(() => {}); }
         sound.play('pop', { vol: .2, rate: 1.2 });
         await wait(m.classList.contains('pic') ? 1300 : 700);
+        if (m.classList.contains('bunch')) { await swipe(m.querySelector('.stack')); await wait(400); }
       }
       await wait(4500);
       chat.classList.add('is-reset'); await wait(450);
