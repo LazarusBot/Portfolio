@@ -64,12 +64,9 @@ img { display: block; max-width: 100%; }
 .profile__name { font: 500 26px/0.8 var(--display); letter-spacing: -0.06em; }
 .profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #dedede; transition: color .25s; }
 .profile__job:hover { color: #0a66c2; }
-/* Disponibilité : une simple légende sous le métier, avec un point vert qui respire doucement */
-.profile__status { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; font-size: 12px; color: var(--faint); }
-.profile__status i { position: relative; width: 6px; height: 6px; border-radius: 50%; background: #34c759; }
-.profile__status i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #34c759; animation: status-pulse 2.4s ease-out infinite; }
-@keyframes status-pulse { from { opacity: .6; scale: 1; } to { opacity: 0; scale: 2.6; } }
-@media (prefers-reduced-motion: reduce) { .profile__status i::after { animation: none; } }
+/* Disponibilité : une légende discrète à côté du nom, alignée sur sa ligne de base */
+.profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 14px; row-gap: 10px; }
+.profile__status { font-size: 12px; color: var(--faint); }
 /* Icônes en masque CSS pour pouvoir changer leur couleur au survol */
 .icon { display: block; background: currentColor; -webkit-mask: var(--src) center/contain no-repeat; mask: var(--src) center/contain no-repeat; transition: background-color .25s; }
 .icon--linkedin { --src: url(../assets/linkedin.svg); width: 15px; height: 15px; }
