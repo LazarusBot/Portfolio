@@ -218,37 +218,64 @@ img { display: block; max-width: 100%; }
 /* ---------- Études de cas (générées depuis src/projects) ---------- */
 .project { padding-bottom: 20px; }
 .project .section p + p { margin-top: 10px; }
-/* Aer : en-tête en conversation iMessage avec le fabricant. Le téléphone sort du bas de l'en-tête (seul le haut se voit),
-   les messages arrivent un par un et poussent les précédents vers le haut */
+/* Aer : en-tête en conversation iMessage avec le fabricant. On voit le bas du téléphone (le haut sort du cadre) :
+   fil de messages, champ de saisie, barre d'accueil. Les messages poussent les précédents vers le haut */
 .chat { position: relative; margin: 30px 0 60px; aspect-ratio: 16 / 10; overflow: hidden; background: #f2f2f2; }
-.chat__phone { position: absolute; left: 50%; top: 8%; bottom: 0; width: min(330px, 78%); translate: -50% 0; display: flex; flex-direction: column;
-  background: #fff; border: 9px solid #111; border-bottom: 0; border-radius: 46px 46px 0 0; box-shadow: 0 30px 60px rgba(0, 0, 0, .12); }
-.chat__top { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 0 10px; border-bottom: 1px solid #ececec; background: #fafafa; border-radius: 37px 37px 0 0; }
-.chat__top b { font-size: 11px; font-weight: 500; color: #000; }
-.chat__avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(#a4a8b1, #868a93); color: #fff; font-size: 15px; font-weight: 500; }
-.chat__thread { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 0; overflow: hidden; padding: 8px 12px 18px; }
-.chat__time { margin: 0 0 6px; text-align: center; font-size: 10px; color: #8e8e93; }
+.chat__phone { position: absolute; left: 50%; top: 0; bottom: 7%; width: min(330px, 78%); translate: -50% 0; display: flex; flex-direction: column;
+  background: #fff; border: 9px solid #111; border-top: 0; border-radius: 0 0 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, .12); }
+.chat__thread { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; padding: 0 14px 6px;
+  -webkit-mask: linear-gradient(transparent, #000 18%); mask: linear-gradient(transparent, #000 18%); }
+.chat__time { margin: 0 0 8px; text-align: center; font-size: 10px; color: #8e8e93; }
+.chat__time b { font-weight: 600; }
 .msg { display: grid; grid-template-rows: 1fr; }
-.msg > * { min-height: 0; overflow: hidden; }
-.msg p { width: fit-content; max-width: 74%; margin: 3px 0 0; padding: 7px 12px; border-radius: 18px; font-size: 13px; line-height: 1.3; }
+.msg__in { min-height: 0; overflow: hidden; padding: 0 9px; margin: 0 -9px; }
+.msg p { position: relative; width: fit-content; max-width: 74%; margin: 2px 0 0; padding: 7px 12px; border-radius: 18px; font-size: 13px; line-height: 1.3; }
+.msg.tail p { margin-bottom: 6px; }
 .msg.them p { background: #e9e9eb; color: #000; }
 .msg.me p { margin-left: auto; background: #0b84ff; color: #fff; }
-.msg.pic img, .msg.pic video { display: block; width: 62%; aspect-ratio: 4 / 3; margin: 4px 0 0 auto; object-fit: cover; border-radius: 16px; background: #e9e9eb; }
+/* Queue de bulle iOS, sur la dernière bulle d'un groupe */
+.msg.tail p::before, .msg.tail p::after { content: ""; position: absolute; bottom: 0; height: 18px; }
+.msg.me.tail p::before { right: -7px; width: 20px; background: #0b84ff; border-bottom-left-radius: 16px 14px; }
+.msg.me.tail p::after { right: -26px; width: 26px; background: #fff; border-bottom-left-radius: 10px; }
+.msg.them.tail p::before { left: -7px; width: 20px; background: #e9e9eb; border-bottom-right-radius: 16px 14px; }
+.msg.them.tail p::after { left: -26px; width: 26px; background: #fff; border-bottom-right-radius: 10px; }
+.msg.pic img, .msg.pic video { display: block; width: 60%; aspect-ratio: 4 / 3; margin: 6px 0 4px auto; object-fit: cover; border-radius: 16px; background: #e9e9eb; }
+.msg.pic.tall img { width: 46%; aspect-ratio: 3 / 4; object-position: 50% 70%; }
+/* Pile de photos envoyées ensemble (iOS) */
+.msg.stack .msg__in { display: flex; flex-direction: column; align-items: flex-end; padding-top: 10px; }
+.stack { position: relative; display: block; flex: none; align-self: flex-end; width: 126px; height: 168px; margin-right: 10px; }
+.msg.pic .stack img { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; aspect-ratio: auto; object-fit: cover; border-radius: 14px; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .15); }
+.stack img:nth-child(1) { rotate: -9deg; translate: -8px 2px; }
+.stack img:nth-child(2) { rotate: 6deg; translate: 6px 0; }
+.stack img:nth-child(3) { rotate: -3deg; }
+.msg.stack small { align-self: flex-end; margin: 6px 8px 4px 0; font-size: 10px; color: #8e8e93; }
+/* Accusé : « Distribué » puis « Lu » sous le dernier message envoyé */
+.chat__receipt { margin: -2px 2px 4px auto; font-size: 10px; color: #8e8e93; }
+/* Champ de saisie et barre d'accueil */
+.chat__bar { display: flex; align-items: flex-end; gap: 8px; padding: 6px 12px 8px; }
+.chat__plus { display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 50%; background: #e9e9eb; color: #8e8e93; font-size: 20px; line-height: 1; }
+.chat__field { position: relative; flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-height: 30px; padding: 4px 34px 4px 12px; border: 1px solid #d1d1d6; border-radius: 16px; font-size: 13px; }
+.chat__ph { color: #b4b4b8; }
+.chat__field.has-draft .chat__ph { display: none; }
+.chat__draft img { width: 34px; height: 34px; object-fit: cover; border-radius: 8px; vertical-align: middle; margin-right: 3px; }
+.chat__send { position: absolute; right: 3px; bottom: 3px; width: 24px; height: 24px; border-radius: 50%; background: #0b84ff; opacity: 0; scale: .5; transition: opacity .15s, scale .2s cubic-bezier(.34, 1.56, .64, 1); }
+.chat__send::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; border: solid #fff; border-width: 2px 0 0 2px; translate: -50% -25%; rotate: 45deg; }
+.chat__field.has-draft .chat__send { opacity: 1; scale: 1; }
+.chat__home { flex: none; align-self: center; width: 110px; height: 4px; margin: 2px 0 8px; border-radius: 4px; background: #111; }
 /* Lecture : un message caché ne prend pas de place ; à son tour il s'ouvre et la bulle apparaît avec un petit ressort */
 .chat.is-playing .msg { grid-template-rows: 0fr; transition: grid-template-rows .35s cubic-bezier(.2, .8, .2, 1); }
-.chat.is-playing .msg > * { opacity: 0; scale: .6; transition: opacity .25s ease, scale .45s cubic-bezier(.34, 1.56, .64, 1); }
-.chat.is-playing .msg.me > * { transform-origin: 100% 100%; }
-.chat.is-playing .msg.them > * { transform-origin: 0 100%; }
+.chat.is-playing .msg__in > * { opacity: 0; scale: .7; transition: opacity .2s ease, scale .45s cubic-bezier(.34, 1.56, .64, 1); }
+.chat.is-playing .msg.me .msg__in > * { transform-origin: 100% 100%; }
+.chat.is-playing .msg.them .msg__in > * { transform-origin: 0 100%; }
 .chat.is-playing .msg.is-in { grid-template-rows: 1fr; }
-.chat.is-playing .msg.is-in > * { opacity: 1; scale: 1; }
+.chat.is-playing .msg.is-in .msg__in > * { opacity: 1; scale: 1; }
 .chat.is-reset .chat__thread { opacity: 0; transition: opacity .4s ease; }
-/* Points « en train d'écrire » */
 .msg.typing p { display: flex; gap: 3px; padding: 10px 12px; }
 .msg.typing i { width: 6px; height: 6px; border-radius: 50%; background: #9a9aa0; animation: chat-dot 1s infinite; }
 .msg.typing i:nth-child(2) { animation-delay: .15s; }
 .msg.typing i:nth-child(3) { animation-delay: .3s; }
 @keyframes chat-dot { 0%, 60%, 100% { opacity: .35; translate: 0 0; } 30% { opacity: 1; translate: 0 -2px; } }
-@media (max-width: 809px) { .chat { aspect-ratio: 4 / 5; } .chat__phone { width: 84%; top: 6%; } }
+@media (max-width: 809px) { .chat { aspect-ratio: 4 / 5; } .chat__phone { width: 86%; bottom: 5%; } }
 .gallery { display: grid; grid-template-columns: repeat(var(--cols, 2), 1fr); gap: 20px; margin-top: 20px; align-items: start; }
 .gallery img, .gallery video { display: block; width: 100%; height: auto; background: var(--card); }
 .wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; height: 900px; overflow: hidden; margin: 20px -150px 0;

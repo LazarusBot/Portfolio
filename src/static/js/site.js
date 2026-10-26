@@ -887,36 +887,56 @@ document.querySelectorAll('.logo').forEach(logo => {
   });
 });
 
-// Aer : la conversation avec le fabricant se joue quand l'en-tête arrive à l'écran, puis recommence.
-// Avant chaque réponse du fabricant, trois points « en train d'écrire ». La vidéo ne joue qu'une fois arrivée.
+// Aer : la conversation avec le fabricant se joue quand l'en-tête arrive à l'écran, puis recommence, comme sur iOS :
+// mes messages sont tapés dans le champ puis envoyés (« Distribué »), le fabricant les lit (« Lu ») et écrit avant de répondre.
 document.querySelectorAll('.chat').forEach(chat => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const thread = chat.querySelector('.chat__thread');
   const msgs = [...thread.querySelectorAll('.msg')];
+  const field = chat.querySelector('.chat__field'), draft = chat.querySelector('.chat__draft');
   const typing = document.createElement('div');
-  typing.className = 'msg them typing';
-  typing.innerHTML = '<p aria-hidden="true"><i></i><i></i><i></i></p>';
+  typing.className = 'msg them tail typing';
+  typing.innerHTML = '<div class="msg__in"><p aria-hidden="true"><i></i><i></i><i></i></p></div>';
+  const receipt = document.createElement('p');
+  receipt.className = 'chat__receipt';
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const open = el => { void el.offsetWidth; el.classList.add('is-in'); };
+  const clock = n => `09:${String(41 + n).padStart(2, '0')}`;
   let running = false;
   const play = async () => {
     if (running) return; running = true;
     while (true) {
       chat.classList.add('is-playing');
       msgs.forEach(m => m.classList.remove('is-in'));
-      chat.querySelector('video')?.pause();
-      await wait(600);
+      receipt.remove(); chat.querySelector('video')?.pause();
+      await wait(700);
+      let sent = 0;
       for (const m of msgs) {
         if (m.classList.contains('them')) {
-          // le fabricant « écrit », puis sa bulle remplace les points
+          if (receipt.isConnected) { await wait(500); receipt.textContent = `Read ${clock(sent)}`; }
           thread.insertBefore(typing, m); typing.classList.remove('is-in'); open(typing);
-          await wait(1100);
-          typing.classList.remove('is-in'); await wait(150); typing.remove();
+          await wait(1200);
+          typing.remove();
+          open(m);
+          sound.play('pop', { vol: .2, rate: .9 });
+          await wait(800);
+          continue;
         }
+        // Mes messages : le texte se tape (ou les photos se posent) dans le champ, puis la flèche bleue l'envoie
+        const text = m.querySelector('p')?.textContent;
+        field.classList.add('has-draft');
+        if (text) {
+          for (let k = 1; k <= text.length; k++) { draft.textContent = text.slice(0, k); await wait(28); }
+        } else {
+          draft.innerHTML = [...m.querySelectorAll('img, video')].map(e => `<img src="${e.poster || e.getAttribute('src')}" alt="">`).join('');
+        }
+        await wait(text ? 350 : 700);
+        draft.textContent = ''; field.classList.remove('has-draft');
         open(m);
+        m.after(receipt); receipt.textContent = 'Delivered'; sent++;
         const v = m.querySelector('video'); if (v) { v.currentTime = 0; v.play().catch(() => {}); }
-        sound.play('pop', { vol: .25, rate: m.classList.contains('me') ? 1.15 : .95 });
-        await wait(m.classList.contains('pic') ? 1500 : 900);
+        sound.play('pop', { vol: .2, rate: 1.2 });
+        await wait(m.classList.contains('pic') ? 1300 : 700);
       }
       await wait(4500);
       chat.classList.add('is-reset'); await wait(450);

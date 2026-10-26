@@ -1,24 +1,30 @@
 
       <!-- En-tête d'Aer : une conversation iMessage (fictive) avec le fabricant, chaque étape partagée en photo.
-           Sans JavaScript, tous les messages restent affichés ; sinon ils arrivent un par un (site.js) -->
+           On voit le bas du téléphone (champ de saisie, barre d'accueil). Sans JavaScript, tous les messages restent affichés ;
+           sinon ils sont tapés, envoyés et reçus un par un (site.js) -->
       <section class="chat" aria-label="From an idea to a tested shirt, told as a conversation with the manufacturer">
         <div class="chat__phone">
-          <div class="chat__top">
-            <span class="chat__avatar" aria-hidden="true">M</span>
-            <b>Manufacturer</b>
-          </div>
           <div class="chat__thread">
-            <p class="chat__time">Today 09:41</p>
-            <div class="msg them"><p>Hi Maxence! Ready when you are for Aer.</p></div>
-            <div class="msg me"><p>Here’s the idea: a mascot that runs</p></div>
-            <div class="msg me pic"><img src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot"></div>
-            <div class="msg them"><p>Love it. Can you send the flats?</p></div>
-            <div class="msg me pic"><img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve"></div>
-            <div class="msg them"><p>First sample is on its way</p></div>
-            <div class="msg me pic"><img src="assets/aer/worn-sm.jpg" alt="Maxence wearing the Aer long sleeve"></div>
-            <div class="msg me"><p>Tested it on the trails</p></div>
-            <div class="msg me pic"><video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" muted loop playsinline aria-label="Running in the fog in the long sleeve"></video></div>
-            <div class="msg them"><p>Looks great. Let’s produce it.</p></div>
+            <p class="chat__time"><b>iMessage</b> Today 09:41</p>
+            <div class="msg them tail"><div class="msg__in"><p>Hi Maxence! Ready when you are for Aer.</p></div></div>
+            <div class="msg me tail"><div class="msg__in"><p>Here’s the idea: a mascot that runs</p></div></div>
+            <div class="msg me pic"><div class="msg__in"><img src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot"></div></div>
+            <div class="msg them tail"><div class="msg__in"><p>Love it. Can you send the flats?</p></div></div>
+            <div class="msg me pic"><div class="msg__in"><img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve"></div></div>
+            <div class="msg them tail"><div class="msg__in"><p>First sample is on its way</p></div></div>
+            <div class="msg me pic tall"><div class="msg__in"><img src="assets/aer/worn-sm.jpg" alt="Maxence wearing the Aer long sleeve"></div></div>
+            <div class="msg them tail"><div class="msg__in"><p>How does it hold up on a run?</p></div></div>
+            <div class="msg me pic stack"><div class="msg__in"><span class="stack">
+              <img src="assets/aer/test-2.jpg" alt=""><img src="assets/aer/test-3.jpg" alt=""><img src="assets/aer/test-4.jpg" alt=""><img src="assets/aer/test-1.jpg" alt="Test runs in the fog in the Aer long sleeve">
+            </span><small>4 Photos</small></div></div>
+            <div class="msg me pic"><div class="msg__in"><video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" muted loop playsinline aria-label="Running in the fog in the long sleeve"></video></div></div>
+            <div class="msg me tail"><div class="msg__in"><p>Tested in the fog. It holds up.</p></div></div>
+            <div class="msg them tail"><div class="msg__in"><p>Looks great. Let’s produce it.</p></div></div>
           </div>
+          <div class="chat__bar" aria-hidden="true">
+            <span class="chat__plus">+</span>
+            <span class="chat__field"><span class="chat__draft"></span><span class="chat__ph">iMessage</span><span class="chat__send"></span></span>
+          </div>
+          <span class="chat__home" aria-hidden="true"></span>
         </div>
       </section>
