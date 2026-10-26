@@ -222,7 +222,8 @@ img { display: block; max-width: 100%; }
    fil de messages, champ de saisie, barre d'accueil. Les messages poussent les précédents vers le haut */
 .chat { position: relative; margin: 30px 0 60px; aspect-ratio: 16 / 10; overflow: hidden; background: #f2f2f2; }
 .chat__phone { position: absolute; left: 50%; top: 0; bottom: 7%; width: min(330px, 78%); translate: -50% 0; display: flex; flex-direction: column;
-  background: #fff; border: 9px solid #111; border-top: 0; border-radius: 0 0 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, .12); }
+  background: #fff; border: 9px solid #111; border-top: 0; border-radius: 0 0 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, .12);
+  overflow: hidden; }   /* l'écran suit l'arrondi intérieur du cadre : rien ne déborde dans les coins */
 .chat__thread { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; padding: 0 14px 6px;
   -webkit-mask: linear-gradient(transparent, #000 18%); mask: linear-gradient(transparent, #000 18%); }
 .chat__time { margin: 0; padding-bottom: 8px; text-align: center; font-size: 10px; color: #8e8e93; }
@@ -273,9 +274,13 @@ img { display: block; max-width: 100%; }
 .chat__field.has-draft .chat__ph { display: none; }
 .chat__draft { display: flex; flex-wrap: wrap; gap: 4px; }
 .chat__draft img { flex: none; width: 30px; height: 30px; object-fit: cover; border-radius: 7px; }
-.chat__send { position: absolute; right: 3px; bottom: 3px; width: 24px; height: 24px; border-radius: 50%; background: #0b84ff; opacity: 0; scale: .5; transition: opacity .15s, scale .2s cubic-bezier(.34, 1.56, .64, 1); }
-.chat__send::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; border: solid #fff; border-width: 2px 0 0 2px; translate: -50% -25%; rotate: 45deg; }
+/* Bouton d'envoi iOS : flèche blanche dans un rond bleu, à la place du micro dès qu'il y a quelque chose à envoyer */
+.chat__send, .chat__mic { position: absolute; right: 3px; bottom: 3px; width: 24px; height: 24px; }
+.chat__send svg, .chat__mic svg { display: block; width: 100%; height: 100%; }
+.chat__mic { right: 6px; bottom: 5px; width: 20px; height: 20px; color: #8e8e93; transition: opacity .12s; }
+.chat__send { opacity: 0; scale: .4; transition: opacity .12s, scale .25s cubic-bezier(.34, 1.56, .64, 1); }
 .chat__field.has-draft .chat__send { opacity: 1; scale: 1; }
+.chat__field.has-draft .chat__mic { opacity: 0; }
 .chat__home { flex: none; align-self: center; width: 110px; height: 4px; margin: 2px 0 8px; border-radius: 4px; background: #111; }
 /* Lecture : un message caché ne prend pas de place ; à son tour il s'ouvre et la bulle apparaît avec un petit ressort */
 .chat.is-playing .msg { max-height: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.2, .8, .2, 1), padding .35s cubic-bezier(.2, .8, .2, 1); }
