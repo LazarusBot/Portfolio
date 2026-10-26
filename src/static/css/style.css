@@ -76,7 +76,7 @@ img { display: block; max-width: 100%; }
 .contact { display: inline-flex; align-items: center; gap: 10px; width: 390px; height: 50px; margin-top: 30px; padding: 0 5px 0 25px; background: #efefef; border-radius: 25px; }
 .contact__mail { flex: 1; font: 500 18px/22px "Inter", sans-serif; color: var(--soft); letter-spacing: 0; cursor: pointer; transition: color .25s; }
 .contact__mail:hover { color: #000; }
-.contact__btn { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 99px; background: #dedede; color: var(--soft); }
+.contact__btn { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 99px; background: #e5e5e5; color: var(--soft); }
 .contact__btn:hover { color: #000; }
 .profile__info { display: flex; flex-direction: column; align-items: flex-start; }
 /* Classement Chess.com (accueil) : une ligne discrète sous le contact, le détail apparaît au survol */
