@@ -1,15 +1,24 @@
 
-      <!-- En-tête d'Aer : une grande image en quatre étapes ; flèches et légende posées dessus, sur un fond flouté (site.js) -->
-      <section class="origin" aria-roledescription="carousel" aria-label="From an idea to a tested shirt">
-        <div class="origin__media">
-          <img class="is-on" src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot">
-          <img class="origin__fit" src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve, front and back">
-          <img src="assets/aer/worn.jpg" alt="Maxence wearing the Aer long sleeve in the mountains" style="--p:50% 75%">
-          <video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" muted loop playsinline preload="metadata" aria-label="Running in the fog to test it"></video>
-          <div class="origin__bar">
-          <button class="origin__arrow" data-dir="-1" aria-label="Previous step"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <button class="origin__arrow" data-dir="1" aria-label="Next step"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <p class="origin__label" aria-live="polite"><small>Step 01</small> Idea, a mascot that runs</p>
+      <!-- En-tête d'Aer : une conversation iMessage (fictive) avec le fabricant, chaque étape partagée en photo.
+           Sans JavaScript, tous les messages restent affichés ; sinon ils arrivent un par un (site.js) -->
+      <section class="chat" aria-label="From an idea to a tested shirt, told as a conversation with the manufacturer">
+        <div class="chat__phone">
+          <div class="chat__top">
+            <span class="chat__avatar" aria-hidden="true">M</span>
+            <b>Manufacturer</b>
+          </div>
+          <div class="chat__thread">
+            <p class="chat__time">Today 09:41</p>
+            <div class="msg them"><p>Hi Maxence! Ready when you are for Aer.</p></div>
+            <div class="msg me"><p>Here’s the idea: a mascot that runs</p></div>
+            <div class="msg me pic"><img src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot"></div>
+            <div class="msg them"><p>Love it. Can you send the flats?</p></div>
+            <div class="msg me pic"><img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve"></div>
+            <div class="msg them"><p>First sample is on its way</p></div>
+            <div class="msg me pic"><img src="assets/aer/worn-sm.jpg" alt="Maxence wearing the Aer long sleeve"></div>
+            <div class="msg me"><p>Tested it on the trails</p></div>
+            <div class="msg me pic"><video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" muted loop playsinline aria-label="Running in the fog in the long sleeve"></video></div>
+            <div class="msg them"><p>Looks great. Let’s produce it.</p></div>
           </div>
         </div>
       </section>

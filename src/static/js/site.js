@@ -887,23 +887,45 @@ document.querySelectorAll('.logo').forEach(logo => {
   });
 });
 
-// Aer : en-tête en quatre étapes ; les deux flèches (ou un glissé au doigt) passent de l'une à l'autre, en boucle.
-// La vidéo du test ne joue que quand elle est affichée.
-document.querySelectorAll('.origin').forEach(o => {
-  const slides = [...o.querySelectorAll('.origin__media > img, .origin__media > video')];
-  const label = o.querySelector('.origin__label');
-  const steps = ['Idea, a mascot that runs', 'Design, flats for a long sleeve', 'Made, the first Aer long sleeve', 'Tested in the fog, on real trails'];
-  let i = 0;
-  const show = k => {
-    i = (k + slides.length) % slides.length;
-    slides.forEach((s, n) => s.classList.toggle('is-on', n === i));
-    slides.forEach(s => { if (s.tagName === 'VIDEO') { if (s.classList.contains('is-on')) { s.currentTime = 0; s.play().catch(() => {}); } else s.pause(); } });
-    label.innerHTML = `<small>Step 0${i + 1}</small> ${steps[i]}`;
+// Aer : la conversation avec le fabricant se joue quand l'en-tête arrive à l'écran, puis recommence.
+// Avant chaque réponse du fabricant, trois points « en train d'écrire ». La vidéo ne joue qu'une fois arrivée.
+document.querySelectorAll('.chat').forEach(chat => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const thread = chat.querySelector('.chat__thread');
+  const msgs = [...thread.querySelectorAll('.msg')];
+  const typing = document.createElement('div');
+  typing.className = 'msg them typing';
+  typing.innerHTML = '<p aria-hidden="true"><i></i><i></i><i></i></p>';
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const open = el => { void el.offsetWidth; el.classList.add('is-in'); };
+  let running = false;
+  const play = async () => {
+    if (running) return; running = true;
+    while (true) {
+      chat.classList.add('is-playing');
+      msgs.forEach(m => m.classList.remove('is-in'));
+      chat.querySelector('video')?.pause();
+      await wait(600);
+      for (const m of msgs) {
+        if (m.classList.contains('them')) {
+          // le fabricant « écrit », puis sa bulle remplace les points
+          thread.insertBefore(typing, m); typing.classList.remove('is-in'); open(typing);
+          await wait(1100);
+          typing.classList.remove('is-in'); await wait(150); typing.remove();
+        }
+        open(m);
+        const v = m.querySelector('video'); if (v) { v.currentTime = 0; v.play().catch(() => {}); }
+        sound.play('pop', { vol: .25, rate: m.classList.contains('me') ? 1.15 : .95 });
+        await wait(m.classList.contains('pic') ? 1500 : 900);
+      }
+      await wait(4500);
+      chat.classList.add('is-reset'); await wait(450);
+      chat.classList.remove('is-reset');
+    }
   };
-  o.querySelectorAll('.origin__arrow').forEach(b => b.addEventListener('click', () => show(i + Number(b.dataset.dir))));
-  let x0 = null;
-  const media = o.querySelector('.origin__media');
-  media.addEventListener('pointerdown', e => { x0 = e.clientX; });
-  media.addEventListener('pointerup', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) show(i + (e.clientX < x0 ? 1 : -1)); x0 = null; });
+  // déjà à l'écran au chargement (en haut de la page) : on joue tout de suite, sinon quand on y arrive
+  const r = chat.getBoundingClientRect();
+  if (r.top < innerHeight * .7 && r.bottom > 0) { play(); return; }
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { play(); io.disconnect(); } }, { threshold: .35 });
+  io.observe(chat);
 });
-
