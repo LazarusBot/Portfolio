@@ -886,3 +886,24 @@ document.querySelectorAll('.logo').forEach(logo => {
     sheet.showModal(); setMode(mode);
   });
 });
+
+// Aer : en-tête en quatre étapes ; les deux flèches (ou un glissé au doigt) passent de l'une à l'autre, en boucle.
+// La vidéo du test ne joue que quand elle est affichée.
+document.querySelectorAll('.origin').forEach(o => {
+  const slides = [...o.querySelectorAll('.origin__media > img, .origin__media > video')];
+  const label = o.querySelector('.origin__label');
+  const steps = ['Idea, a mascot that runs', 'Design, flats for a long sleeve', 'Made, the first Aer long sleeve', 'Tested in the fog, on real trails'];
+  let i = 0;
+  const show = k => {
+    i = (k + slides.length) % slides.length;
+    slides.forEach((s, n) => s.classList.toggle('is-on', n === i));
+    slides.forEach(s => { if (s.tagName === 'VIDEO') { if (s.classList.contains('is-on')) { s.currentTime = 0; s.play().catch(() => {}); } else s.pause(); } });
+    label.innerHTML = `<small>Step 0${i + 1}</small> ${steps[i]}`;
+  };
+  o.querySelectorAll('.origin__arrow').forEach(b => b.addEventListener('click', () => show(i + Number(b.dataset.dir))));
+  let x0 = null;
+  const media = o.querySelector('.origin__media');
+  media.addEventListener('pointerdown', e => { x0 = e.clientX; });
+  media.addEventListener('pointerup', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) show(i + (e.clientX < x0 ? 1 : -1)); x0 = null; });
+});
+

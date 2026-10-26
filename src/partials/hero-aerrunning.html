@@ -1,9 +1,15 @@
 
-      <!-- En-tête d'Aer : idée → dessin → vraie vie, trois vignettes et deux flèches -->
-      <section class="origin" aria-label="From an idea to a tested shirt">
-        <figure><div class="origin__media"><img src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot"></div><figcaption>Idea</figcaption></figure>
-        <span class="origin__arrow" aria-hidden="true"></span>
-        <figure><div class="origin__media origin__media--fit"><img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve"></div><figcaption>Design</figcaption></figure>
-        <span class="origin__arrow" aria-hidden="true"></span>
-        <figure><div class="origin__media origin__media--live"><img src="assets/aer/worn.jpg" alt="Maxence wearing the Aer long sleeve" style="--p:50% 30%"><video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" autoplay muted loop playsinline aria-label="Testing it on a run in the fog"></video></div><figcaption>Worn and tested</figcaption></figure>
+      <!-- En-tête d'Aer : une grande image comme sur les autres projets, mais en quatre étapes qu'on parcourt avec deux flèches (site.js) -->
+      <section class="origin" aria-roledescription="carousel" aria-label="From an idea to a tested shirt">
+        <div class="origin__media">
+          <img class="is-on" src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot">
+          <img class="origin__fit" src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve, front and back">
+          <img src="assets/aer/worn.jpg" alt="Maxence wearing the Aer long sleeve in the mountains" style="--p:50% 32%">
+          <video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" muted loop playsinline preload="metadata" aria-label="Running in the fog to test it"></video>
+        </div>
+        <div class="origin__bar">
+          <button class="origin__arrow" data-dir="-1" aria-label="Previous step"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="origin__arrow" data-dir="1" aria-label="Next step"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="origin__label" aria-live="polite"><small>Step 01</small> Idea, a mascot that runs</p>
+        </div>
       </section>
