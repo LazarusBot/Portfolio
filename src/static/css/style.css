@@ -286,14 +286,11 @@ img { display: block; max-width: 100%; }
 .chat__field.has-draft .chat__send { opacity: 1; scale: 1; }
 .chat__field.has-draft .chat__mic { opacity: 0; }
 .chat__home { flex: none; align-self: center; width: 110px; height: 4px; margin: 2px 0 8px; border-radius: 4px; background: #111; }
-/* Lecture : un message caché ne prend pas de place ; à son tour il s'ouvre et la bulle apparaît avec un petit ressort */
-.chat.is-playing .msg { max-height: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.2, .8, .2, 1), padding .35s cubic-bezier(.2, .8, .2, 1); }
-.chat.is-playing .msg:not(.is-in) { padding-top: 0; padding-bottom: 0; }
-.chat.is-playing .msg.is-open { overflow: visible; }
-.chat.is-playing .msg__in > * { opacity: 0; scale: .7; transition: opacity .2s ease, scale .45s cubic-bezier(.34, 1.56, .64, 1); }
-.chat.is-playing .msg.me .msg__in > * { transform-origin: 100% 100%; }
-.chat.is-playing .msg.them .msg__in > * { transform-origin: 0 100%; }
-.chat.is-playing .msg.is-in .msg__in > * { opacity: 1; scale: 1; }
+/* Lecture : un message pas encore arrivé n'existe pas à l'écran ; à son arrivée, site.js fait glisser les autres
+   depuis leur ancienne place et fait éclore la nouvelle bulle depuis son coin */
+.chat.is-playing .msg:not(.is-in) { display: none; }
+.msg.me .msg__in { transform-origin: 100% 100%; }
+.msg.them .msg__in { transform-origin: 0 100%; }
 .chat.is-reset .chat__thread { opacity: 0; transition: opacity .4s ease; }
 .msg.typing p { display: flex; gap: 3px; padding: 10px 12px; }
 .msg.typing i { width: 6px; height: 6px; border-radius: 50%; background: #9a9aa0; animation: chat-dot 1s infinite; }

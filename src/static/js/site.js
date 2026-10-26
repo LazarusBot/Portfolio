@@ -900,15 +900,27 @@ document.querySelectorAll('.chat').forEach(chat => {
   const receipt = document.createElement('p');
   receipt.className = 'chat__receipt';
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  // Ouvre un message à sa vraie hauteur (mesurée), pour qu'il pousse les autres sans jamais les chevaucher
-  // (hauteur de mise en page, pas scrollHeight : la bulle encore réduite à 70 % fausserait la mesure)
-  const open = el => {
-    el.classList.add('is-in');
-    const cs = getComputedStyle(el);
-    el.style.maxHeight = `${el.firstElementChild.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)}px`;
-    setTimeout(() => { if (el.classList.contains('is-in')) { el.classList.add('is-open'); el.style.maxHeight = 'none'; } }, 380);
+  // Chaque changement du fil (bulle qui arrive, points qui partent, accusé) : on note la place de chaque élément,
+  // on applique le changement, puis chacun glisse de son ancienne place à la nouvelle ; ce qui apparaît éclot depuis son coin.
+  const EASE = 'cubic-bezier(.2, .8, .2, 1)';
+  const change = fn => {
+    // (les éléments cachés n'ont pas de place : ils ne sont pas notés, et seront traités comme nouveaux)
+    const before = new Map([...thread.children].filter(el => el.getClientRects().length).map(el => [el, el.getBoundingClientRect().top]));
+    fn();
+    for (const el of thread.children) {
+      if (!el.getClientRects().length) continue;
+      const top = before.get(el);
+      if (top === undefined) {
+        const target = el.classList.contains('msg') ? el.firstElementChild : el;
+        target.animate([{ opacity: 0, transform: 'translateY(10px) scale(.86)' }, { opacity: 1, transform: 'none' }],
+          { duration: 420, easing: 'cubic-bezier(.3, 1.35, .5, 1)' });
+      } else {
+        const dy = top - el.getBoundingClientRect().top;
+        if (Math.abs(dy) > .5) el.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 420, easing: EASE });
+      }
+    }
   };
-  const shut = el => { el.classList.remove('is-in', 'is-open'); el.style.maxHeight = ''; };
+  const shut = el => el.classList.remove('is-in');
   // Après l'envoi de la pile : on la feuillette d'un coup de doigt, chaque carte part à gauche et la suivante vient devant
   const swipe = async stack => {
     const cards = [stack.querySelector('.stack__front'), ...[...stack.querySelectorAll(':scope > img')].reverse()];
@@ -936,10 +948,10 @@ document.querySelectorAll('.chat').forEach(chat => {
       for (const m of msgs) {
         if (m.classList.contains('them')) {
           if (receipt.isConnected) { await wait(500); receipt.textContent = `Read ${clock(sent)}`; }
-          thread.insertBefore(typing, m); shut(typing); open(typing);
+          typing.classList.add('is-in');
+          change(() => thread.insertBefore(typing, m));
           await wait(1200);
-          typing.remove();
-          open(m);
+          change(() => { typing.remove(); m.classList.add('is-in'); });
           sound.play('pop', { vol: .2, rate: .9 });
           await wait(800);
           continue;
@@ -954,8 +966,8 @@ document.querySelectorAll('.chat').forEach(chat => {
         }
         await wait(text ? 350 : 700);
         draft.textContent = ''; field.classList.remove('has-draft');
-        open(m);
-        m.after(receipt); receipt.textContent = 'Delivered'; sent++;
+        receipt.textContent = 'Delivered';
+        change(() => { m.classList.add('is-in'); m.after(receipt); }); sent++;
         sound.play('pop', { vol: .2, rate: 1.2 });
         await wait(m.classList.contains('pic') ? 1300 : 700);
         if (m.classList.contains('bunch')) { await swipe(m.querySelector('.stack')); await wait(400); }
