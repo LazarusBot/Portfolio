@@ -886,3 +886,10 @@ document.querySelectorAll('.logo').forEach(logo => {
     sheet.showModal(); setMode(mode);
   });
 });
+
+// Aer : les étapes « idée → dessin → objet » se dévoilent quand l'en-tête arrive à l'écran
+document.querySelectorAll('.origin').forEach(o => {
+  if (!('IntersectionObserver' in window)) { o.classList.add('is-in'); return; }
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { o.classList.add('is-in'); io.disconnect(); } }, { threshold: .25 });
+  io.observe(o.querySelector('.origin__steps'));
+});

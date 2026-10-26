@@ -247,7 +247,8 @@ function bagOver(s) {
 }
 
 function projectSections(p) {
-  return p.sections.map(s => `
+  // En-tête sur mesure d'un projet s'il existe (partials/hero-<slug>.html), avant les sections
+  return (partials[`hero-${p.slug}`] || '') + p.sections.map(s => `
       <section class="section">
         <h2>${esc(s.title)}</h2>
         ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${s.bagOver ? bagOver(s) : gallery(s.images, s.layout) + bag(s.bag)}
