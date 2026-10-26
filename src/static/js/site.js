@@ -444,7 +444,24 @@ document.querySelectorAll('.art').forEach(art => {
   const cards = [...art.querySelectorAll('.art__card')];
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let i = 0;
-  const go = k => { i = (k + cards.length) % cards.length; cards.forEach((c, n) => c.classList.toggle('is-active', n === i)); };
+  // Sur mobile la bande défile : la carte active est ramenée en place (sans faire défiler la page)
+  const strip = () => art.scrollWidth > art.clientWidth + 2;
+  const left = c => c.offsetLeft - cards[0].offsetLeft;   // position dans la bande
+  const go = (k, scroll = true) => {
+    i = (k + cards.length) % cards.length; cards.forEach((c, n) => c.classList.toggle('is-active', n === i));
+    if (scroll && strip()) art.scrollTo({ left: left(cards[i]), behavior: calm ? 'auto' : 'smooth' });
+  };
+  // Glissé au doigt : à l'arrêt, la carte calée à gauche devient active ; le défilement automatique se met en pause un moment
+  let settle, touched = 0;
+  art.addEventListener('scroll', () => {
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      if (!strip()) return;
+      const n = cards.reduce((b, c, k) => (Math.abs(left(c) - art.scrollLeft) < Math.abs(left(cards[b]) - art.scrollLeft) ? k : b), 0);
+      if (n !== i) go(n, false);
+    }, 120);
+  }, { passive: true });
+  art.addEventListener('touchstart', () => { touched = Date.now(); }, { passive: true });
   cards.forEach(c => { c.tabIndex = 0; });
   art.addEventListener('click', e => {
     const c = e.target.closest('.art__card');
@@ -460,14 +477,14 @@ document.querySelectorAll('.art').forEach(art => {
   art.addEventListener('pointerup', e => {
     if (x0 === null) return;
     const dx = e.clientX - x0; x0 = null;
-    if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 40 && !strip()) go(i + (dx < 0 ? 1 : -1));
   });
   // Défilement automatique, en pause au survol
   let hover = false;
   art.addEventListener('pointerenter', () => { hover = true; });
   art.addEventListener('pointerleave', () => { hover = false; x0 = null; });
-  if (!calm) setInterval(() => { if (!hover && !document.hidden) go(i + 1); }, 3500);
-  go(0);
+  if (!calm) setInterval(() => { if (!hover && !document.hidden && Date.now() - touched > 6000) go(i + 1); }, 3500);
+  go(0, false);
 });
 
 // Robots (About) : un clic ouvre la fiche du robot : liste des composants, design industriel et caractéristiques mécaniques

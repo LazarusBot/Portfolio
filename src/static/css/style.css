@@ -298,9 +298,15 @@ img { display: block; max-width: 100%; }
   .wall__col:nth-child(n+3) { display: none; }
   .crumb { padding-top: 30px; }
   .marquee { margin-right: -16px; }
-  .art__track { gap: 8px; }
-  .art__tag { top: 5px; right: 5px; padding: 3px 6px; font-size: 9px; }
-  .art__media { border-radius: 8px; }
+  /* Mobile : une bande qu'on fait glisser au doigt, cartes plus grandes ; celle calée à gauche est la carte active */
+  .art { margin-right: -16px; padding-right: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; touch-action: auto; }
+  .art::-webkit-scrollbar { display: none; }
+  /* (marge de fin : la dernière carte peut aussi se caler à gauche) */
+  .art__track { width: max-content; gap: 12px; padding: 24px calc(100vw - 16px - 168px) 64px 0; }
+  .art__card { flex: 0 0 168px; scroll-snap-align: start; }
+  .art__card:nth-child(n + 3) figcaption { left: 0; right: auto; text-align: left; }
+  .art__card figcaption { width: 100%; }
+  .art__tag { top: 7px; right: 7px; padding: 4px 8px; font-size: 10px; }
   .marquee[data-bleed] { mask: none; }
   .issue-item { grid-template-columns: 30px 1fr; }
   .lvl { grid-column: 2; justify-self: start; }
