@@ -62,7 +62,7 @@ img { display: block; max-width: 100%; }
 .carousel { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent);
   mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent); }
 .profile__name { font: 500 26px/0.8 var(--display); letter-spacing: -0.06em; }
-.profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #aebdd0; transition: color .25s; }
+.profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #c3ccd6; transition: color .25s; }
 .profile__job:hover { color: #0a66c2; }
 /* Métier + disponibilité sur une même ligne ; seul « Product Designer » et le logo LinkedIn passent au bleu au survol */
 .profile__role { display: flex; flex-wrap: wrap; align-items: center; column-gap: 10px; row-gap: 8px; margin-top: 30px; }
