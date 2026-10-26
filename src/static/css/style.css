@@ -64,8 +64,9 @@ img { display: block; max-width: 100%; }
 .profile__name { font: 500 26px/0.8 var(--display); letter-spacing: -0.06em; }
 .profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #dedede; transition: color .25s; }
 .profile__job:hover { color: #0a66c2; }
-/* Disponibilité : une légende discrète à côté du nom, alignée sur sa ligne de base */
-.profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 14px; row-gap: 10px; }
+/* Métier + disponibilité sur une même ligne ; seul « Product Designer » et le logo LinkedIn passent au bleu au survol */
+.profile__role { display: flex; flex-wrap: wrap; align-items: center; column-gap: 10px; row-gap: 8px; margin-top: 30px; }
+.profile__role .profile__job { margin-top: 0; }
 .profile__status { font-size: 12px; color: var(--faint); }
 /* Icônes en masque CSS pour pouvoir changer leur couleur au survol */
 .icon { display: block; background: currentColor; -webkit-mask: var(--src) center/contain no-repeat; mask: var(--src) center/contain no-repeat; transition: background-color .25s; }
@@ -283,7 +284,8 @@ img { display: block; max-width: 100%; }
   .profile { flex-direction: column; align-items: stretch; gap: 26px; padding: 30px 0 55px; }
   .carousel { display: none; }
   .strip { display: flex; }
-  .profile__job { margin-top: 26px; }
+  .profile__job, .profile__role { margin-top: 26px; }
+  .profile__role .profile__job { margin-top: 0; }
   .contact { margin-top: 26px; width: 100%; max-width: 390px; gap: 6px; padding-left: 18px; }
   .contact__mail { font-size: 15px; min-width: 0; }
   /* La ligne Chess.com / GitHub tient sur une seule ligne, sans saut quand on passe d'un état à l'autre */
