@@ -286,6 +286,7 @@ img { display: block; max-width: 100%; }
   .strip { display: flex; }
   .profile__job, .profile__role { margin-top: 26px; }
   .profile__role .profile__job { margin-top: 0; }
+  .profile__sep { display: none; }   /* la disponibilité passe sous le métier : pas de point en début de ligne */
   .contact { margin-top: 26px; width: 100%; max-width: 390px; gap: 6px; padding-left: 18px; }
   .contact__mail { font-size: 15px; min-width: 0; }
   /* La ligne Chess.com / GitHub tient sur une seule ligne, sans saut quand on passe d'un état à l'autre */
