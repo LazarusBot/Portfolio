@@ -887,9 +887,38 @@ document.querySelectorAll('.logo').forEach(logo => {
   });
 });
 
-// Aer : les étapes « idée → dessin → objet » se dévoilent quand l'en-tête arrive à l'écran
+// Aer : la scène montre l'étape choisie ; elles défilent seules (4 s, la vidéo du test joue en entier),
+// ou au survol / clic d'une vignette. Pause quand la souris est sur la scène.
 document.querySelectorAll('.origin').forEach(o => {
-  if (!('IntersectionObserver' in window)) { o.classList.add('is-in'); return; }
-  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { o.classList.add('is-in'); io.disconnect(); } }, { threshold: .25 });
-  io.observe(o.querySelector('.origin__steps'));
+  const layers = [...o.querySelectorAll('.origin__stage > img, .origin__stage > video')];
+  const tabs = [...o.querySelectorAll('.origin__thumbs button')];
+  const cap = o.querySelector('.origin__caption');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i = 0, timer;
+  const show = k => {
+    i = (k + tabs.length) % tabs.length;
+    layers.forEach((l, n) => l.classList.toggle('is-on', n === i));
+    // (tout désélectionner puis resélectionner relance le trait de progression de la vignette)
+    tabs.forEach(t => t.setAttribute('aria-selected', false)); void o.offsetWidth;
+    tabs[i].setAttribute('aria-selected', true);
+    cap.innerHTML = `<small>Step 0${i + 1}</small><span>${tabs[i].dataset.caption}</span>`;
+    const v = layers[i].tagName === 'VIDEO' ? layers[i] : null;
+    layers.forEach(l => l !== v && l.tagName === 'VIDEO' && l.pause());
+    if (v) { v.currentTime = 0; v.play().catch(() => {}); }
+    const dur = v ? 5000 : 4000;
+    tabs[i].style.setProperty('--dur', `${dur}ms`);
+    clearTimeout(timer);
+    if (!calm) timer = setTimeout(() => o.classList.contains('is-paused') ? wait() : show(i + 1), dur);
+  };
+  const wait = () => { timer = setTimeout(() => (o.classList.contains('is-paused') ? wait() : show(i + 1)), 400); };
+  tabs.forEach((t, n) => {
+    t.addEventListener('mouseenter', () => n !== i && show(n));
+    t.addEventListener('click', () => show(n));
+  });
+  const stage = o.querySelector('.origin__stage');
+  stage.addEventListener('mouseenter', () => o.classList.add('is-paused'));
+  stage.addEventListener('mouseleave', () => o.classList.remove('is-paused'));
+  // ne démarre qu'à l'écran
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { show(0); io.disconnect(); } }, { threshold: .3 });
+  io.observe(o);
 });

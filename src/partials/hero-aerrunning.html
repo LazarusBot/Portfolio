@@ -1,10 +1,17 @@
 
-      <!-- En-tête d'Aer : le parcours en quatre étapes, de l'idée au t-shirt testé sur le terrain -->
+      <!-- En-tête d'Aer : une grande scène et quatre vignettes, de l'idée au t-shirt testé sur le terrain (site.js) -->
       <section class="origin" aria-label="From an idea to a tested shirt">
-        <ol class="origin__steps">
-          <li style="--i:0"><div class="origin__media"><img src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot"></div><b>Idea</b><span>The mascot</span></li>
-          <li style="--i:1"><div class="origin__media" style="--p:0% 50%"><img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve"></div><b>Design</b><span>The flats</span></li>
-          <li style="--i:2"><div class="origin__media"><img src="assets/aer/worn.jpg" alt="Maxence wearing the Aer long sleeve"></div><b>Made</b><span>The long sleeve</span></li>
-          <li style="--i:3"><div class="origin__media"><video src="assets/aer/tested.mp4" poster="assets/aer/tested.jpg" autoplay muted loop playsinline aria-label="Running in the fog to test it"></video></div><b>Tested</b><span>On real trails</span></li>
-        </ol>
+        <div class="origin__stage">
+          <img class="is-on" src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt="The Aer mascot">
+          <img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt="Flat drawings of the long sleeve, front and back">
+          <img src="assets/aer/worn.jpg" alt="Maxence wearing the Aer long sleeve in the mountains" style="--p:50% 30%">
+          <video src="assets/aer/tested-wide.mp4" poster="assets/aer/tested-wide.jpg" muted loop playsinline preload="none" aria-label="Running in the fog to test it"></video>
+          <p class="origin__caption"><small>Step 01</small><span>The idea, a mascot that runs</span></p>
+        </div>
+        <div class="origin__thumbs" role="tablist" aria-label="Steps">
+          <button role="tab" aria-selected="true" data-caption="The idea, a mascot that runs"><span class="origin__thumb"><img src="assets/img/kzvobKZjaLgMI9JuEih64LTkA.png" alt=""></span><small>Step 01</small><b>Idea</b></button>
+          <button role="tab" aria-selected="false" data-caption="The design, flats for a long sleeve"><span class="origin__thumb"><img src="assets/img/T7gjRYXknydB1RDvBy721xWio.png" alt=""></span><small>Step 02</small><b>Design</b></button>
+          <button role="tab" aria-selected="false" data-caption="Made, the first Aer long sleeve"><span class="origin__thumb"><img src="assets/aer/worn.jpg" alt="" style="object-position:50% 30%"></span><small>Step 03</small><b>Made</b></button>
+          <button role="tab" aria-selected="false" data-caption="Tested in the fog, on real trails"><span class="origin__thumb"><img src="assets/aer/tested.jpg" alt=""></span><small>Step 04</small><b>Tested</b></button>
+        </div>
       </section>
