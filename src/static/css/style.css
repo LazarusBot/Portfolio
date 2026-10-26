@@ -64,6 +64,12 @@ img { display: block; max-width: 100%; }
 .profile__name { font: 500 26px/0.8 var(--display); letter-spacing: -0.06em; }
 .profile__job { display: inline-flex; gap: 8px; align-items: center; margin-top: 30px; font: 400 18px/0.8 var(--display); letter-spacing: -0.06em; color: #dedede; transition: color .25s; }
 .profile__job:hover { color: #0a66c2; }
+/* Disponibilité : une simple légende sous le métier, avec un point vert qui respire doucement */
+.profile__status { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; font-size: 12px; color: var(--faint); }
+.profile__status i { position: relative; width: 6px; height: 6px; border-radius: 50%; background: #34c759; }
+.profile__status i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #34c759; animation: status-pulse 2.4s ease-out infinite; }
+@keyframes status-pulse { from { opacity: .6; scale: 1; } to { opacity: 0; scale: 2.6; } }
+@media (prefers-reduced-motion: reduce) { .profile__status i::after { animation: none; } }
 /* Icônes en masque CSS pour pouvoir changer leur couleur au survol */
 .icon { display: block; background: currentColor; -webkit-mask: var(--src) center/contain no-repeat; mask: var(--src) center/contain no-repeat; transition: background-color .25s; }
 .icon--linkedin { --src: url(../assets/linkedin.svg); width: 15px; height: 15px; }
@@ -80,6 +86,12 @@ img { display: block; max-width: 100%; }
 .chess { position: relative; display: inline-flex; cursor: pointer; user-select: none; align-items: center; gap: 8px; margin-top: 18px; padding: 4px 0; font-size: 13px; color: var(--faint); }
 .chess__icon { width: 15px; height: 15px; color: var(--faint); transition: color .25s, rotate .4s cubic-bezier(.34, 1.56, .64, 1); }
 .chess__label { transition: color .25s; }
+/* Icône + texte de la ligne : glissent ensemble quand on passe de Chess.com à GitHub */
+.chess__head { display: inline-flex; align-items: center; gap: 8px; }
+.chess__head.is-out { animation: head-out .16s ease-in forwards; }
+.chess__head.is-in { animation: head-in .32s cubic-bezier(.34, 1.4, .64, 1); }
+@keyframes head-out { to { opacity: 0; translate: 0 -6px; } }
+@keyframes head-in { from { opacity: 0; translate: 0 6px; } }
 .chess__elo { position: relative; display: inline-flex; align-items: baseline; height: 22px; padding: 0 9px; overflow: hidden; border-radius: 99px; background: #efefef; color: var(--faint);
               transition: width .3s cubic-bezier(.34, 1.4, .64, 1), background .25s, color .25s; }
 .chess__value { display: inline-flex; align-items: baseline; gap: 5px; height: 22px; white-space: nowrap; line-height: 22px; transition: translate .3s cubic-bezier(.34, 1.4, .64, 1), opacity .2s; }
@@ -275,6 +287,10 @@ img { display: block; max-width: 100%; }
   .profile__job { margin-top: 26px; }
   .contact { margin-top: 26px; width: 100%; max-width: 390px; gap: 6px; padding-left: 18px; }
   .contact__mail { font-size: 15px; min-width: 0; }
+  /* La ligne Chess.com / GitHub tient sur une seule ligne, sans saut quand on passe d'un état à l'autre */
+  .chess { font-size: 12px; }
+  .chess__label { white-space: nowrap; }
+  .chess__opt { display: none; }
   .grid { grid-template-columns: 1fr; gap: 40px; padding-top: 50px; }
   .card__media { aspect-ratio: 290 / 218; }
   .photos { grid-template-columns: 1fr 1fr; gap: 10px; }

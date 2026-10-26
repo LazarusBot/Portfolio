@@ -100,15 +100,33 @@ async function chessData() {
     return saved;
   }
 }
-// Le chiffre change de catégorie à chaque survol : Rapid → Blitz → Puzzles (meilleurs scores)
-function chessLine(c) {
+// Dernier dépôt GitHub poussé (comme Chess.com : relu au build, gardé si GitHub ne répond pas, mis à jour en direct par la page)
+const GITHUB_FILE = path.join(SRC, 'static', 'data', 'github.json');
+async function githubData() {
+  const saved = JSON.parse(read(GITHUB_FILE));
+  try {
+    const res = await fetch(`https://api.github.com/users/${saved.user}/repos?sort=pushed&per_page=1`, {
+      headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)' }, signal: AbortSignal.timeout(8000),
+    });
+    const [r] = await res.json();
+    if (!r?.pushed_at) throw new Error('pas de dépôt');
+    const fresh = { ...saved, repo: r.name, pushed: r.pushed_at };
+    fs.writeFileSync(GITHUB_FILE, JSON.stringify(fresh, null, 2) + '\n');
+    return fresh;
+  } catch (e) {
+    console.warn(`  ! GitHub indisponible (${e.message}), dernière valeur gardée`);
+    return saved;
+  }
+}
+// Le chiffre change de catégorie à chaque survol : Rapid → Blitz → Puzzles (meilleurs scores), puis le dernier commit GitHub
+function chessLine(c, gh) {
   const best = c.rapid.best ?? c.rapid.rating;
   // [libellé, valeur, date du record (s), record précédent] : la page fête un record de moins de 7 jours
   const rec = k => [c.records?.[k]?.date ?? null, c.records?.[k]?.prev ?? null];
   const values = [['Rapid', best, ...rec('rapid')], ['Blitz', c.blitz, ...rec('blitz')], ['Puzzles', c.puzzles, ...rec('puzzles')]].filter(([, v]) => v);
-  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}'>
-          <svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.8 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
-          <span class="chess__label">Currently playing on Chess.com</span>
+  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}' data-github='${JSON.stringify(gh)}'>
+          <span class="chess__head"><svg class="chess__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19.5h10V21H7zM8.5 18c0-2.7 1.9-4.3 2.4-6.3-1.4.9-3 .9-4.1 1.8L5.5 11.8c1.4-2.6 3-4.8 5-6.3L10 3l2.5 1.4c3.6.6 5.6 4.2 5 13.6z" fill="currentColor"/></svg>
+          <span class="chess__label">Currently playing on Chess.com</span></span>
           <span class="chess__elo" aria-live="polite"><span class="chess__value"><small>Rapid</small> <b>${best}</b></span></span>
         </span>`;
 }
@@ -267,7 +285,7 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const written = [];
 
-  const chess = chessLine(await chessData());
+  const chess = chessLine(await chessData(), await githubData());
   const order = projectOrder();
   const titles = Object.fromEntries(fs.readdirSync(path.join(SRC, 'projects')).filter(f => /^[a-z].*\.json$/.test(f))
     .map(f => { const p = JSON.parse(read(path.join(SRC, 'projects', f))); return [p.slug, p.title]; }));

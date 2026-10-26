@@ -313,19 +313,42 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   addEventListener('resize', apply);
 });
 
-// Meilleurs classements Chess.com. Le premier défile depuis 0 au chargement ; chaque survol (ou toucher,
-// sur mobile) passe au suivant : Rapid → Blitz → Puzzles. Un record de moins de 7 jours est fêté : le cavalier
+// Meilleurs classements Chess.com, puis le dernier commit GitHub. Le premier défile depuis 0 au chargement ; chaque survol
+// (ou toucher, sur mobile) passe au suivant : Rapid → Blitz → Puzzles → GitHub (l'icône et le texte glissent aussi). Un record de moins de 7 jours est fêté : le cavalier
 // reçoit une couronne, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « PB » reste.
 // Les valeurs enregistrées au build sont remplacées par celles du moment dès que Chess.com répond.
 document.querySelectorAll('[data-chess]').forEach(line => {
   const pill = line.querySelector('.chess__elo');
   // Chaque valeur : [libellé, record, date du record (s), record précédent]
   let values = JSON.parse(line.dataset.chessValues), i = 0, busy = false;
+  // Dernier dépôt poussé sur GitHub : une entrée de plus dans le cycle, repérée par son libellé
+  let gh = line.dataset.github ? JSON.parse(line.dataset.github) : null;
+  if (gh) values.push(['GitHub', 0, null, null]);
+  const isGh = v => v[0] === 'GitHub';
+  const ago = iso => {
+    const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4));
+    return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
+  };
+  const HEADS = {
+    chess: line.querySelector('.chess__head').innerHTML,
+    github: '<svg class="chess__icon" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="chess__label">Currently committing <span class="chess__opt">things </span>on GitHub</span>',
+  };
+  // Icône et texte : l'ancien monte et s'efface, le nouveau arrive par en dessous
+  const head = kind => {
+    const h = line.querySelector('.chess__head');
+    if (h.dataset.kind === kind || (!h.dataset.kind && kind === 'chess')) return;
+    h.dataset.kind = kind;
+    if (calm) { h.innerHTML = HEADS[kind]; return; }
+    h.classList.add('is-out');
+    setTimeout(() => { h.innerHTML = HEADS[kind]; h.classList.remove('is-out'); h.classList.add('is-in'); }, 160);
+    h.addEventListener('animationend', e => e.animationName === 'head-in' && h.classList.remove('is-in'));
+  };
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const WEEK = 7 * 864e5;
   const recent = v => v[2] && Date.now() - v[2] * 1000 < WEEK;
   const gain = v => (recent(v) && v[3] && v[1] > v[3] ? v[1] - v[3] : 0);
-  const markup = v => `<small>${v[0]}</small> <b>${v[1]}</b>${recent(v) ? '<em class="chess__new" title="Personal best, less than 7 days ago">PB</em>' : ''}`;
+  const markup = v => (isGh(v) ? `<small>${gh.repo}</small> <b>${ago(gh.pushed)}</b>`
+    : `<small>${v[0]}</small> <b>${v[1]}</b>${recent(v) ? '<em class="chess__new" title="Personal best, less than 7 days ago">PB</em>' : ''}`);
   const countUp = (b, from, to) => {
     const t0 = performance.now(), dur = 900;
     const step = t => {
@@ -363,6 +386,8 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     sound.play('select', { vol: .6, rate: 1.1 });
     i = (i + 1) % values.length;
     const v = values[i];
+    head(isGh(v) ? 'github' : 'chess');
+    line.title = isGh(v) ? `Last push to ${gh.repo}` : '';
     const old = pill.querySelector('.chess__value');
     const neu = document.createElement('span');
     neu.className = 'chess__value is-in';
@@ -392,6 +417,15 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       });
       const now = values[i];
       if (now[1] !== cur[1]) { pill.querySelector('.chess__value').innerHTML = markup(now); celebrate(now, pill.querySelector('b')); }
+    })
+    .catch(() => {});
+  // Dernier push GitHub du moment (l'API publique répond aux navigateurs)
+  if (gh) fetch(`https://api.github.com/users/${gh.user}/repos?sort=pushed&per_page=1`)
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then(([r]) => {
+      if (!r?.pushed_at) return;
+      gh = { ...gh, repo: r.name, pushed: r.pushed_at };
+      if (isGh(values[i])) pill.querySelector('.chess__value').innerHTML = markup(values[i]);
     })
     .catch(() => {});
 });
