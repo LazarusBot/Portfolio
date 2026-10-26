@@ -221,9 +221,13 @@ img { display: block; max-width: 100%; }
 /* Aer : en-tête en conversation iMessage avec le fabricant. On voit le bas du téléphone (le haut sort du cadre) :
    fil de messages, champ de saisie, barre d'accueil. Les messages poussent les précédents vers le haut */
 .chat { position: relative; margin: 30px 0 60px; aspect-ratio: 16 / 10; overflow: hidden; background: #f2f2f2; }
-.chat__phone { position: absolute; left: 50%; top: 0; bottom: 7%; width: min(330px, 78%); translate: -50% 0; display: flex; flex-direction: column;
-  background: #fff; border: 9px solid #111; border-top: 0; border-radius: 0 0 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, .12);
-  overflow: hidden; }   /* l'écran suit l'arrondi intérieur du cadre : rien ne déborde dans les coins */
+/* Le cadre et l'écran sont deux couches : l'écran est découpé à l'arrondi par clip-path (qui coupe aussi les calques animés,
+   là où overflow: hidden laisse parfois passer des coins), et le cadre noir est redessiné par-dessus, comme filet de sécurité */
+.chat__phone { position: absolute; left: 50%; top: 0; bottom: 7%; width: min(330px, 78%); translate: -50% 0; padding: 0 9px 9px;
+  background: #111; border-radius: 0 0 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, .12); }
+.chat__phone::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; border: 9px solid #111; border-top: 0; border-radius: 0 0 48px 48px; }
+.chat__screen { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; background: #fff; border-radius: 0 0 39px 39px;
+  overflow: hidden; clip-path: inset(0 round 0 0 39px 39px); isolation: isolate; }
 .chat__thread { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; padding: 0 14px 6px;
   -webkit-mask: linear-gradient(transparent, #000 18%); mask: linear-gradient(transparent, #000 18%); }
 .chat__time { margin: 0; padding-bottom: 8px; text-align: center; font-size: 10px; color: #8e8e93; }
