@@ -420,13 +420,15 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     })
     .catch(() => {});
   // Dernier push GitHub du moment, tous dépôts confondus (l'API publique répond aux navigateurs)
-  if (gh) fetch(`https://api.github.com/users/${gh.user}/events/public?per_page=100`)
-    .then(r => (r.ok ? r.json() : Promise.reject()))
-    .then(events => {
-      // Le plus récent, y compris sur les dépôts des autres
-      const [e] = events.filter(e => e.type === 'PushEvent').sort((a, b) => b.created_at.localeCompare(a.created_at));
-      if (!e) return;
-      gh = { ...gh, repo: e.repo.name.split('/')[1], pushed: e.created_at };
+  const ghGet = q => fetch(`https://api.github.com/users/${gh.user}/${q}`).then(r => (r.ok ? r.json() : []));
+  // Mes dépôts (à jour) + l'activité publique (pushs sur les dépôts des autres, avec du retard) : le plus récent gagne
+  if (gh) Promise.all([ghGet('repos?sort=pushed&per_page=1'), ghGet('events/public?per_page=100')])
+    .then(([repos, events]) => {
+      const [last] = [...repos.map(r => ({ repo: r.name, pushed: r.pushed_at })),
+        ...events.filter(e => e.type === 'PushEvent').map(e => ({ repo: e.repo.name.split('/')[1], pushed: e.created_at }))]
+        .filter(p => p.pushed).sort((a, b) => b.pushed.localeCompare(a.pushed));
+      if (!last) return;
+      gh = { ...gh, ...last };
       if (isGh(values[i])) pill.querySelector('.chess__value').innerHTML = markup(values[i]);
     })
     .catch(() => {});

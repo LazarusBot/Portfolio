@@ -102,16 +102,21 @@ async function chessData() {
 }
 // Dernier push GitHub, quel que soit le dépôt (comme Chess.com : relu au build, gardé si GitHub ne répond pas, mis à jour en direct par la page)
 const GITHUB_FILE = path.join(SRC, 'static', 'data', 'github.json');
+const latestPush = (repos, events) => [
+  ...(Array.isArray(repos) ? repos : []).map(r => ({ repo: r.name, pushed: r.pushed_at })),
+  ...(Array.isArray(events) ? events : []).filter(e => e.type === 'PushEvent').map(e => ({ repo: e.repo.name.split('/')[1], pushed: e.created_at })),
+].filter(p => p.pushed).sort((a, b) => b.pushed.localeCompare(a.pushed));
 async function githubData() {
   const saved = JSON.parse(read(GITHUB_FILE));
   try {
-    // Activité publique : compte aussi les pushs sur les dépôts des autres (orgs, collaborations)
-    const res = await fetch(`https://api.github.com/users/${saved.user}/events/public?per_page=100`, {
+    // Mes dépôts (à jour) + l'activité publique (pushs sur les dépôts des autres, avec du retard) : on garde le plus récent
+    const get = q => fetch(`https://api.github.com/users/${saved.user}/${q}`, {
       headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)' }, signal: AbortSignal.timeout(8000),
-    });
-    const [e] = (await res.json()).filter(e => e.type === 'PushEvent').sort((a, b) => b.created_at.localeCompare(a.created_at));
-    if (!e) throw new Error('pas de push');
-    const fresh = { ...saved, repo: e.repo.name.split('/')[1], pushed: e.created_at };
+    }).then(r => r.json());
+    const [repos, events] = await Promise.all([get('repos?sort=pushed&per_page=1'), get('events/public?per_page=100')]);
+    const [last] = latestPush(repos, events);
+    if (!last) throw new Error('pas de push');
+    const fresh = { ...saved, ...last };
     fs.writeFileSync(GITHUB_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
   } catch (e) {
