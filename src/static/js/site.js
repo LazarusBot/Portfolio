@@ -419,12 +419,14 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       if (now[1] !== cur[1]) { pill.querySelector('.chess__value').innerHTML = markup(now); celebrate(now, pill.querySelector('b')); }
     })
     .catch(() => {});
-  // Dernier push GitHub du moment (l'API publique répond aux navigateurs)
-  if (gh) fetch(`https://api.github.com/users/${gh.user}/repos?sort=pushed&per_page=1`)
+  // Dernier push GitHub du moment, tous dépôts confondus (l'API publique répond aux navigateurs)
+  if (gh) fetch(`https://api.github.com/users/${gh.user}/events/public?per_page=100`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
-    .then(([r]) => {
-      if (!r?.pushed_at) return;
-      gh = { ...gh, repo: r.name, pushed: r.pushed_at };
+    .then(events => {
+      // Le plus récent, y compris sur les dépôts des autres
+      const [e] = events.filter(e => e.type === 'PushEvent').sort((a, b) => b.created_at.localeCompare(a.created_at));
+      if (!e) return;
+      gh = { ...gh, repo: e.repo.name.split('/')[1], pushed: e.created_at };
       if (isGh(values[i])) pill.querySelector('.chess__value').innerHTML = markup(values[i]);
     })
     .catch(() => {});

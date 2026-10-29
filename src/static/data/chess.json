@@ -7,9 +7,9 @@
     "loss": 113,
     "draw": 8
   },
-  "updated": "2026-10-26",
+  "updated": "2026-10-29",
   "blitz": 1036,
-  "puzzles": 1461,
+  "puzzles": 1466,
   "records": {
     "rapid": {
       "best": 1085,
@@ -22,9 +22,9 @@
       "prev": null
     },
     "puzzles": {
-      "best": 1461,
-      "date": 1792971964,
-      "prev": 1435
+      "best": 1466,
+      "date": 1793225304,
+      "prev": 1461
     }
   }
 }

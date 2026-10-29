@@ -100,17 +100,18 @@ async function chessData() {
     return saved;
   }
 }
-// Dernier dépôt GitHub poussé (comme Chess.com : relu au build, gardé si GitHub ne répond pas, mis à jour en direct par la page)
+// Dernier push GitHub, quel que soit le dépôt (comme Chess.com : relu au build, gardé si GitHub ne répond pas, mis à jour en direct par la page)
 const GITHUB_FILE = path.join(SRC, 'static', 'data', 'github.json');
 async function githubData() {
   const saved = JSON.parse(read(GITHUB_FILE));
   try {
-    const res = await fetch(`https://api.github.com/users/${saved.user}/repos?sort=pushed&per_page=1`, {
+    // Activité publique : compte aussi les pushs sur les dépôts des autres (orgs, collaborations)
+    const res = await fetch(`https://api.github.com/users/${saved.user}/events/public?per_page=100`, {
       headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)' }, signal: AbortSignal.timeout(8000),
     });
-    const [r] = await res.json();
-    if (!r?.pushed_at) throw new Error('pas de dépôt');
-    const fresh = { ...saved, repo: r.name, pushed: r.pushed_at };
+    const [e] = (await res.json()).filter(e => e.type === 'PushEvent').sort((a, b) => b.created_at.localeCompare(a.created_at));
+    if (!e) throw new Error('pas de push');
+    const fresh = { ...saved, repo: e.repo.name.split('/')[1], pushed: e.created_at };
     fs.writeFileSync(GITHUB_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
   } catch (e) {
