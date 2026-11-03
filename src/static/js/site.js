@@ -987,3 +987,26 @@ document.querySelectorAll('.chat').forEach(chat => {
   const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { play(); io.disconnect(); } }, { threshold: .35 });
   io.observe(chat);
 });
+
+// Podz : V1 / V2 sur la même page, le choix suit l'adresse (podz.html?v=2)
+document.querySelectorAll('[data-version-switch]').forEach(sw => {
+  const show = (v, push) => {
+    sw.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', b.dataset.v === v));
+    document.querySelectorAll('[data-version]').forEach(m => { m.hidden = m.dataset.version !== v; });
+    if (push) history.replaceState(null, '', v === '1' ? location.pathname : `?v=${v}`);
+  };
+  sw.addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.v, true); });
+  const v = new URLSearchParams(location.search).get('v');
+  if (v === '2') show('2');
+});
+
+// Podz V2 : les écrans d'onboarding en sombre ou en clair
+document.querySelectorAll('[data-ob-mode]').forEach(sw => {
+  const rail = sw.closest('.pz2-hero').querySelector('[data-ob-rail]');
+  sw.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    sw.querySelectorAll('button').forEach(x => x.setAttribute('aria-selected', x === b));
+    rail.classList.toggle('is-dark', b.dataset.mode === 'dark');
+  });
+});

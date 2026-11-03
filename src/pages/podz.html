@@ -1,11 +1,15 @@
 <!-- meta {"title": "Podz — Maxence Prioux", "description": "Podz: designing a mountain shelter booking iOS app from scratch, from brand to motion."} -->
 {{> head}}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@800&family=Inter:wght@400;600&display=swap">
 <body>
 {{> topbar}}
   <div class="wrap wrap--narrow">
     <p class="crumb"><a href="{{crumbHref}}">{{crumbLabel}} /</a> <strong>Podz</strong></p>
-    <main class="project podz">
+    <div class="pz-version" role="tablist" aria-label="Version of the project" data-version-switch>
+      <button role="tab" aria-selected="true" data-v="1">V1</button>
+      <button role="tab" aria-selected="false" data-v="2">V2 <small>In progress</small></button>
+    </div>
+    <main class="project podz" data-version="1">
 
       <div class="pz-hero">
         <img class="pz-hero__bg" src="assets/podz/banner-2.jpg" alt="">
@@ -194,6 +198,82 @@
               </nav>
             </div>
           </div>
+        </div>
+      </section>
+
+    </main>
+    <main class="project podz podz2" data-version="2" hidden>
+
+      <div class="pz2-hero">
+        <div class="pz2-hero__bar">
+          <p>Onboarding, six steps. Drag through the screens.</p>
+          <div class="pz2-mode" role="tablist" aria-label="Appearance" data-ob-mode>
+            <button role="tab" aria-selected="true" data-mode="dark">Dark</button>
+            <button role="tab" aria-selected="false" data-mode="light">Light</button>
+          </div>
+        </div>
+        <div class="pz2-rail is-dark" data-drag data-ob-rail>
+          <figure class="ob ob--welcome"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob-wall"><div class="ob-wall__sharp"><i class="ob-wall__line" style="left:181px;top:100px;width:265px;height:204px;--d:3"></i><i class="ob-wall__line" style="left:129px;top:328px;width:247px;height:187px;--d:4"></i><i class="ob-wall__line" style="left:-145px;top:266px;width:247px;height:187px;--d:5"></i><i class="ob-wall__line" style="left:-74px;top:47px;width:247px;height:187px;--d:6"></i><i class="ob-wall__line" style="left:213px;top:-105px;width:247px;height:187px;--d:7"></i><span class="ob-wall__pic" style="left:152px;top:349px;width:200px;height:146px;--d:0"><img src="assets/podz/v2/obchalet.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:29px;top:737px;width:200px;height:168px;--d:1"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:67px;width:200px;height:150px;--d:2"><img src="assets/podz/v2/obhillside.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:199px;top:118px;width:200px;height:168px;--d:3"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:232px;top:597px;width:200px;height:112px;--d:4"><img src="assets/podz/v2/obhut.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:532px;width:200px;height:143px;--d:5"><img src="assets/podz/v2/obrocks.jpg" alt=""></span><span class="ob-wall__pic" style="left:235px;top:-49px;width:200px;height:112px;--d:6"><img src="assets/podz/v2/obridge.jpg" alt=""></span><span class="ob-wall__pic" style="left:-21px;top:286px;width:100px;height:150px;--d:7"><img src="assets/podz/v2/obterrace.jpg" alt=""></span></div><div class="ob-wall__soft"><div><i class="ob-wall__line" style="left:181px;top:100px;width:265px;height:204px;--d:3"></i><i class="ob-wall__line" style="left:129px;top:328px;width:247px;height:187px;--d:4"></i><i class="ob-wall__line" style="left:-145px;top:266px;width:247px;height:187px;--d:5"></i><i class="ob-wall__line" style="left:-74px;top:47px;width:247px;height:187px;--d:6"></i><i class="ob-wall__line" style="left:213px;top:-105px;width:247px;height:187px;--d:7"></i><span class="ob-wall__pic" style="left:152px;top:349px;width:200px;height:146px;--d:0"><img src="assets/podz/v2/obchalet.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:29px;top:737px;width:200px;height:168px;--d:1"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:67px;width:200px;height:150px;--d:2"><img src="assets/podz/v2/obhillside.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:199px;top:118px;width:200px;height:168px;--d:3"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:232px;top:597px;width:200px;height:112px;--d:4"><img src="assets/podz/v2/obhut.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:532px;width:200px;height:143px;--d:5"><img src="assets/podz/v2/obrocks.jpg" alt=""></span><span class="ob-wall__pic" style="left:235px;top:-49px;width:200px;height:112px;--d:6"><img src="assets/podz/v2/obridge.jpg" alt=""></span><span class="ob-wall__pic" style="left:-21px;top:286px;width:100px;height:150px;--d:7"><img src="assets/podz/v2/obterrace.jpg" alt=""></span></div></div><i class="ob-wall__fade"></i></div>
+            <div class="ob__text ob__text--welcome"><b>Book a shelter.<br>In an instant</b><p>Ask Lenny about your trip, select and you’re all set.</p></div>
+            <span class="ob__pill ob__pill--start">Touch to start →</span>
+          </div></div><figcaption>Welcome</figcaption></figure>
+          <figure class="ob ob--card"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob__hero"><img src="assets/podz/v2/obterrace.jpg" alt=""></div>
+            <div class="ob__text"><b>Only this needed</b><p>No stress, no multiple fields, just your mail.</p></div>
+            <div class="ob__field">Tap your email</div><small class="ob__note"></small>
+          </div></div><figcaption>Only this needed</figcaption></figure>
+          <figure class="ob ob--card"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob__hero"><img src="assets/podz/v2/obchalet.jpg" alt=""></div>
+            <div class="ob__text"><b>Check your inbox</b><p>We sent you a 6-digit code. Enter it to get in.</p></div>
+            <div class="ob__field">Enter your code</div><small class="ob__note">Resend code</small>
+          </div></div><figcaption>Check your inbox</figcaption></figure>
+          <figure class="ob ob--bleed"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob__hero"><img src="assets/podz/v2/obpod.jpg" alt=""></div>
+            <div class="ob__text"><b>Find the perfect pod</b><p>Discover unique, architectural stays and cozy cabins hidden deep within nature’s most stunning landscapes.</p></div>
+            <div class="ob__row"><span class="ob__back is-off"></span><span class="ob__pill">Continue</span></div>
+          </div></div><figcaption>Find the perfect pod</figcaption></figure>
+          <figure class="ob ob--bleed"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob__hero"><img src="assets/podz/v2/obdeck.jpg" alt=""><i class="ob__lenny"></i></div>
+            <div class="ob__text ob__text--lenny"><b>Meet Lenny</b><p>Tell him where and when. He finds you a bed in a mountain pod.</p></div>
+            <div class="ob__row"><span class="ob__back"></span><span class="ob__pill">Continue</span></div>
+          </div></div><figcaption>Meet Lenny</figcaption></figure>
+          <figure class="ob ob--region"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob__grid"><span class="ob__tile is-on"><img src="assets/podz/v2/obchalet.jpg" alt=""><b>Dolomites</b></span><span class="ob__tile"><img src="assets/podz/v2/obhillside.jpg" alt=""><b>Mont Blanc</b></span><span class="ob__tile"><img src="assets/podz/v2/obpod.jpg" alt=""><b>Julian Alps</b></span><span class="ob__tile"><img src="assets/podz/v2/obrocks.jpg" alt=""><b>Pyrenees</b></span></div>
+            <div class="ob__text"><b>Where to first?</b><p>Pick a region. You can change it anytime.</p></div>
+            <div class="ob__row"><span class="ob__back"></span><span class="ob__pill ob__pill--hi">Get started</span></div>
+          </div></div><figcaption>Where to first?</figcaption></figure>
+        </div>
+      </div>
+
+      <dl class="pz-scope" data-reveal>
+        <div><dt>Role</dt><dd>Design &amp; build</dd></div>
+        <div><dt>Platform</dt><dd>iOS, SwiftUI</dd></div>
+        <div><dt>Status</dt><dd>In progress</dd></div>
+      </dl>
+
+      <section class="section" data-reveal>
+        <h2>Description</h2>
+        <p>The second version of Podz, designed and built in SwiftUI. Same goal, find and reserve a mountain shelter, with a quieter app around it: three tabs, one field to sign in, and Lenny to find you a bed.</p>
+      </section>
+
+      <section class="section" data-reveal>
+        <h2>Principles</h2>
+        <ol class="pz2-rules">
+          <li><b>UX first</b><span>Ease of use beats polish and beats features. Fewer gestures on one screen, so nothing fights.</span></li>
+          <li><b>No accent color</b><span>Pure black and white grounds, flat grey pills. The photos carry all the color.</span></li>
+          <li><b>Both modes designed</b><span>Every screen exists in dark and light, built from shared tokens, never a hard-coded color.</span></li>
+          <li><b>Quiet copy</b><span>Short, lower-key sentences. “Tell him where and when.”</span></li>
+        </ol>
+      </section>
+
+      <section class="section" data-reveal>
+        <h2>Tokens</h2>
+        <div class="pz2-tokens">
+          <span style="--l:#fff;--d:#000"><i></i><b>Ground</b><small>#FFFFFF · #000000</small></span>
+          <span style="--l:#000;--d:#fff"><i></i><b>Text</b><small>#000000 · #FFFFFF</small></span>
+          <span style="--l:#989898;--d:rgba(255,255,255,.88)"><i></i><b>Subtitle</b><small>#989898 · white 88%</small></span>
+          <span style="--l:#f1f1f1;--d:#323232"><i></i><b>Pill</b><small>#F1F1F1 · #323232</small></span>
         </div>
       </section>
 
