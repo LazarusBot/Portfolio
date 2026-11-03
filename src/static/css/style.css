@@ -1353,3 +1353,6 @@ video::-webkit-media-controls { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .ob-wall__pic, .ob-wall__line { animation: none; } }
 .ob__hero { min-height: 0; position: relative; }
 .ob__hero img { position: absolute; inset: 0; }
+/* Le défilement horizontal coupe aussi en vertical : on laisse de la place au-dessus pour la carte qui se soulève au survol */
+.pz-rail, .pz2-rail { padding-top: 14px; padding-bottom: 14px; margin-top: 6px; margin-bottom: -14px; }
+.pz2-hero__bar { margin-bottom: 4px; }
