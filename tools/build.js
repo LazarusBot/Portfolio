@@ -191,6 +191,10 @@ function pageMeta(src) {
 // layout "row" : une seule rangée à hauteur égale, chaque image prend une largeur proportionnelle à son format.
 // Une image marquée "full" passe après, sur toute la largeur.
 function gallery(images, layout) {
+  // layout "mosaic" : tuiles de tailles variées sur 6 colonnes (c colonnes × r rangées de 40 px), recadrées en cover ;
+  // kind sert au téléphone (s portrait, q carré, w large, g le GIF)
+  if (layout === 'mosaic') return `\n        <div class="mosaic">\n          ${images.map(i =>
+    `<figure class="mosaic__tile mosaic__tile--${i.kind}" style="--c:${i.c};--r:${i.r}" data-reveal><img src="assets/raising/${i.src}" alt="" loading="lazy"></figure>`).join('\n          ')}\n        </div>`;
   const full = images.filter(i => i.full).map(i => `\n        <img class="gallery-full" src="assets/img/${i.id}" alt=""${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">`).join('');
   images = images.filter(i => !i.full);
   // layout "grid2" : 2 rangées de 2 sur toute la largeur. Dans chaque rangée, les deux images ont la même
