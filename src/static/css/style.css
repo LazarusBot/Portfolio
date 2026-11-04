@@ -1374,9 +1374,3 @@ video::-webkit-media-controls { display: none !important; }
 .project > .tags:first-child { margin-top: 0; }
 .tags li { display: inline-flex; align-items: baseline; gap: 8px; padding: 8px 16px; border-radius: 99px; background: #f3f3f3; }
 .tags span { color: var(--k-mute); }
-
-/* Navigation des études de cas au même calibre que le texte : 15/24, libellés gris, noms en noir */
-.wrap:has(.quiet) :is(.crumb, .crumb strong, .pnav small, .pnav b, .pnav em, .pz-version button, .pz-version small) { font: 400 15px/24px Inter, system-ui, sans-serif; letter-spacing: .005em; }
-.wrap:has(.quiet) :is(.crumb, .crumb a, .pnav small, .pnav em, .pz-version small) { color: rgba(0, 0, 0, .45); }
-.wrap:has(.quiet) .pnav b { color: #000; }
-.wrap:has(.quiet) :is(.pz-version button, .pz-version small) { line-height: 1; }
