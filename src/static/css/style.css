@@ -1356,10 +1356,14 @@ video::-webkit-media-controls { display: none !important; }
 .pz2-top .ob { --s: 1; display: block; }
 .pz2-top .ob__screen { position: relative; transform: none; }
 /* L'en-tête se parcourt au doigt : les six étapes empilées, celle du moment au centre, les suivantes à droite, les passées à gauche */
-.pz2-top [data-ob-step] { position: absolute; inset: 0; translate: 100% 0; transition: translate .55s cubic-bezier(.32, .72, 0, 1), opacity .55s; }
-.pz2-top [data-ob-step].is-past { translate: -28% 0; opacity: 0; }
-.pz2-top [data-ob-step].is-on { z-index: 2; translate: 0; opacity: 1; }
-.pz2-top button { appearance: none; border: 0; font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .4s, color .4s, scale .2s, opacity .2s; }
+/* Le fond de l'écran suit le mode (noir en sombre) : rien de clair ne passe entre deux étapes */
+.pz2-top { background: var(--g, #000); }
+.pz2-top.is-dark { --g: #000; }
+.pz2-top [data-ob-step] { position: absolute; inset: 0; translate: 100% 0; will-change: translate; backface-visibility: hidden;
+                          transition: translate .6s cubic-bezier(.32, .72, 0, 1); }
+.pz2-top [data-ob-step].is-past { translate: -30% 0; }
+.pz2-top [data-ob-step].is-on { z-index: 2; translate: 0; box-shadow: -24px 0 48px rgba(0, 0, 0, .35); }
+:where(.pz2-top) button { appearance: none; border: 0; font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .4s, color .4s, scale .2s, opacity .2s; }
 .pz2-top button:active { scale: .96; }
 .pz2-top .ob__pill:hover, .pz2-top .ob__back:hover, .pz2-top .ob__field:hover { opacity: .82; }
 .pz2-top .ob__field.is-filled { color: var(--t); }
