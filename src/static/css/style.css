@@ -1348,7 +1348,7 @@ video::-webkit-media-controls { display: none !important; }
 .podz2 h2, .podz2 .section h2 { font: inherit; letter-spacing: inherit; margin: 0 0 4px; color: var(--k-mute); }
 .podz2 .section > p { color: #000; line-height: inherit; }
 .podz2 .section > p + p { margin-top: 12px; }
-.podz2 .pz-hero__beta i { background: #fff; }
+.quiet .pz-hero__beta i { background: #fff; }
 .podz2 .pz-hero__bg { filter: blur(4px) brightness(1.04); }
 /* Accueil : sans les contours décalés autour des photos */
 .ob-wall__line { display: none; }
