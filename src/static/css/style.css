@@ -1368,9 +1368,8 @@ video::-webkit-media-controls { display: none !important; }
 .pz2-top .ob__pill:hover, .pz2-top .ob__back:hover, .pz2-top .ob__field:hover { opacity: .82; }
 .pz2-top .ob__field.is-filled { color: var(--t); }
 .pz2-top .ob__tile { padding: 0; background: none; transition: opacity .3s, scale .2s; }
-/* Même indice que la page Micro-interactions (Caveat, rose), posé à droite du téléphone, à hauteur du bouton */
-.pz2-hint { position: absolute; left: calc(50% + 160px); top: 76%; font-size: 20px; rotate: -4deg; white-space: nowrap; animation: pz-rise .9s ease 1s both; }
-@media (max-width: 720px) { .pz2-hint { left: auto; right: 16px; top: auto; bottom: 18px; font-size: 18px; } }
+/* Même indice que la page Micro-interactions (Caveat 14 px, rose), juste au-dessus de l'en-tête */
+.pz2-hint { margin: 0 0 6px; }
 .podz2 .pz2-mode { margin-top: 18px; }
 .podz2 .pz2-mode button { font: inherit; font-size: 13px; line-height: 1; }
 .podz2 .ob figcaption { font-size: 13px; line-height: 18px; color: var(--k-mute); }
