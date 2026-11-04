@@ -99,109 +99,11 @@
       ],
       "images": [
         {
-          "src": "brand.gif",
-          "kind": "g",
-          "c": 4,
-          "r": 9
-        },
-        {
-          "src": "raise.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 9
-        },
-        {
-          "src": "vision.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 7
-        },
-        {
-          "src": "newkid.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 7
-        },
-        {
-          "src": "noise.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 7
-        },
-        {
-          "src": "speed.jpg",
-          "kind": "w",
-          "c": 3,
-          "r": 6
-        },
-        {
-          "src": "classic.jpg",
-          "kind": "w",
-          "c": 3,
-          "r": 6
-        },
-        {
-          "src": "yourself.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 9
-        },
-        {
-          "src": "tennis.jpg",
-          "kind": "w",
-          "c": 4,
-          "r": 9
-        },
-        {
-          "src": "shine.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 7
-        },
-        {
-          "src": "legacy.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 7
-        },
-        {
-          "src": "lense.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 7
-        },
-        {
-          "src": "thunder.jpg",
-          "kind": "q",
-          "c": 2,
-          "r": 6
-        },
-        {
-          "src": "earned.jpg",
-          "kind": "q",
-          "c": 2,
-          "r": 6
-        },
-        {
-          "src": "lens.jpg",
-          "kind": "q",
-          "c": 2,
-          "r": 6
-        },
-        {
-          "src": "povwide.jpg",
-          "kind": "w",
-          "c": 4,
-          "r": 9
-        },
-        {
-          "src": "pov.jpg",
-          "kind": "s",
-          "c": 2,
-          "r": 9
+          "id": "brand.gif",
+          "w": 1920,
+          "h": 1200
         }
-      ],
-      "layout": "mosaic"
+      ]
     }
   ]
 }
