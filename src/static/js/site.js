@@ -1000,6 +1000,46 @@ document.querySelectorAll('[data-version-switch]').forEach(sw => {
   if (v === '1') show('1');
 });
 
+// Podz V2 : l'onboarding de l'en-tête se parcourt pour de vrai. Les boutons avancent ou reculent d'une étape,
+// un champ touché se remplit tout seul puis passe à la suite, une région se choisit, et « Get started » revient au début
+document.querySelectorAll('[data-ob-flow]').forEach(flow => {
+  const steps = [...flow.querySelectorAll('[data-ob-step]')];
+  const fields = [...flow.querySelectorAll('[data-ob-type]')];
+  fields.forEach(f => (f.dataset.ph = f.textContent));
+  let at = 0, busy = false;
+  const go = n => {
+    // Les étapes qui ne bougent pas changent de côté sans animation (retour au début depuis la fin)
+    steps.forEach((s, k) => { if (k !== at && k !== n) s.style.transition = 'none'; });
+    if (n < at) steps[at].style.zIndex = 3;
+    steps.forEach((s, k) => { s.classList.toggle('is-on', k === n); s.classList.toggle('is-past', k < n); s.inert = k !== n; });
+    const from = at; at = n;
+    requestAnimationFrame(() => requestAnimationFrame(() => steps.forEach(s => (s.style.transition = ''))));
+    setTimeout(() => (steps[from].style.zIndex = ''), 560);
+  };
+  flow.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b || busy) return;
+    flow.closest('.pz-hero').classList.add('is-touched');
+    if (b.dataset.obGo === 'next') go(Math.min(at + 1, steps.length - 1));
+    else if (b.dataset.obGo === 'back') go(Math.max(at - 1, 0));
+    else if (b.dataset.obGo === 'start') { go(0); setTimeout(() => fields.forEach(f => { f.textContent = f.dataset.ph; f.classList.remove('is-filled'); }), 600); }
+    else if ('obTile' in b.dataset) b.parentElement.querySelectorAll('[data-ob-tile]').forEach(x => { x.classList.toggle('is-on', x === b); x.setAttribute('aria-pressed', x === b); });
+    else if ('obType' in b.dataset) {
+      busy = true;
+      const txt = b.dataset.obType;
+      let k = 0;
+      b.classList.add('is-filled');
+      const tick = () => {
+        b.textContent = txt.slice(0, ++k);
+        if (k < txt.length) setTimeout(tick, 55);
+        else setTimeout(() => { busy = false; go(at + 1); }, 450);
+      };
+      tick();
+    }
+  });
+  go(0);
+});
+
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
   const rail = sw.closest('section').querySelector('[data-ob-rail]');

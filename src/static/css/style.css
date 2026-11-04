@@ -1355,6 +1355,18 @@ video::-webkit-media-controls { display: none !important; }
 /* L'écran d'accueil dans la même coque d'iPhone que V1, à taille réelle : la coque s'occupe de la réduction */
 .pz2-top .ob { --s: 1; display: block; }
 .pz2-top .ob__screen { position: relative; transform: none; }
+/* L'en-tête se parcourt au doigt : les six étapes empilées, celle du moment au centre, les suivantes à droite, les passées à gauche */
+.pz2-top [data-ob-step] { position: absolute; inset: 0; translate: 100% 0; transition: translate .55s cubic-bezier(.32, .72, 0, 1), opacity .55s; }
+.pz2-top [data-ob-step].is-past { translate: -28% 0; opacity: 0; }
+.pz2-top [data-ob-step].is-on { z-index: 2; translate: 0; opacity: 1; }
+.pz2-top button { appearance: none; border: 0; font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .4s, color .4s, scale .2s, opacity .2s; }
+.pz2-top button:active { scale: .96; }
+.pz2-top .ob__pill:hover, .pz2-top .ob__back:hover, .pz2-top .ob__field:hover { opacity: .82; }
+.pz2-top .ob__field.is-filled { color: var(--t); }
+.pz2-top .ob__tile { padding: 0; background: none; transition: opacity .3s, scale .2s; }
+.pz2-hint { position: absolute; right: 16px; bottom: 16px; padding: 7px 12px; border-radius: 999px; background: rgba(0, 0, 0, .35); color: #fff; font-size: 12px;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); animation: pz-rise .9s ease 1s both; transition: opacity .4s; }
+.is-touched .pz2-hint { opacity: 0; }
 .podz2 .pz2-mode { margin-top: 18px; }
 .podz2 .pz2-mode button { font: inherit; font-size: 13px; line-height: 1; }
 .podz2 .ob figcaption { font-size: 13px; line-height: 18px; color: var(--k-mute); }
