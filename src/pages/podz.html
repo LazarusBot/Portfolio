@@ -206,7 +206,6 @@
 
       <div class="pz2-hero">
         <div class="pz2-hero__bar">
-          <p>Onboarding, six steps. Drag through the screens.</p>
           <div class="pz2-mode" role="tablist" aria-label="Appearance" data-ob-mode>
             <button role="tab" aria-selected="true" data-mode="dark">Dark</button>
             <button role="tab" aria-selected="false" data-mode="light">Light</button>
@@ -246,34 +245,56 @@
         </div>
       </div>
 
-      <dl class="pz-scope" data-reveal>
-        <div><dt>Role</dt><dd>Design &amp; build</dd></div>
-        <div><dt>Platform</dt><dd>iOS, SwiftUI</dd></div>
+      <div class="k-intro" data-reveal>
+        <h1>Quiet, then built.</h1>
+        <p class="k-mute">The second version of Podz, an iOS app to find and reserve mountain shelters. Designed in Paper and built in SwiftUI: three tabs, one field to sign in, and Lenny to find you a bed. The photos carry all the color.</p>
+      </div>
+
+      <dl class="k-meta" data-reveal>
+        <div><dt>Project</dt><dd>Podz V2</dd></div>
+        <div><dt>What it is</dt><dd>iOS app, mountain shelters</dd></div>
+        <div><dt>Role</dt><dd>Design and SwiftUI build</dd></div>
         <div><dt>Status</dt><dd>In progress</dd></div>
       </dl>
 
-      <section class="section" data-reveal>
-        <h2>Description</h2>
-        <p>The second version of Podz, designed and built in SwiftUI. Same goal, find and reserve a mountain shelter, with a quieter app around it: three tabs, one field to sign in, and Lenny to find you a bed.</p>
+      <section class="k-row" data-reveal>
+        <h2>The question</h2>
+        <div>
+          <p>The first version proved the idea, but it did a lot: a feed of friends' posts, an offline trip pass, a whole host side with its own tabs and forms. Booking a bed in a hut should feel instant, not like learning an app.</p>
+        </div>
       </section>
 
-      <section class="section" data-reveal>
+      <section class="k-row" data-reveal>
+        <h2>The idea</h2>
+        <div>
+          <p>Keep only what gets you to a bed. Three tabs: Home, Likes and Profile. Sign in with your email and a six-digit code, nothing else. Then tell Lenny where and when, and he finds you a pod.</p>
+        </div>
+      </section>
+
+      <section class="k-row" data-reveal>
+        <h2>The system</h2>
+        <div>
+          <p>Pure black and white grounds, flat grey pills, Inter throughout. No accent color, no shadows, nothing glass. Every screen is designed in dark and in light from the same tokens, and the app never hard-codes a color.</p>
+          <div class="k-tokens">
+            <span style="--l:#fff;--d:#000"><i></i>Ground</span>
+            <span style="--l:#000;--d:#fff"><i></i>Text</span>
+            <span style="--l:#989898;--d:#e0e0e0"><i></i>Subtitle</span>
+            <span style="--l:#f1f1f1;--d:#323232"><i></i>Pill</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="k-grid" data-reveal>
+        <img class="k-grid__wide" src="assets/podz/v2/obridge.jpg" alt="" loading="lazy">
+        <img src="assets/podz/v2/obterrace.jpg" alt="" loading="lazy">
+        <img src="assets/podz/v2/obdeck.jpg" alt="" loading="lazy">
+      </div>
+
+      <section class="k-row" data-reveal>
         <h2>Principles</h2>
-        <ol class="pz2-rules">
-          <li><b>UX first</b><span>Ease of use beats polish and beats features. Fewer gestures on one screen, so nothing fights.</span></li>
-          <li><b>No accent color</b><span>Pure black and white grounds, flat grey pills. The photos carry all the color.</span></li>
-          <li><b>Both modes designed</b><span>Every screen exists in dark and light, built from shared tokens, never a hard-coded color.</span></li>
-          <li><b>Quiet copy</b><span>Short, lower-key sentences. “Tell him where and when.”</span></li>
-        </ol>
-      </section>
-
-      <section class="section" data-reveal>
-        <h2>Tokens</h2>
-        <div class="pz2-tokens">
-          <span style="--l:#fff;--d:#000"><i></i><b>Ground</b><small>#FFFFFF · #000000</small></span>
-          <span style="--l:#000;--d:#fff"><i></i><b>Text</b><small>#000000 · #FFFFFF</small></span>
-          <span style="--l:#989898;--d:rgba(255,255,255,.88)"><i></i><b>Subtitle</b><small>#989898 · white 88%</small></span>
-          <span style="--l:#f1f1f1;--d:#323232"><i></i><b>Pill</b><small>#F1F1F1 · #323232</small></span>
+        <div>
+          <p>UX comes first. Ease of use beats polish and beats adding features, so a screen never holds two gestures that could fight.</p>
+          <p>Quiet copy. Short, lower-key sentences, like “Tell him where and when.”</p>
         </div>
       </section>
 
