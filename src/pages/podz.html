@@ -6,10 +6,10 @@
   <div class="wrap wrap--narrow">
     <p class="crumb"><a href="{{crumbHref}}">{{crumbLabel}} /</a> <strong>Podz</strong></p>
     <div class="pz-version" role="tablist" aria-label="Version of the project" data-version-switch>
-      <button role="tab" aria-selected="true" data-v="1">V1</button>
-      <button role="tab" aria-selected="false" data-v="2">V2 <small>In progress</small></button>
+      <button role="tab" aria-selected="false" data-v="1">V1</button>
+      <button role="tab" aria-selected="true" data-v="2">V2 <small>In progress</small></button>
     </div>
-    <main class="project podz" data-version="1">
+    <main class="project podz" data-version="1" hidden>
 
       <div class="pz-hero">
         <img class="pz-hero__bg" src="assets/podz/banner-2.jpg" alt="">
@@ -202,14 +202,36 @@
       </section>
 
     </main>
-    <main class="project podz podz2" data-version="2" hidden>
+    <main class="project podz podz2" data-version="2">
 
-      <div class="pz2-hero">
-        <div class="pz2-hero__bar">
-          <div class="pz2-mode" role="tablist" aria-label="Appearance" data-ob-mode>
-            <button role="tab" aria-selected="true" data-mode="dark">Dark</button>
-            <button role="tab" aria-selected="false" data-mode="light">Light</button>
-          </div>
+      <div class="pz-hero">
+        <img class="pz-hero__bg" src="assets/podz/v2/obridge.jpg" alt="">
+        <div class="pz2-top is-dark"><div class="ob ob--welcome"><div class="ob__frame"><div class="ob__screen">
+            <div class="ob-wall"><div class="ob-wall__sharp"><i class="ob-wall__line" style="left:181px;top:100px;width:265px;height:204px;--d:3"></i><i class="ob-wall__line" style="left:129px;top:328px;width:247px;height:187px;--d:4"></i><i class="ob-wall__line" style="left:-145px;top:266px;width:247px;height:187px;--d:5"></i><i class="ob-wall__line" style="left:-74px;top:47px;width:247px;height:187px;--d:6"></i><i class="ob-wall__line" style="left:213px;top:-105px;width:247px;height:187px;--d:7"></i><span class="ob-wall__pic" style="left:152px;top:349px;width:200px;height:146px;--d:0"><img src="assets/podz/v2/obchalet.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:29px;top:737px;width:200px;height:168px;--d:1"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:67px;width:200px;height:150px;--d:2"><img src="assets/podz/v2/obhillside.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:199px;top:118px;width:200px;height:168px;--d:3"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:232px;top:597px;width:200px;height:112px;--d:4"><img src="assets/podz/v2/obhut.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:532px;width:200px;height:143px;--d:5"><img src="assets/podz/v2/obrocks.jpg" alt=""></span><span class="ob-wall__pic" style="left:235px;top:-49px;width:200px;height:112px;--d:6"><img src="assets/podz/v2/obridge.jpg" alt=""></span><span class="ob-wall__pic" style="left:-21px;top:286px;width:100px;height:150px;--d:7"><img src="assets/podz/v2/obterrace.jpg" alt=""></span></div><div class="ob-wall__soft"><div><i class="ob-wall__line" style="left:181px;top:100px;width:265px;height:204px;--d:3"></i><i class="ob-wall__line" style="left:129px;top:328px;width:247px;height:187px;--d:4"></i><i class="ob-wall__line" style="left:-145px;top:266px;width:247px;height:187px;--d:5"></i><i class="ob-wall__line" style="left:-74px;top:47px;width:247px;height:187px;--d:6"></i><i class="ob-wall__line" style="left:213px;top:-105px;width:247px;height:187px;--d:7"></i><span class="ob-wall__pic" style="left:152px;top:349px;width:200px;height:146px;--d:0"><img src="assets/podz/v2/obchalet.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:29px;top:737px;width:200px;height:168px;--d:1"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:67px;width:200px;height:150px;--d:2"><img src="assets/podz/v2/obhillside.jpg" alt=""></span><span class="ob-wall__pic is-tall" style="left:199px;top:118px;width:200px;height:168px;--d:3"><img src="assets/podz/v2/obdeck.jpg" alt=""></span><span class="ob-wall__pic" style="left:232px;top:597px;width:200px;height:112px;--d:4"><img src="assets/podz/v2/obhut.jpg" alt=""></span><span class="ob-wall__pic" style="left:-44px;top:532px;width:200px;height:143px;--d:5"><img src="assets/podz/v2/obrocks.jpg" alt=""></span><span class="ob-wall__pic" style="left:235px;top:-49px;width:200px;height:112px;--d:6"><img src="assets/podz/v2/obridge.jpg" alt=""></span><span class="ob-wall__pic" style="left:-21px;top:286px;width:100px;height:150px;--d:7"><img src="assets/podz/v2/obterrace.jpg" alt=""></span></div></div><i class="ob-wall__fade"></i></div>
+            <div class="ob__text ob__text--welcome"><b>Book a shelter.<br>In an instant</b><p>Ask Lenny about your trip, select and you’re all set.</p></div>
+            <span class="ob__pill ob__pill--start">Touch to start →</span>
+          </div></div></div></div>
+        <span class="pz-hero__beta"><i></i>In progress</span>
+      </div>
+
+      <dl class="pz-scope" data-reveal>
+        <div><dt>Role</dt><dd>Design and SwiftUI build</dd></div>
+        <div><dt>Platform</dt><dd>iOS</dd></div>
+        <div><dt>Status</dt><dd>In progress</dd></div>
+      </dl>
+
+      <section class="section" data-reveal>
+        <h2>Description</h2>
+        <p>The second version of Podz, the iOS app to find and reserve mountain shelters. This time I wanted something really minimalist, so it feels fresh and modern: black and white, one typeface, no accent color. The photos carry all the color.</p>
+        <p>Designed in Paper and built in SwiftUI: three tabs, one field to sign in, and Lenny to find you a bed.</p>
+      </section>
+
+      <section class="section" data-reveal>
+        <h2>Onboarding</h2>
+        <p>Six steps, from the welcome wall to picking a region. Drag through the screens, then switch them to light.</p>
+        <div class="pz2-mode" role="tablist" aria-label="Appearance" data-ob-mode>
+          <button role="tab" aria-selected="true" data-mode="dark">Dark</button>
+          <button role="tab" aria-selected="false" data-mode="light">Light</button>
         </div>
         <div class="pz2-rail is-dark" data-drag data-ob-rail>
           <figure class="ob ob--welcome"><div class="ob__frame"><div class="ob__screen">
@@ -243,59 +265,40 @@
             <div class="ob__row"><span class="ob__back"></span><span class="ob__pill ob__pill--hi">Get started</span></div>
           </div></div><figcaption>Where to first?</figcaption></figure>
         </div>
-      </div>
-
-      <div class="k-intro" data-reveal>
-        <h1>Quiet, then built.</h1>
-        <p class="k-mute">The second version of Podz, an iOS app to find and reserve mountain shelters. Designed in Paper and built in SwiftUI: three tabs, one field to sign in, and Lenny to find you a bed. The photos carry all the color.</p>
-      </div>
-
-      <dl class="k-meta" data-reveal>
-        <div><dt>Project</dt><dd>Podz V2</dd></div>
-        <div><dt>What it is</dt><dd>iOS app, mountain shelters</dd></div>
-        <div><dt>Role</dt><dd>Design and SwiftUI build</dd></div>
-        <div><dt>Status</dt><dd>In progress</dd></div>
-      </dl>
-
-      <section class="k-row" data-reveal>
-        <h2>The question</h2>
-        <div>
-          <p>The first version proved the idea, but it did a lot: a feed of friends' posts, an offline trip pass, a whole host side with its own tabs and forms. Booking a bed in a hut should feel instant, not like learning an app.</p>
-        </div>
       </section>
 
-      <section class="k-row" data-reveal>
-        <h2>The idea</h2>
-        <div>
-          <p>Keep only what gets you to a bed. Three tabs: Home, Likes and Profile. Sign in with your email and a six-digit code, nothing else. Then tell Lenny where and when, and he finds you a pod.</p>
-        </div>
+      <section class="section" data-reveal>
+        <h2>Why a second version</h2>
+        <p>The first version proved the idea, but it did a lot: a feed of friends' posts, an offline trip pass, a whole host side with its own tabs and forms. Booking a bed in a hut should feel instant, not like learning an app.</p>
+        <p>So V2 keeps only what gets you to a bed. Home, Likes and Profile. Sign in with your email and a six-digit code, nothing else. Then tell Lenny where and when.</p>
       </section>
 
-      <section class="k-row" data-reveal>
+      <section class="section" data-reveal>
         <h2>The system</h2>
-        <div>
-          <p>Pure black and white grounds, flat grey pills, Inter throughout. No accent color, no shadows, nothing glass. Every screen is designed in dark and in light from the same tokens, and the app never hard-codes a color.</p>
-          <div class="k-tokens">
-            <span style="--l:#fff;--d:#000"><i></i>Ground</span>
-            <span style="--l:#000;--d:#fff"><i></i>Text</span>
-            <span style="--l:#989898;--d:#e0e0e0"><i></i>Subtitle</span>
-            <span style="--l:#f1f1f1;--d:#323232"><i></i>Pill</span>
-          </div>
+        <p>Pure black and white grounds, flat grey pills, Inter throughout. No shadows, nothing glass. Every screen exists in dark and in light from the same tokens.</p>
+        <div class="k-tokens">
+          <span style="--l:#fff;--d:#000"><i></i>Ground</span>
+          <span style="--l:#000;--d:#fff"><i></i>Text</span>
+          <span style="--l:#989898;--d:#e0e0e0"><i></i>Subtitle</span>
+          <span style="--l:#f1f1f1;--d:#323232"><i></i>Pill</span>
         </div>
       </section>
 
-      <div class="k-grid" data-reveal>
-        <img class="k-grid__wide" src="assets/podz/v2/obridge.jpg" alt="" loading="lazy">
-        <img src="assets/podz/v2/obterrace.jpg" alt="" loading="lazy">
-        <img src="assets/podz/v2/obdeck.jpg" alt="" loading="lazy">
+      <section class="section" data-reveal>
+        <h2>Imagery</h2>
+        <p>Architectural pods and cabins, shot in soft daylight.</p>
+      </section>
+      <div class="pz-marquee" aria-label="Podz V2 photos">
+        <div class="pz-marquee__track">
+          <img src="assets/podz/v2/obridge.jpg" alt=""><img src="assets/podz/v2/obterrace.jpg" alt=""><img src="assets/podz/v2/obchalet.jpg" alt=""><img src="assets/podz/v2/obdeck.jpg" alt=""><img src="assets/podz/v2/obhillside.jpg" alt=""><img src="assets/podz/v2/obpod.jpg" alt=""><img src="assets/podz/v2/obrocks.jpg" alt=""><img src="assets/podz/v2/obhut.jpg" alt="">
+          <img src="assets/podz/v2/obridge.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obterrace.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obchalet.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obdeck.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obhillside.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obpod.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obrocks.jpg" alt="" aria-hidden="true"><img src="assets/podz/v2/obhut.jpg" alt="" aria-hidden="true">
+        </div>
       </div>
 
-      <section class="k-row" data-reveal>
+      <section class="section" data-reveal>
         <h2>Principles</h2>
-        <div>
-          <p>UX comes first. Ease of use beats polish and beats adding features, so a screen never holds two gestures that could fight.</p>
-          <p>Quiet copy. Short, lower-key sentences, like “Tell him where and when.”</p>
-        </div>
+        <p>UX comes first. Ease of use beats polish and beats adding features, so a screen never holds two gestures that could fight.</p>
+        <p>Quiet copy. Short, lower-key sentences, like “Tell him where and when.”</p>
       </section>
 
     </main>{{projectNav}}

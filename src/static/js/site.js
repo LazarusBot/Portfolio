@@ -607,9 +607,9 @@ document.querySelectorAll('[data-beta]').forEach(video => {
 });
 
 // Podz : la photo de l'en-tête défile un peu moins vite que la page
-const heroBg = document.querySelector('.pz-hero__bg');
-if (heroBg && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  addEventListener('scroll', () => heroBg.style.setProperty('--py', `${Math.min(scrollY, 800) * .25}px`), { passive: true });
+const heroBgs = document.querySelectorAll('.pz-hero__bg');
+if (heroBgs.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  addEventListener('scroll', () => heroBgs.forEach(bg => bg.style.setProperty('--py', `${Math.min(scrollY, 800) * .25}px`)), { passive: true });
 }
 
 // Podz : évolution du logo, une étape toutes les 2,4 s tant que la section est visible
@@ -993,16 +993,16 @@ document.querySelectorAll('[data-version-switch]').forEach(sw => {
   const show = (v, push) => {
     sw.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', b.dataset.v === v));
     document.querySelectorAll('[data-version]').forEach(m => { m.hidden = m.dataset.version !== v; });
-    if (push) history.replaceState(null, '', v === '1' ? location.pathname : `?v=${v}`);
+    if (push) history.replaceState(null, '', v === '2' ? location.pathname : `?v=${v}`);
   };
   sw.addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.v, true); });
   const v = new URLSearchParams(location.search).get('v');
-  if (v === '2') show('2');
+  if (v === '1') show('1');
 });
 
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
-  const rail = sw.closest('.pz2-hero').querySelector('[data-ob-rail]');
+  const rail = sw.closest('section').querySelector('[data-ob-rail]');
   sw.addEventListener('click', e => {
     const b = e.target.closest('button');
     if (!b) return;

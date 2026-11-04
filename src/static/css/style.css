@@ -720,7 +720,7 @@ video::-webkit-media-controls { display: none !important; }
 .pz-scope dt { font-size: 12px; color: var(--faint); margin-bottom: 14px; }
 .pz-scope dd { font: 500 26px/1 var(--display); letter-spacing: -0.05em; }
 
-.podz .section p { max-width: 560px; }
+.podz .section > p { max-width: 560px; }
 .pz-board { display: block; width: 100%; margin-top: 20px; background: var(--card); }
 
 /* Évolution du logo : les étapes défilent seules quand la section est visible */
@@ -1259,8 +1259,6 @@ video::-webkit-media-controls { display: none !important; }
 [data-version][hidden] { display: none; }
 
 /* V2 : les écrans d'onboarding de l'app, refaits en HTML aux mesures SwiftUI (393 × 852 pt), réduits par --s */
-.pz2-hero__bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-.pz2-hero__bar p { font-size: 13px; color: var(--soft); }
 .pz2-mode { display: inline-flex; gap: 2px; padding: 3px; border-radius: 99px; background: var(--pill); }
 .pz2-mode button { padding: 6px 12px; border: 0; border-radius: 99px; background: none; font: 500 12px/1 var(--display); color: var(--soft); cursor: pointer; transition: background .25s, color .25s; }
 .pz2-mode button[aria-selected="true"] { background: #000; color: #fff; }
@@ -1342,43 +1340,30 @@ video::-webkit-media-controls { display: none !important; }
 .ob__hero img { position: absolute; inset: 0; }
 /* Le défilement horizontal coupe aussi en vertical : on laisse de la place au-dessus pour la carte qui se soulève au survol */
 .pz-rail, .pz2-rail { padding-top: 14px; padding-bottom: 14px; margin-top: 6px; margin-bottom: -14px; }
-.pz2-hero__bar { margin-bottom: 4px; }
 
 /* Podz V2, à la manière d'Office Commun (Karda) : une seule taille de texte, la hiérarchie par le gris,
    libellé à gauche et texte à droite, images carrées en grille serrée */
+/* V2 : même mise en page que V1, mais une seule taille de texte et presque aucune couleur ; la hiérarchie vient du gris */
 .podz2 { --k-mute: rgba(0, 0, 0, .45); font: 400 15px/24px Inter, system-ui, sans-serif; letter-spacing: .005em; }
-.podz2 h1, .podz2 h2 { font: inherit; letter-spacing: inherit; margin: 0; }
-.pz2-hero { position: relative; padding: 56px 0 44px; background: #f3f3f3; overflow: hidden; }
-.pz2-hero__bar { position: absolute; right: 14px; top: 14px; z-index: 1; margin: 0; }
-.pz2-mode { background: #fff; }
-.pz2-mode button { font: inherit; font-size: 13px; line-height: 1; }
-.podz2 .pz2-rail { margin: 0; padding: 14px 40px; scroll-padding: 0 40px; -webkit-mask-image: none; mask-image: none; }
-.podz2 .pz2-rail:hover .ob figcaption { opacity: 1; }
+.podz2 h2, .podz2 .section h2 { font: inherit; letter-spacing: inherit; margin: 0 0 4px; color: var(--k-mute); }
+.podz2 .section > p { color: #000; line-height: inherit; }
+.podz2 .section > p + p { margin-top: 12px; }
+.podz2 .pz-scope dt { font-size: inherit; color: var(--k-mute); margin-bottom: 4px; }
+.podz2 .pz-scope dd { font: inherit; letter-spacing: inherit; }
+.podz2 .pz-scope > div { padding: 18px 0 20px; }
+.podz2 .pz-hero__beta i { background: #fff; }
+.pz2-top { --s: .6; position: relative; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .35)); animation: pz-rise 1.2s cubic-bezier(.34, 1.3, .64, 1) .15s both; }
+.pz2-top .ob__frame { box-shadow: none; }
+.pz2-top .ob:hover .ob__frame { transform: none; }
+.podz2 .pz2-mode { margin-top: 18px; }
+.podz2 .pz2-mode button { font: inherit; font-size: 13px; line-height: 1; }
 .podz2 .ob figcaption { font-size: 13px; line-height: 18px; color: var(--k-mute); }
-.podz2 .ob__frame { box-shadow: none; }
-.k-intro { display: grid; gap: 24px; width: 668px; max-width: 100%; margin: 56px auto 48px; padding-left: 140px; }
-.k-mute { color: var(--k-mute); }
-.k-meta { display: grid; width: 668px; max-width: 100%; margin: 0 auto 56px; }
-.k-meta > div { display: grid; grid-template-columns: 140px 1fr; }
-.k-meta dt { color: var(--k-mute); }
-.k-row { display: grid; grid-template-columns: 140px 528px; justify-content: center; margin: 0 0 40px; }
-.k-row h2 { grid-column: 1; padding-right: 24px; color: var(--k-mute); }
-.k-row > div { grid-column: 2; display: grid; gap: 24px; }
-.k-row p { color: #000; }
+.podz2 .k-tokens { margin-top: 20px; }
 .k-tokens { display: grid; grid-template-columns: repeat(4, 72px); gap: 8px; color: var(--k-mute); font-size: 13px; line-height: 18px; }
 .k-tokens span { display: grid; gap: 8px; }
 .k-tokens i { aspect-ratio: 1; background: linear-gradient(135deg, var(--l) 50%, var(--d) 50%); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
-.k-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 72px 0 72px; }
-.k-grid img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: #f3f3f3; }
-.k-grid .k-grid__wide { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
-@media (max-width: 900px) {
-  .k-row { grid-template-columns: 1fr; gap: 4px; }
-  .k-row h2, .k-row > div { grid-column: 1; margin: 0; padding: 0; max-width: none; }
-  .k-intro { padding-left: 0; }
-  .k-meta > div { grid-template-columns: 112px 1fr; }
-}
 @media (max-width: 720px) {
-  .pz2-hero { padding: 52px 0 32px; }
-  .podz2 .pz2-rail { padding: 14px 16px; scroll-padding: 0 16px; }
-  .k-grid { margin: 48px 0; }
+  .pz2-top { --s: .5; }
+  .podz2 .pz-scope dd { font-size: inherit; }
+}
 }
