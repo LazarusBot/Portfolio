@@ -254,7 +254,10 @@ function bagOver(s) {
 
 function projectSections(p) {
   // En-tête sur mesure d'un projet s'il existe (partials/hero-<slug>.html), avant les sections
-  return (partials[`hero-${p.slug}`] || '') + p.sections.map(s => `
+  // puis les infos du projet en pilules (_overrides.json → tags)
+  const tags = p.tags ? `
+      <ul class="tags">${p.tags.map(([k, v]) => `<li><span>${esc(k)}</span>${esc(v)}</li>`).join('')}</ul>` : '';
+  return (partials[`hero-${p.slug}`] || '') + tags + p.sections.map(s => `
       <section class="section">
         <h2>${esc(s.title)}</h2>
         ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${s.bagOver ? bagOver(s) : gallery(s.images, s.layout) + bag(s.bag)}

@@ -1,11 +1,137 @@
 {
   "logoset": {
     "wall": [
-      "iT88dv5qDloBgq7412ZdYLr6bWo.png", "nlSkIlXA5vWeysptvn4gn8y2kdA.png", "ohdn6yraFYUk56VFad77rwM.png",
-      "tXf825EnA2bAQ3JAFFEViFtuXA.png", "TgYVIjcLwbjDWazrPAGJOJdSTsg.png", "jtrY3FEN1c8gRjfyZQsF1CdFrIg.png",
-      "A6Hj3m7jUjBSAQa0XLfDhIKxKzo.png", "0ZOWeGGPyzUa2xbMVI2hA6HBJug.png", "cub9cKooEikVvy92Oxfsssy4n7g.png",
-      "iDJBcM9SiYOaOYQPNChFf5z5x78.png", "mYogaUArbenB9SjfEXnGevcTxc.png", "15Rmlaqdrm4cG43PnpHipQamYU.png",
+      "iT88dv5qDloBgq7412ZdYLr6bWo.png",
+      "nlSkIlXA5vWeysptvn4gn8y2kdA.png",
+      "ohdn6yraFYUk56VFad77rwM.png",
+      "tXf825EnA2bAQ3JAFFEViFtuXA.png",
+      "TgYVIjcLwbjDWazrPAGJOJdSTsg.png",
+      "jtrY3FEN1c8gRjfyZQsF1CdFrIg.png",
+      "A6Hj3m7jUjBSAQa0XLfDhIKxKzo.png",
+      "0ZOWeGGPyzUa2xbMVI2hA6HBJug.png",
+      "cub9cKooEikVvy92Oxfsssy4n7g.png",
+      "iDJBcM9SiYOaOYQPNChFf5z5x78.png",
+      "mYogaUArbenB9SjfEXnGevcTxc.png",
+      "15Rmlaqdrm4cG43PnpHipQamYU.png",
       "ILVQBNDFaEgOsjqt5hHCjMlZQL0.png"
+    ],
+    "tags": [
+      [
+        "For",
+        "Personal explorations"
+      ],
+      [
+        "Scope",
+        "Logo design"
+      ]
+    ]
+  },
+  "aerrunning": {
+    "tags": [
+      [
+        "For",
+        "Running brand"
+      ],
+      [
+        "Scope",
+        "Logo, mascot, labels, socials"
+      ]
+    ]
+  },
+  "appstore": {
+    "tags": [
+      [
+        "For",
+        "Connectivity app"
+      ],
+      [
+        "Scope",
+        "Design system, components, prototyping"
+      ]
+    ]
+  },
+  "axeinos": {
+    "tags": [
+      [
+        "For",
+        "AI SaaS"
+      ],
+      [
+        "Scope",
+        "Brand design"
+      ]
+    ]
+  },
+  "carddi": {
+    "tags": [
+      [
+        "For",
+        "Task app"
+      ],
+      [
+        "Scope",
+        "App design"
+      ]
+    ]
+  },
+  "padelwlrd": {
+    "tags": [
+      [
+        "For",
+        "Premium padel brand"
+      ],
+      [
+        "Scope",
+        "Logo, booking experience"
+      ]
+    ]
+  },
+  "peregresss": {
+    "tags": [
+      [
+        "For",
+        "Travel account"
+      ],
+      [
+        "Scope",
+        "Logo, socials"
+      ]
+    ]
+  },
+  "quantum": {
+    "tags": [
+      [
+        "For",
+        "AI SaaS"
+      ],
+      [
+        "Scope",
+        "Brand design"
+      ]
+    ]
+  },
+  "raisingstd": {
+    "tags": [
+      [
+        "For",
+        "Raising Studio"
+      ],
+      [
+        "Scope",
+        "Logo, graphic elements, socials"
+      ]
+    ]
+  },
+  "sensia": {
+    "tags": [
+      [
+        "For",
+        "AI SaaS"
+      ],
+      [
+        "Scope",
+        "Brand design, landing page"
+      ]
     ]
   }
 }
