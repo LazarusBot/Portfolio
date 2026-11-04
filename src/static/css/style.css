@@ -1368,8 +1368,8 @@ video::-webkit-media-controls { display: none !important; }
 .pz2-top .ob__pill:hover, .pz2-top .ob__back:hover, .pz2-top .ob__field:hover { opacity: .82; }
 .pz2-top .ob__field.is-filled { color: var(--t); }
 .pz2-top .ob__tile { padding: 0; background: none; transition: opacity .3s, scale .2s; }
-/* Même indice que la page Micro-interactions (Caveat 14 px, rose), juste au-dessus de l'en-tête */
-.pz2-hint { margin: 0 0 6px; }
+/* Même indice que la page Micro-interactions (Caveat 14 px, rose), à côté de la bascule V1 / V2, seulement sur V2 */
+.pz2-hint { margin-left: 12px; }
 .podz2 .pz2-mode { margin-top: 18px; }
 .podz2 .pz2-mode button { font: inherit; font-size: 13px; line-height: 1; }
 .podz2 .ob figcaption { font-size: 13px; line-height: 18px; color: var(--k-mute); }
