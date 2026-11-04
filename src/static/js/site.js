@@ -1019,7 +1019,6 @@ document.querySelectorAll('[data-ob-flow]').forEach(flow => {
   flow.addEventListener('click', e => {
     const b = e.target.closest('button');
     if (!b || busy) return;
-    flow.closest('.pz-hero').classList.add('is-touched');
     if (b.dataset.obGo === 'next') go(Math.min(at + 1, steps.length - 1));
     else if (b.dataset.obGo === 'back') go(Math.max(at - 1, 0));
     else if (b.dataset.obGo === 'start') { go(0); setTimeout(() => fields.forEach(f => { f.textContent = f.dataset.ph; f.classList.remove('is-filled'); }), 600); }
