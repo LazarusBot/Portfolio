@@ -1348,13 +1348,14 @@ video::-webkit-media-controls { display: none !important; }
 .podz2 h2, .podz2 .section h2 { font: inherit; letter-spacing: inherit; margin: 0 0 4px; color: var(--k-mute); }
 .podz2 .section > p { color: #000; line-height: inherit; }
 .podz2 .section > p + p { margin-top: 12px; }
-.podz2 .pz-scope dt { font-size: inherit; color: var(--k-mute); margin-bottom: 4px; }
+.podz2 .pz-scope { margin: 32px 0 8px; }
+.podz2 .pz-scope dt { font-size: inherit; color: var(--k-mute); margin-bottom: 6px; }
 .podz2 .pz-scope dd { font: inherit; letter-spacing: inherit; }
-.podz2 .pz-scope > div { padding: 18px 0 20px; }
+.podz2 .pz-scope > div { padding-top: 22px; padding-bottom: 24px; }
 .podz2 .pz-hero__beta i { background: #fff; }
-.pz2-top { --s: .6; position: relative; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .35)); animation: pz-rise 1.2s cubic-bezier(.34, 1.3, .64, 1) .15s both; }
-.pz2-top .ob__frame { box-shadow: none; }
-.pz2-top .ob:hover .ob__frame { transform: none; }
+/* L'écran d'accueil dans la même coque d'iPhone que V1, à taille réelle : la coque s'occupe de la réduction */
+.pz2-top .ob { --s: 1; display: block; }
+.pz2-top .ob__screen { position: relative; transform: none; }
 .podz2 .pz2-mode { margin-top: 18px; }
 .podz2 .pz2-mode button { font: inherit; font-size: 13px; line-height: 1; }
 .podz2 .ob figcaption { font-size: 13px; line-height: 18px; color: var(--k-mute); }
@@ -1363,7 +1364,7 @@ video::-webkit-media-controls { display: none !important; }
 .k-tokens span { display: grid; gap: 8px; }
 .k-tokens i { aspect-ratio: 1; background: linear-gradient(135deg, var(--l) 50%, var(--d) 50%); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
 @media (max-width: 720px) {
-  .pz2-top { --s: .5; }
   .podz2 .pz-scope dd { font-size: inherit; }
-}
+  .podz2 .pz-scope dt { margin: 0; }
+  .podz2 .pz-scope > div { padding-top: 16px; padding-bottom: 16px; }
 }
