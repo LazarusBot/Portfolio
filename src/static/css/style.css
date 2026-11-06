@@ -1474,13 +1474,15 @@ video::-webkit-media-controls { display: none !important; }
 
 /* En-tête : le métier à côté du nom, la disponibilité juste dessous, le CV rejoint les liens du contact.
    Deux groupes qui respirent : qui (en haut de la photo) et comment me joindre (en bas) */
-.contact__btn--text { font: 600 14px/1 "Inter", sans-serif; letter-spacing: .01em; }
+.contact__btn.contact__btn--text { display: inline-flex; align-items: center; gap: 4px; width: auto; padding: 0 14px; font: 600 14px/1 "Inter", sans-serif; letter-spacing: .01em; white-space: nowrap; }
 .profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 14px; }
 .profile__head .profile__job { margin-top: 0; }
 .profile__status { margin-top: 14px; font-size: 13px; line-height: 16px; color: var(--soft); }
-.contact { width: 380px; gap: 8px; }
+.contact { width: 410px; gap: 8px; }
 @media (max-width: 810px) {
   .profile__head { row-gap: 18px; }
   .profile__status { margin-top: 12px; }
-  .contact { width: 100%; max-width: 380px; gap: 4px; padding-left: 16px; }
+  .contact { width: 100%; max-width: 410px; gap: 4px; padding-left: 16px; }
+  .contact .contact__btn { width: 38px; height: 38px; }
+  .contact .contact__btn.contact__btn--text { width: auto; padding: 0 10px; }
 }
