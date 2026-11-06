@@ -1457,23 +1457,8 @@ video::-webkit-media-controls { display: none !important; }
 .ob__pill.is-dim { opacity: .45; }
 @media (prefers-reduced-motion: reduce) { .ln-dots i, .ln-mark, .ln-dot::after, .ln-typing i, .is-sorry .ln-avatar .ln-mark { animation: none !important; } }
 
-/* Podz V2 plus aéré : de grands blancs entre les sections, un peu plus d'air entre titre, texte et visuel */
-.podz2 .section { margin: 96px 0; }
-.podz2 .tags + .section { margin-top: 64px; }
-.podz2 .section > h2 { margin-bottom: 8px; }
-.podz2 .section > p + p { margin-top: 16px; }
-.podz2 .tags { margin: 32px 0 0; }
-.podz2 .pz2-logo, .podz2 .k-tokens { margin-top: 32px; }
-.podz2 .pz2-mode { margin-top: 28px; }
-.podz2 .pz2-rail { margin-top: 18px; }
+/* Podz V2 : le texte respire sous les écrans de Lenny */
 .podz2 .section > .pz2-rail + p { margin-top: 40px; }
-.podz2 .section > .pz2-rail:last-child { margin-bottom: 0; }
-.podz2 .pz-marquee { margin: -64px 0 96px; }
-@media (max-width: 720px) {
-  .podz2 .section { margin: 64px 0; }
-  .podz2 .tags + .section { margin-top: 48px; }
-  .podz2 .pz-marquee { margin: -40px 0 64px; }
-}
 
 /* En-tête : le nom et le métier calés sur le haut de la photo, le contact et la ligne Chess.com sur son bas */
 @media (min-width: 811px) {
