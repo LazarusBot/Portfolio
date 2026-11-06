@@ -68,6 +68,8 @@ img { display: block; max-width: 100%; }
 .profile__role { display: flex; flex-wrap: wrap; align-items: center; column-gap: 10px; row-gap: 8px; margin-top: 30px; }
 .profile__role .profile__job { margin-top: 0; }
 .profile__status { font-size: 12px; color: var(--faint); }
+.profile__cv { padding: 3px 9px; border-radius: 99px; background: #efefef; font-size: 12px; color: #000; transition: background .2s; }
+.profile__cv:hover { background: #e2e2e2; }
 /* Icônes en masque CSS pour pouvoir changer leur couleur au survol */
 .icon { display: block; background: currentColor; -webkit-mask: var(--src) center/contain no-repeat; mask: var(--src) center/contain no-repeat; transition: background-color .25s; }
 .icon--linkedin { --src: url(../assets/linkedin.svg); width: 15px; height: 15px; }
