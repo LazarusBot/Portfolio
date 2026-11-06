@@ -1411,8 +1411,8 @@ video::-webkit-media-controls { display: none !important; }
 }
 
 /* Podz V2 : les écrans de Lenny refaits aux mesures SwiftUI (design.md « Lenny search »), en clair */
-/* Même rail que l'onboarding : les trois écrans tiennent sur un grand écran, sinon on les fait glisser */
-.ln-rail { justify-content: space-between; }
+/* Même rail que l'onboarding : les trois écrans côte à côte, serrés, sinon on les fait glisser */
+.ln-rail { gap: 20px; }
 .ob--lenny .ob__screen { position: absolute; }
 .ob--lenny .ob__screen > * { position: absolute; left: 24px; right: 24px; }
 .ln-planet { inset: auto -137px -330px !important; height: 550px; border-radius: 50%; pointer-events: none;
@@ -1456,3 +1456,21 @@ video::-webkit-media-controls { display: none !important; }
 .ln-row { bottom: 36px; left: 24px !important; right: 24px !important; padding: 0 !important; }
 .ob__pill.is-dim { opacity: .45; }
 @media (prefers-reduced-motion: reduce) { .ln-dots i, .ln-mark, .ln-dot::after, .ln-typing i, .is-sorry .ln-avatar .ln-mark { animation: none !important; } }
+
+/* Podz V2 plus aéré : de grands blancs entre les sections, un peu plus d'air entre titre, texte et visuel */
+.podz2 .section { margin: 96px 0; }
+.podz2 .tags + .section { margin-top: 64px; }
+.podz2 .section > h2 { margin-bottom: 8px; }
+.podz2 .section > p + p { margin-top: 16px; }
+.podz2 .tags { margin: 32px 0 0; }
+.podz2 .pz2-logo, .podz2 .k-tokens { margin-top: 32px; }
+.podz2 .pz2-mode { margin-top: 28px; }
+.podz2 .pz2-rail { margin-top: 18px; }
+.podz2 .section > .pz2-rail + p { margin-top: 40px; }
+.podz2 .section > .pz2-rail:last-child { margin-bottom: 0; }
+.podz2 .pz-marquee { margin: -64px 0 96px; }
+@media (max-width: 720px) {
+  .podz2 .section { margin: 64px 0; }
+  .podz2 .tags + .section { margin-top: 48px; }
+  .podz2 .pz-marquee { margin: -40px 0 64px; }
+}
