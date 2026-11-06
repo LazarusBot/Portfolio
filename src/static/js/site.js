@@ -1039,16 +1039,26 @@ document.querySelectorAll('[data-ob-flow]').forEach(flow => {
   go(0);
 });
 
-// Podz V2 : un clic sur le logo le redessine depuis les points
-document.querySelectorAll('[data-logo]').forEach(box => box.addEventListener('click', () => {
-  // retour à zéro sans transition, puis on rejoue
-  box.classList.add('is-reset');
-  box.classList.remove('is-in');
-  void box.offsetWidth;
-  box.classList.remove('is-reset');
-  void box.offsetWidth;
-  box.classList.add('is-in');
-}));
+// Podz V2 : le logo se redessine en boucle tant qu'il est à l'écran. Le noir s'efface,
+// puis les points reviennent un à un (rien ne bouge avec Réduire les animations)
+document.querySelectorAll('[data-logo]').forEach(box => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let timer = null;
+  const play = () => {
+    // retour à zéro sans transition, puis on rejoue
+    box.classList.add('is-reset');
+    box.classList.remove('is-in', 'is-out');
+    void box.offsetWidth;
+    box.classList.remove('is-reset');
+    void box.offsetWidth;
+    box.classList.add('is-in');
+  };
+  const cycle = () => { box.classList.add('is-out'); setTimeout(play, 600); };
+  new IntersectionObserver(([e]) => {
+    clearInterval(timer);
+    if (e.isIntersecting) timer = setInterval(cycle, 6200);
+  }).observe(box);
+});
 
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
