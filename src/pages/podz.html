@@ -323,6 +323,32 @@
         <h2>Lenny, instead of filters</h2>
         <p>A trip is a sentence, not a form. You write “Chamonix to Zermatt in 5 days, two of us” and Lenny picks out the places, the number of guests, the dates and the length of the stay. The sentence is read on the phone, with Apple's NaturalLanguage framework.</p>
         <p>Every search shows the same three steps, so the screen never changes shape while you wait: extracting your stops, finding the best huts around them, loading your itinerary. Huts are looked for within 50 km, then 100, then 160, nearest first, and closed huts are never offered. Name a whole area, like the Alps, and Lenny plans a route across it, a day's walk between huts, that you can reshape: a loop, shorter days, bookable huts only.</p>
+        <div class="pz2-rail ln-rail" data-drag>
+          <figure class="ob ob--lenny is-working"><div class="ob__frame"><div class="ob__screen">
+            <i class="ln-planet"></i>
+            <b class="ln-title">Lenny is searching<span class="ln-dots"><i>.</i><i>.</i><i>.</i></span></b>
+            <div class="ln-route"><i class="ln-mark"></i>Chamonix to Zermatt in 5 days</div>
+            <ol class="ln-steps"><li class="ln-step is-done"><i class="ln-dot"></i><b>Extracting two stops.</b><small>Chamonix, Zermatt  ·  5 days</small></li><li class="ln-step is-active"><i class="ln-dot"></i><b>Finding the best huts around here.</b><small>Peeking into the huts…</small></li><li class="ln-step is-wait"><i class="ln-dot"></i><b>Loading your itinerary.</b><small>Can take up to 2 minutes…</small></li></ol>
+            <div class="ln-reply"><i class="ln-avatar"><i class="ln-mark"></i></i><span class="ln-bubble"><span class="ln-typing"><i></i><i></i><i></i></span></span></div>
+            <div class="ob__row ln-row"><span class="ob__back"></span><span class="ob__pill is-dim">View selected huts</span></div>
+          </div></div><figcaption>Searching</figcaption></figure>
+          <figure class="ob ob--lenny is-happy"><div class="ob__frame"><div class="ob__screen">
+            <i class="ln-planet"></i>
+            <b class="ln-title">6 huts found</b>
+            <div class="ln-route"><i class="ln-mark"></i>Chamonix to Zermatt in 5 days</div>
+            <ol class="ln-steps"><li class="ln-step is-done"><i class="ln-dot"></i><b>Extracting two stops.</b><small>Chamonix, Zermatt  ·  5 days</small></li><li class="ln-step is-done"><i class="ln-dot"></i><b>Finding the best huts around here.</b><small>Around each stop</small></li><li class="ln-step is-done"><i class="ln-dot"></i><b>Loading your itinerary.</b><small>Your plan is ready</small></li></ol>
+            <div class="ln-reply"><i class="ln-avatar"><i class="ln-mark"></i></i><span class="ln-bubble">I found 6 huts along your route (5 days). Want to take a look?</span></div>
+            <div class="ob__row ln-row"><span class="ob__back"></span><span class="ob__pill ob__pill--hi">View selected huts</span></div>
+          </div></div><figcaption>Found</figcaption></figure>
+          <figure class="ob ob--lenny is-sorry"><div class="ob__frame"><div class="ob__screen">
+            <i class="ln-planet"></i>
+            <b class="ln-title">No huts found</b>
+            <div class="ln-route"><i class="ln-mark"></i>somewhere quiet this weekend</div>
+            <ol class="ln-steps"><li class="ln-step is-wait"><i class="ln-dot"></i><b>Extracting your stops.</b><small>Reading your itinerary…</small></li><li class="ln-step is-wait"><i class="ln-dot"></i><b>Finding the best huts around here.</b><small>Peeking into the huts…</small></li><li class="ln-step is-wait"><i class="ln-dot"></i><b>Loading your itinerary.</b><small>Can take up to 2 minutes…</small></li></ol>
+            <div class="ln-reply"><i class="ln-avatar"><i class="ln-mark"></i></i><span class="ln-bubble">I couldn’t make out a place in that. Try a town, a lake or a peak.</span></div>
+            <div class="ob__row ln-row"><span class="ob__back"></span><span class="ob__pill is-dim">View selected huts</span></div>
+          </div></div><figcaption>When Lenny can’t help</figcaption></figure>
+        </div>
         <p>When it can't help, it says so and tells you what to try: “I couldn't make out a place in that. Try a town, a lake or a peak.” Asking for a shower or a kitchen reorders the huts instead of hiding some, because hut data is incomplete and a hut that lists nothing may still have it.</p>
       </section>
 
