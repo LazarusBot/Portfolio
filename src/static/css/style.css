@@ -1474,3 +1474,11 @@ video::-webkit-media-controls { display: none !important; }
   .podz2 .tags + .section { margin-top: 48px; }
   .podz2 .pz-marquee { margin: -40px 0 64px; }
 }
+
+/* En-tête : le nom et le métier calés sur le haut de la photo, le contact et la ligne Chess.com sur son bas */
+@media (min-width: 811px) {
+  .profile { align-items: stretch; }
+  .profile__info { justify-content: flex-start; }
+  .profile__info .contact { margin-top: auto; }
+  .profile__info .chess { margin-bottom: -4px; }   /* son padding de 4 px tombe sous le bas de la photo */
+}
