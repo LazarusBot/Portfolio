@@ -160,7 +160,7 @@ function projectOrder() {
   }
   return list;
 }
-const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions' };
+const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions', xchange: 'XChange' };
 function projectNav(order, slug, titleOf) {
   const i = order.findIndex(p => p.slug === slug);
   if (i < 0) return '';

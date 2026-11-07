@@ -1,0 +1,200 @@
+<!-- meta {"title": "XChange — Maxence Prioux", "description": "XChange, Marlink: the connection dashboard crews use at sea to get online, designed for every state of a satellite link and shipped on iOS to 200K+ users."} -->
+{{> head}}
+<body>
+{{> topbar}}
+  <div class="wrap wrap--narrow">
+    <p class="crumb"><a href="{{crumbHref}}">{{crumbLabel}} /</a> <strong>XChange</strong></p>
+    <div class="pz-version" role="tablist" aria-label="Version of the project" data-version-switch>
+      <button role="tab" aria-selected="false" data-v="1">V1</button>
+      <button role="tab" aria-selected="true" data-v="2">V2 <small>Shipped</small></button>
+    </div>
+    <main class="project quiet xc" data-version="1" hidden>
+
+      <div class="xc-hero">
+        <img src="assets/xchange/marlink-hero.jpg" alt="A ship crossing a Norwegian fjord under a clear sky" width="1920" height="960">
+        <div class="xc-hero__title">
+          <img class="xc-hero__logo" src="assets/xchange/marlink-logo.svg" alt="Marlink" width="3419" height="774">
+          <span>XChange · crew connectivity at sea</span>
+        </div>
+      </div>
+      <ul class="tags" data-reveal>
+        <li><span>For</span>Marlink, crew connectivity at sea</li>
+        <li><span>Role</span>Product designer, iOS dev</li>
+        <li><span>Version</span>First, the tiles</li>
+      </ul>
+      <section class="section" data-reveal>
+        <h2>Context</h2>
+        <p>XChange is the app crews use to get online at sea. Every minute of connection is paid for, from up to three places: an allowance from the company, the crew member's own personal credit, or an eWallet for links like Starlink Direct. Each can be on, empty, or simply unavailable on the current link.</p>
+      </section>
+      <section class="section" data-reveal>
+        <h2>The problem</h2>
+        <p>The old dashboard updated in jumps. Numbers changed without warning and the screen flipped from one state to another, so crews couldn't tell at a glance whether they were online, or which credit was being spent. We called it status anxiety: on a paid satellite link, not knowing is the worst state to be in.</p>
+      </section>
+      <section class="section" data-reveal>
+        <h2>Where it started</h2>
+        <p>The first drafts gave each role its own home, for the crew, the captain and the admin: a big plug-shaped button, a price per MiB and the list of satellite links. Everything was there, but in network terms, and the state of the connection was one small dot next to the name.</p>
+        <img class="xc-board" src="assets/xchange/before.jpg" alt="Early drafts of the home screen for the crew, the captain and the admin" width="1584" height="996" loading="lazy">
+      </section>
+      <section class="section" data-reveal>
+        <h2>About thirty tries, then tiles</h2>
+        <p>The connection panel went through around thirty versions: credits as lines, as sliders, with a voucher field, with warnings for a session already open on another device, the links shown as their logos. The first version settled on tiles: the three credits side by side, each one you switch on, under one big button.</p>
+        <img class="xc-board" src="assets/xchange/explorations.jpg" alt="Twenty explorations of the connection panel" width="2400" height="992" loading="lazy">
+      </section>
+      <section class="section" data-reveal>
+        <h2>One screen, every state</h2>
+        <p>Every state the link can be in got its own screen, and instead of jumping, the tiles and the button morph from one to the next, so the change itself tells you what happened.</p>
+        <div class="pz-rail" data-drag data-stagger>
+          <figure><img src="assets/xchange/state-offline.jpg" alt="" loading="lazy"><figcaption>Offline, nothing chosen</figcaption></figure>
+          <figure><img src="assets/xchange/state-credits.jpg" alt="" loading="lazy"><figcaption>Company and personal credit on</figcaption></figure>
+          <figure><img src="assets/xchange/state-unavailable.jpg" alt="" loading="lazy"><figcaption>eWallet unavailable on this link</figcaption></figure>
+          <figure><img src="assets/xchange/state-refill.jpg" alt="" loading="lazy"><figcaption>eWallet empty, refill in one tap</figcaption></figure>
+          <figure><img src="assets/xchange/state-ewallet.jpg" alt="" loading="lazy"><figcaption>Only the eWallet left</figcaption></figure>
+          <figure><img src="assets/xchange/state-online.jpg" alt="" loading="lazy"><figcaption>Online, one button to stop</figcaption></figure>
+          <figure><img src="assets/xchange/state-wait.jpg" alt="" loading="lazy"><figcaption>Out of time, next window in 2 hours</figcaption></figure>
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>Edge cases first</h2>
+        <p>Each state was written as a user story with the team before it was drawn: eleven stories for the Crew Welfare proof of concept, most of them about what happens when something is missing.</p>
+        <ul class="xc-stories">
+          <li>Keep credits and quota visible when opening a session is impossible</li>
+          <li>Choose the wallet when the session opens</li>
+          <li>No wallet assigned</li>
+          <li>Hide everything eWallet when the feature isn't activated</li>
+          <li>Every combination at credit selection</li>
+          <li>A pop-up for link errors, success and waiting</li>
+        </ul>
+        <img class="xc-board" src="assets/xchange/story.jpg" alt="The user story 'Combinatory at credit selection' with its first screens" width="2400" height="515" loading="lazy">
+      </section>
+      <section class="section" data-reveal>
+        <h2>Seeing where the credit goes</h2>
+        <p>MyUsage answers the question that comes right after connecting: what did that cost? The three credits sit like cards in a wallet, every session and top-up is listed with its source, and filters narrow the history by credit, device or type.</p>
+        <div class="pz-rail" data-drag data-stagger>
+          <figure><img src="assets/xchange/wallet-1.jpg" alt="" loading="lazy"><figcaption>Balances at a glance</figcaption></figure>
+          <figure><img src="assets/xchange/wallet-2.jpg" alt="" loading="lazy"><figcaption>The credits as cards</figcaption></figure>
+          <figure><img src="assets/xchange/wallet-3.jpg" alt="" loading="lazy"><figcaption>Sliding into the wallet</figcaption></figure>
+          <figure><img src="assets/xchange/wallet-4.jpg" alt="" loading="lazy"><figcaption>Wallet closed</figcaption></figure>
+          <figure><img src="assets/xchange/filter-1.jpg" alt="" loading="lazy"><figcaption>History</figcaption></figure>
+          <figure><img src="assets/xchange/filter-2.jpg" alt="" loading="lazy"><figcaption>Filter by credit</figcaption></figure>
+          <figure><img src="assets/xchange/filter-3.jpg" alt="" loading="lazy"><figcaption>Filter by type</figcaption></figure>
+          <figure><img src="assets/xchange/filter-4.jpg" alt="" loading="lazy"><figcaption>Session details</figcaption></figure>
+          <figure><img src="assets/xchange/graph-1.jpg" alt="" loading="lazy"><figcaption>Daily overview</figcaption></figure>
+          <figure><img src="assets/xchange/graph-2.jpg" alt="" loading="lazy"><figcaption>eWallet consumption</figcaption></figure>
+        </div>
+        <p>And outside the app: a Live Activity counts down to the next time window on the lock screen and in the Dynamic Island, and the news sit in a widget.</p>
+        <img class="xc-board" src="assets/xchange/ios.jpg" alt="XChange on iOS: a Live Activity announcing a new time window in 8 minutes, the countdown in the Dynamic Island, and the news widget" width="1680" height="841" loading="lazy">
+      </section>
+      <section class="section" data-reveal>
+        <h2>On desktop</h2>
+        <p>The same panel and components ran in the browser, in light and in dark.</p>
+        <div class="xc-desk">
+          <img class="xc-desk__wide" src="assets/xchange/v1-desk-home.jpg" alt="First version of XChange on desktop, light mode" width="940" height="615" loading="lazy">
+          <img src="assets/xchange/v1-desk-login.jpg" alt="XChange login on desktop" width="940" height="615" loading="lazy">
+          <img src="assets/xchange/v1-desk-dark.jpg" alt="First version of XChange on desktop, dark mode" width="940" height="615" loading="lazy">
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>Components</h2>
+        <p>The first set of components: buttons for each state, the credit tiles, the cards and the history rows. Version 2 grew it into the full design system.</p>
+        <img class="xc-board" src="assets/xchange/v1-components.jpg" alt="Components of the first version: buttons for every state, credit tiles and credit cards" width="1998" height="1480" loading="lazy">
+      </section>
+
+    </main>
+    <main class="project quiet xc" data-version="2">
+
+      <div class="xc-hero">
+        <img src="assets/xchange/marlink-hero.jpg" alt="A ship crossing a Norwegian fjord under a clear sky" width="1920" height="960">
+        <div class="xc-hero__title">
+          <img class="xc-hero__logo" src="assets/xchange/marlink-logo.svg" alt="Marlink" width="3419" height="774">
+          <span>XChange · crew connectivity at sea</span>
+        </div>
+      </div>
+      <ul class="tags" data-reveal>
+        <li><span>For</span>Marlink, crew connectivity at sea</li>
+        <li><span>Role</span>Product designer, iOS dev</li>
+        <li><span>Reach</span>200K+ users</li>
+      </ul>
+      <section class="section" data-reveal>
+        <h2>Context</h2>
+        <p>XChange is the app crews use to get online at sea. This is the second version, the one that shipped. Every minute of connection is paid for, from up to three places: an allowance from the company, the crew member's own personal credit, or an eWallet for links like Starlink Direct. Each can be on, empty, or simply unavailable on the current link.</p>
+      </section>
+      <section class="section" data-reveal>
+        <h2>The problem</h2>
+        <p>The old dashboard updated in jumps. Numbers changed without warning and the screen flipped from one state to another, so crews couldn't tell at a glance whether they were online, or which credit was being spent. We called it status anxiety: on a paid satellite link, not knowing is the worst state to be in.</p>
+      </section>
+      <section class="section" data-reveal>
+        <h2>The final design: the balance first</h2>
+        <p>Version 2 kept the states and dropped the noise. The credit in use is the hero, with its trend drawn behind it, the link it runs on, and one button. Swipe to switch between the company, personal and eWallet credit. Under it, the last seven days and a one-tap credit request.</p>
+        <div class="pz-rail" data-drag data-stagger>
+          <figure><img src="assets/xchange/v2-corpo.jpg" alt="" loading="lazy"><figcaption>Company credit</figcaption></figure>
+          <figure><img src="assets/xchange/v2-perso.jpg" alt="" loading="lazy"><figcaption>Personal and company</figcaption></figure>
+          <figure><img src="assets/xchange/v2-ewallet.jpg" alt="" loading="lazy"><figcaption>eWallet, on Starlink Direct</figcaption></figure>
+          <figure><img src="assets/xchange/v2-dark-corpo.jpg" alt="" loading="lazy"><figcaption>Dark mode</figcaption></figure>
+          <figure><img src="assets/xchange/v2-dark-ewallet.jpg" alt="" loading="lazy"><figcaption>eWallet, dark</figcaption></figure>
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>A bar for the time window</h2>
+        <p>The anxiety was mostly about what's left. So the balance got a bar, and I tried it in every place it could live before keeping it under the number: at the top, under the balance with what remains in words, as a gauge in a panel. When it runs out, the button turns into the next step.</p>
+        <div class="pz-rail" data-drag data-stagger>
+          <figure><img src="assets/xchange/bar-top.jpg" alt="" loading="lazy"><figcaption>The bar at the top</figcaption></figure>
+          <figure><img src="assets/xchange/bar-under.jpg" alt="" loading="lazy"><figcaption>Under the balance, with what’s left</figcaption></figure>
+          <figure><img src="assets/xchange/bar-gauge.jpg" alt="" loading="lazy"><figcaption>As a gauge in a panel</figcaption></figure>
+          <figure><img src="assets/xchange/bar-empty.jpg" alt="" loading="lazy"><figcaption>Empty: refill my wallet</figcaption></figure>
+          <figure><img src="assets/xchange/bar-scroll.jpg" alt="" loading="lazy"><figcaption>Scrolled, it stays on top</figcaption></figure>
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>Edge cases first</h2>
+        <p>Each state was written as a user story with the team before it was drawn: eleven stories for the Crew Welfare proof of concept, most of them about what happens when something is missing.</p>
+        <ul class="xc-stories">
+          <li>Keep credits and quota visible when opening a session is impossible</li>
+          <li>Choose the wallet when the session opens</li>
+          <li>No wallet assigned</li>
+          <li>Hide everything eWallet when the feature isn't activated</li>
+          <li>Every combination at credit selection</li>
+          <li>A pop-up for link errors, success and waiting</li>
+        </ul>
+        <img class="xc-board" src="assets/xchange/story.jpg" alt="The user story 'Combinatory at credit selection' with its first screens" width="2400" height="515" loading="lazy">
+      </section>
+
+      <section class="section" data-reveal>
+        <h2>The rest of the app</h2>
+        <p>Every session and top-up in one list, the documents a crew member needs on board, a profile, a sheet that explains what changed in an update, and a menu that stays out of the way.</p>
+        <div class="pz-rail" data-drag data-stagger>
+          <figure><img src="assets/xchange/v2-transactions.jpg" alt="" loading="lazy"><figcaption>Transactions</figcaption></figure>
+          <figure><img src="assets/xchange/v2-documents.jpg" alt="" loading="lazy"><figcaption>Documents</figcaption></figure>
+          <figure><img src="assets/xchange/v2-profile.jpg" alt="" loading="lazy"><figcaption>Profile</figcaption></figure>
+          <figure><img src="assets/xchange/v2-sheet.jpg" alt="" loading="lazy"><figcaption>What changed</figcaption></figure>
+          <figure><img src="assets/xchange/v2-menu.jpg" alt="" loading="lazy"><figcaption>Menu</figcaption></figure>
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>Also on the web</h2>
+        <p>The same credits, chart and seven-day overview run in the browser, as a dashboard, in light and in dark.</p>
+        <div class="xc-desk">
+          <img class="xc-desk__wide" src="assets/xchange/web-light.jpg" alt="XChange web dashboard, light mode" width="1440" height="1024" loading="lazy">
+          <img src="assets/xchange/web-dark.jpg" alt="XChange web dashboard, dark mode" width="1440" height="1024" loading="lazy">
+          <img src="assets/xchange/web-transactions.jpg" alt="XChange web transactions page" width="1440" height="1024" loading="lazy">
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>The system</h2>
+        <p>A design system of 500+ components covers mobile and web: IBM Plex Sans with a clear type scale, a blue brand palette with one colour per meaning (success, error, accent, dark), a set of icons drawn for the app, and a button for every state of the link, from Connect to Sealink to Refill my wallet. I built it in Figma and kept it in step with the Swift and SwiftUI code, so what was designed is what shipped.</p>
+        <div class="xc-ds">
+          <img src="assets/xchange/ds-colors.jpg" alt="XChange colours: primary, secondary and tertiary brand blues, dark, success, error, text, subtle text, accent, light, orange, dark background" width="780" height="1442" loading="lazy">
+          <img src="assets/xchange/ds-type.jpg" alt="XChange typography in IBM Plex Sans, from Title to Link" width="780" height="1442" loading="lazy">
+          <img src="assets/xchange/ds-icons.jpg" alt="XChange icons" width="975" height="762" loading="lazy">
+          <img src="assets/xchange/ds-buttons.jpg" alt="XChange buttons for every state: connect, connecting, disconnect, force disconnect, no wallet yet, need extra credit, refill my wallet" width="620" height="945" loading="lazy">
+        </div>
+      </section>
+      <section class="section" data-reveal>
+        <h2>Result</h2>
+        <p>The app shipped on iOS and reached more than 200,000 users. Designing it and building it myself meant the states, the motion between them and the edge cases made it into the app as drawn.</p>
+      </section>
+
+    </main>{{projectNav}}
+  </div>
+{{> scripts}}
+</body>
+</html>

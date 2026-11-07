@@ -1521,3 +1521,26 @@ video::-webkit-media-controls { display: none !important; }
 .labels img { display: block; width: 100%; height: auto; box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 4px 10px rgba(0, 0, 0, .05); }
 @media (max-width: 1000px) { .labels { grid-template-columns: repeat(5, 76px); gap: 18px 14px; } }
 @media (max-width: 720px) { .labels { grid-template-columns: repeat(5, minmax(0, 56px)); gap: 14px 10px; padding: 28px 16px; } }
+
+/* XChange (Marlink) : en-tête gris avec trois états, liste des user stories, planches pleine largeur */
+.xc-hero { position: relative; overflow: hidden; background: #0a4c8c; }
+.xc-hero > img { display: block; width: 100%; height: auto; }
+/* Le vrai logo Marlink (version claire du site), petit, dans le ciel en haut à gauche */
+.xc-hero__title { position: absolute; left: 5%; top: 9%; display: grid; gap: 12px; justify-items: start; }
+.xc-hero__logo { display: block; width: 132px; height: auto; }
+.xc-hero__title span { font: 400 14px/1.3 Inter, system-ui, sans-serif; color: rgba(255, 255, 255, .85); }
+/* Bureau : l'accueil en grand, la connexion et le mode sombre côte à côte */
+.xc-desk { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.xc-desk img { display: block; width: 100%; height: auto; box-shadow: 0 0 0 1px var(--line); }
+.xc-desk .xc-desk__wide { grid-column: 1 / -1; }
+.xc-stories { margin: 16px 0 0; padding: 0; list-style: none; max-width: 560px; }
+.xc-stories li { position: relative; padding: 10px 0 10px 22px; border-top: 1px solid var(--line); font: 400 15px/22px Inter, system-ui, sans-serif; }
+.xc-stories li::before { content: ""; position: absolute; left: 0; top: 18px; width: 8px; height: 8px; border-radius: 50%; background: #13b13a; }
+.xc-board { display: block; width: 100%; height: auto; margin-top: 24px; background: #f5f5f5; }
+.xc .section > p + .xc-board, .xc .pz-rail + p { margin-top: 24px; }
+/* Le design system : couleurs et typo côte à côte, puis icônes et boutons */
+.xc-ds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; align-items: start; }
+.xc-ds img { display: block; width: 100%; height: auto; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+.xc-board + .pz-rail { margin-top: 24px; }
+@media (max-width: 720px) { .xc-ds { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .xc-hero__title { top: 8%; gap: 6px; } .xc-hero__logo { width: 88px; } .xc-hero__title span { font-size: 11px; } .xc-desk { grid-template-columns: 1fr; } }
