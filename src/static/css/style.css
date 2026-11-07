@@ -1484,7 +1484,7 @@ video::-webkit-media-controls { display: none !important; }
 .profile__status { display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 6px; margin-top: 14px; font-size: 13px; line-height: 16px; color: var(--soft); }
 .contact { width: 380px; gap: 8px; }
 .contact .icon--linkedin { width: 18px; height: 18px; }
-.profile__job:hover { color: #c3ccd6; }   /* plus un lien : il ne bleuit plus */
+
 @media (max-width: 810px) {
   .profile__head { row-gap: 18px; }
   .profile__status { margin-top: 12px; }
