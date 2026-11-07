@@ -1061,6 +1061,35 @@ document.querySelectorAll('[data-logo]').forEach(box => {
   }).observe(box);
 });
 
+// XChange V2 : le prototype rejoué. Chaque parcours enchaîne ses écrans en fondu tant qu'il est à l'écran ;
+// un onglet change de parcours, un tap sur le téléphone avance d'une étape (et relance la minuterie)
+document.querySelectorAll('[data-proto]').forEach(box => {
+  const phone = box.querySelector('.xc-proto__phone');
+  const cap = box.querySelector('.xc-proto__cap');
+  const dots = box.querySelector('.xc-proto__dots');
+  const tabs = [...box.querySelectorAll('[role="tab"]')];
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let flow = tabs[0].dataset.flow, i = 0, timer = null, visible = false;
+  const frames = () => [...phone.querySelectorAll(`img[data-flow="${flow}"]`)];
+  const show = () => {
+    const fs = frames();
+    phone.querySelectorAll('img').forEach(im => im.classList.toggle('is-on', im === fs[i]));
+    fs[i].loading = 'eager';
+    if (fs[i + 1]) fs[i + 1].loading = 'eager';
+    cap.textContent = fs[i].dataset.cap;
+    dots.innerHTML = fs.map((_, k) => `<i${k === i ? ' class="is-on"' : ''}></i>`).join('');
+  };
+  const next = () => { i = (i + 1) % frames().length; show(); };
+  const run = () => { clearInterval(timer); if (visible && !calm) timer = setInterval(next, 1800); };
+  phone.addEventListener('click', () => { next(); run(); });
+  tabs.forEach(b => b.addEventListener('click', () => {
+    tabs.forEach(x => x.setAttribute('aria-selected', x === b));
+    flow = b.dataset.flow; i = 0; show(); run();
+  }));
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; run(); }, { threshold: .3 }).observe(phone);
+  show();
+});
+
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
   const rail = sw.closest('section').querySelector('[data-ob-rail]');
