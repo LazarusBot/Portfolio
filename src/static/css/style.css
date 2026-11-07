@@ -1475,16 +1475,18 @@ video::-webkit-media-controls { display: none !important; }
 /* En-tête : le métier à côté du nom, la disponibilité juste dessous, le CV rejoint les liens du contact.
    Deux groupes qui respirent : qui (en haut de la photo) et comment me joindre (en bas) */
 /* Le CV en légende à côté de la disponibilité : même taille, en noir et souligné, une flèche qui glisse au survol */
-.profile__cv { margin-left: 10px; color: #000; text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .25); text-underline-offset: 3px; white-space: nowrap; transition: text-decoration-color .2s; }
+.profile__cv { color: #000; text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .25); text-underline-offset: 3px; white-space: nowrap; transition: text-decoration-color .2s; }
 .profile__cv:hover { text-decoration-color: #000; }
 .profile__cv span { display: inline-block; transition: translate .25s cubic-bezier(.34, 1.56, .64, 1); }
 .profile__cv:hover span { translate: 2px -2px; }
 .profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 14px; }
 .profile__head .profile__job { margin-top: 0; }
-.profile__status { margin-top: 14px; font-size: 13px; line-height: 16px; color: var(--soft); }
-.contact { gap: 8px; }
+.profile__status { display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 6px; margin-top: 14px; font-size: 13px; line-height: 16px; color: var(--soft); }
+.contact { width: 380px; gap: 8px; }
+.contact .icon--linkedin { width: 18px; height: 18px; }
+.profile__job:hover { color: #c3ccd6; }   /* plus un lien : il ne bleuit plus */
 @media (max-width: 810px) {
   .profile__head { row-gap: 18px; }
   .profile__status { margin-top: 12px; }
-  .contact { gap: 6px; }
+  .contact { width: 100%; max-width: 380px; gap: 4px; padding-left: 16px; }
 }
