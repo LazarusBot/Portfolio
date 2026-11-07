@@ -397,7 +397,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     pill.append(neu);
     old.classList.add('is-out');
     requestAnimationFrame(() => {
-      pill.style.width = `${neu.scrollWidth + 18}px`;
+      pill.style.width = `${neu.scrollWidth}px`;
       neu.classList.remove('is-in');
     });
     if (recent(v)) celebrate(v, neu.querySelector('b'));

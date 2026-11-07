@@ -1490,3 +1490,14 @@ video::-webkit-media-controls { display: none !important; }
   .profile__status { margin-top: 12px; }
   .contact { width: 100%; max-width: 380px; gap: 4px; padding-left: 16px; }
 }
+
+/* Ligne GitHub / Chess.com sans pastille : une info, pas un bouton. La valeur suit le texte après un point médian,
+   le nom du dépôt (ou « Puzzles ») dans le gris de la ligne, le chiffre en noir */
+.chess__head::after { content: "·"; }
+.chess__elo { height: 20px; padding: 0; border-radius: 0; background: none; }
+.chess:hover .chess__elo { background: none; }
+.chess__elo:has(.chess__new) { padding-right: 0; }
+.chess__elo.is-record { animation: none; }
+.chess__value { height: 20px; line-height: 20px; }
+.chess__value small { font-size: inherit; }
+.chess__value.is-out { left: 0; }
