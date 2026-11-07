@@ -1508,9 +1508,9 @@ video::-webkit-media-controls { display: none !important; }
 .taped__item > img { display: block; width: 100%; height: auto; background: var(--card); }
 .taped__tape { position: absolute; left: 50%; top: -22px; width: min(30%, 240px); translate: -50% 0; rotate: var(--r); filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .12)); }
 .taped__tape img { display: block; width: 100%; height: auto; }
-.taped__tape span { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 10%; font: 400 22px/1.05 "Caveat", cursive; color: #2b2b2b; text-align: center; }
+.taped__tape span { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 10%; font: 400 27px/.95 "Reenie Beanie", cursive; color: #2b2b2b; text-align: center; }
 @media (max-width: 720px) {
   .taped { gap: 44px; margin-top: 34px; }
   .taped__tape { top: -18px; width: 62%; }
-  .taped__tape span { font-size: 16px; }
+  .taped__tape span { font-size: 22px; }
 }
