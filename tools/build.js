@@ -258,6 +258,17 @@ function bagOver(s) {
   return `\n        <div class="bag-over">${grid}\n          <div class="bag-over__layer">${bag(s.bag).replace('class="bag"', 'class="bag bag--over"')}</div>\n        </div>${full}`;
 }
 
+// layout "taped" : chaque visuel a un morceau de scotch (s.tape) posé sur son bord haut, son titre écrit dessus
+// à la main ; les titres sont les textes de la section, dans l'ordre des images
+function taped(s) {
+  return `<div class="taped">${s.images.map((i, k) => `
+          <figure class="taped__item">
+            <img src="assets/img/${i.id}" alt="${esc(s.text[k] || '')}"${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">
+            <figcaption class="taped__tape" style="--r:${k % 2 ? 2.5 : -3}deg"><img src="assets/img/${s.tape}" alt=""><span>${esc(s.text[k] || '')}</span></figcaption>
+          </figure>`).join('')}
+        </div>`;
+}
+
 function projectSections(p) {
   // En-tête sur mesure d'un projet s'il existe (partials/hero-<slug>.html), avant les sections
   // puis les infos du projet en pilules (_overrides.json → tags)
@@ -266,7 +277,7 @@ function projectSections(p) {
   return (partials[`hero-${p.slug}`] || '') + tags + p.sections.map(s => `
       <section class="section">
         <h2>${esc(s.title)}</h2>
-        ${s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ')}${s.bagOver ? bagOver(s) : gallery(s.images, s.layout) + bag(s.bag)}
+        ${s.layout === 'taped' ? taped(s) : s.text.map(t => `<p>${esc(t)}</p>`).join('\n        ') + (s.bagOver ? bagOver(s) : gallery(s.images, s.layout) + bag(s.bag))}
       </section>`).join('\n') + (p.wall ? `
       <section class="wall" aria-label="Logos">
         ${[0, 1, 2, 3].map(c => `<div class="wall__col"><div class="wall__track">${

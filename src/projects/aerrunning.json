@@ -237,16 +237,13 @@
           "h": 2470
         },
         {
-          "id": "GasUrw62qQ3agacmI0eathqT1EY.png",
-          "w": 2826,
-          "h": 1005
-        },
-        {
           "id": "vgm80XAj5pvuv5y1T1PyRXpEHQ.png",
           "w": 4628,
           "h": 2470
         }
-      ]
+      ],
+      "layout": "taped",
+      "tape": "GasUrw62qQ3agacmI0eathqT1EY.png"
     },
     {
       "title": "Keep running ….",
