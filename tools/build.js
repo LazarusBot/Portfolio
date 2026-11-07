@@ -197,6 +197,8 @@ function pageMeta(src) {
 // layout "row" : une seule rangée à hauteur égale, chaque image prend une largeur proportionnelle à son format.
 // Une image marquée "full" passe après, sur toute la largeur.
 function gallery(images, layout) {
+  // layout "labels" : des étiquettes de vêtement à peu près à leur taille réelle, posées côte à côte sur un fond gris
+  if (layout === 'labels') return `\n        <div class="labels">\n          ${images.map(i => `<img src="assets/img/${i.id}" alt=""${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">`).join('\n          ')}\n        </div>`;
   const full = images.filter(i => i.full).map(i => `\n        <img class="gallery-full" src="assets/img/${i.id}" alt=""${i.w ? ` width="${i.w}" height="${i.h}"` : ''} loading="lazy">`).join('');
   images = images.filter(i => !i.full);
   // layout "grid2" : 2 rangées de 2 sur toute la largeur. Dans chaque rangée, les deux images ont la même

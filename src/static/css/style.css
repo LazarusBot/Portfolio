@@ -1514,3 +1514,10 @@ video::-webkit-media-controls { display: none !important; }
   .taped__tape { top: -18px; width: 62%; }
   .taped__tape span { font-size: 22px; }
 }
+
+/* Aer Running, étiquettes : à l'échelle d'une vraie étiquette tissée, alignées sur un fond gris comme sur une table.
+   Une rangée de dix quand la place le permet, sinon deux rangées égales de cinq */
+.labels { display: grid; grid-template-columns: repeat(10, 76px); justify-content: center; gap: 16px 10px; margin-top: 20px; padding: 48px 20px; background: #f3f3f3; }
+.labels img { display: block; width: 100%; height: auto; box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 4px 10px rgba(0, 0, 0, .05); }
+@media (max-width: 1000px) { .labels { grid-template-columns: repeat(5, 76px); gap: 18px 14px; } }
+@media (max-width: 720px) { .labels { grid-template-columns: repeat(5, minmax(0, 56px)); gap: 14px 10px; padding: 28px 16px; } }
