@@ -323,24 +323,24 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   let values = JSON.parse(line.dataset.chessValues), i = 0, busy = false;
   // Dernier dépôt poussé sur GitHub : une entrée de plus dans le cycle, repérée par son libellé
   let gh = line.dataset.github ? JSON.parse(line.dataset.github) : null;
-  if (gh) values.push(['GitHub', 0, null, null]);
+  // GitHub ouvre le cycle : c'est la première chose qu'on lit
+  if (gh) values.unshift(['GitHub', 0, null, null]);
   const isGh = v => v[0] === 'GitHub';
   const ago = iso => {
     const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4));
     return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
   };
-  const HEADS = {
-    chess: line.querySelector('.chess__head').innerHTML,
-    github: '<svg class="chess__icon chess__icon--gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="chess__label">Currently committing <span class="chess__opt">things </span>on GitHub</span>',
-  };
+  // Les deux en-têtes (icône + texte) sont écrits au build dans un <template>
+  const tpl = line.querySelector('.chess__heads').content;
+  const HEADS = Object.fromEntries([...tpl.children].map(n => [n.dataset.kind, n.innerHTML]));
   // Icône et texte : l'ancien monte et s'efface, le nouveau arrive par en dessous
   const head = kind => {
     const h = line.querySelector('.chess__head');
-    if (h.dataset.kind === kind || (!h.dataset.kind && kind === 'chess')) return;
+    if (h.dataset.kind === kind) return;
     h.dataset.kind = kind;
     if (calm) { h.innerHTML = HEADS[kind]; return; }
     h.classList.add('is-out');
-    setTimeout(() => { h.innerHTML = HEADS[kind]; h.classList.remove('is-out'); h.classList.add('is-in'); }, 160);
+    setTimeout(() => { h.innerHTML = HEADS[kind]; h.classList.remove('is-out'); h.classList.add('is-in'); }, 240);
     h.addEventListener('animationend', e => e.animationName === 'head-in' && h.classList.remove('is-in'));
   };
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -373,10 +373,11 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       sound.play('select', { rate: 1.3, vol: .8 });
     }
   };
-  const show = (v, b) => (recent(v) ? celebrate(v, b) : calm || countUp(b, 0, v[1]));
-  // Au chargement, on commence par un record récent s'il y en a un, pour qu'il se voie
-  const start = Math.max(0, values.findIndex(recent));
+  const show = (v, b) => (isGh(v) ? null : recent(v) ? celebrate(v, b) : calm || countUp(b, 0, v[1]));
+  // Au chargement : GitHub s'il y est, sinon un record récent pour qu'il se voie
+  const start = gh ? 0 : Math.max(0, values.findIndex(recent));
   i = start;
+  if (isGh(values[i])) line.title = `Last push to ${gh.repo}`;
   pill.querySelector('.chess__value').innerHTML = markup(values[i]);
   show(values[i], pill.querySelector('b'));
   // L'ancienne valeur monte et s'efface, la nouvelle arrive par en dessous
@@ -400,14 +401,14 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       neu.classList.remove('is-in');
     });
     if (recent(v)) celebrate(v, neu.querySelector('b'));
-    setTimeout(() => { old.remove(); pill.style.width = ''; busy = false; }, calm ? 0 : 320);
+    setTimeout(() => { old.remove(); pill.style.width = ''; busy = false; }, calm ? 0 : 480);
   };
   line.addEventListener('pointerenter', e => e.pointerType === 'mouse' && next());
   line.addEventListener('click', next);
   fetch(`https://api.chess.com/pub/player/${line.dataset.chess}/stats`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
-    .then(({ chess_rapid: r, chess_blitz: b, tactics: t }) => {
-      const live = { Rapid: [r?.best?.rating ?? r?.last?.rating, r?.best?.date], Blitz: [b?.best?.rating ?? b?.last?.rating, b?.best?.date], Puzzles: [t?.highest?.rating, t?.highest?.date] };
+    .then(({ tactics: t }) => {
+      const live = { Puzzles: [t?.highest?.rating, t?.highest?.date] };
       const cur = values[i];
       values = values.map(v => {
         const [best, date] = live[v[0]] || [];

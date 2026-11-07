@@ -85,13 +85,13 @@ img { display: block; max-width: 100%; }
 .chess__label { transition: color .25s; }
 /* Icône + texte de la ligne : glissent ensemble quand on passe de Chess.com à GitHub */
 .chess__head { display: inline-flex; align-items: center; gap: 8px; }
-.chess__head.is-out { animation: head-out .16s ease-in forwards; }
-.chess__head.is-in { animation: head-in .32s cubic-bezier(.34, 1.4, .64, 1); }
+.chess__head.is-out { animation: head-out .24s ease-in forwards; }
+.chess__head.is-in { animation: head-in .48s cubic-bezier(.34, 1.4, .64, 1); }
 @keyframes head-out { to { opacity: 0; translate: 0 -6px; } }
 @keyframes head-in { from { opacity: 0; translate: 0 6px; } }
 .chess__elo { position: relative; display: inline-flex; align-items: baseline; height: 22px; padding: 0 9px; overflow: hidden; border-radius: 99px; background: #efefef; color: var(--faint);
-              transition: width .3s cubic-bezier(.34, 1.4, .64, 1), background .25s, color .25s; }
-.chess__value { display: inline-flex; align-items: baseline; gap: 5px; height: 22px; white-space: nowrap; line-height: 22px; transition: translate .3s cubic-bezier(.34, 1.4, .64, 1), opacity .2s; }
+              transition: width .45s cubic-bezier(.34, 1.4, .64, 1), background .25s, color .25s; }
+.chess__value { display: inline-flex; align-items: baseline; gap: 5px; height: 22px; white-space: nowrap; line-height: 22px; transition: translate .45s cubic-bezier(.34, 1.4, .64, 1), opacity .3s; }
 .chess__value small { font-size: 11px; }
 .chess__value b { font-weight: 600; font-variant-numeric: tabular-nums; color: #000; }
 /* Pendant le changement, les deux valeurs se superposent : l'une sort par le haut, l'autre entre par le bas */
