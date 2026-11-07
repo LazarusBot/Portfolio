@@ -68,8 +68,6 @@ img { display: block; max-width: 100%; }
 .profile__role { display: flex; flex-wrap: wrap; align-items: center; column-gap: 10px; row-gap: 8px; margin-top: 30px; }
 .profile__role .profile__job { margin-top: 0; }
 .profile__status { font-size: 12px; color: var(--faint); }
-.profile__cv { padding: 3px 9px; border-radius: 99px; background: #efefef; font-size: 12px; color: #000; transition: background .2s; }
-.profile__cv:hover { background: #e2e2e2; }
 /* Icônes en masque CSS pour pouvoir changer leur couleur au survol */
 .icon { display: block; background: currentColor; -webkit-mask: var(--src) center/contain no-repeat; mask: var(--src) center/contain no-repeat; transition: background-color .25s; }
 .icon--linkedin { --src: url(../assets/linkedin.svg); width: 15px; height: 15px; }
@@ -1468,21 +1466,25 @@ video::-webkit-media-controls { display: none !important; }
   .profile { align-items: stretch; }
   .profile__info { justify-content: flex-start; }
   .profile__info .contact { margin-top: auto; }
-  .profile__info .chess { margin-bottom: -4px; }   /* son padding de 4 px tombe sous le bas de la photo */
+  .profile__info .chess { margin-top: auto; margin-bottom: -4px; }
+  /* trois blocs (qui, contact, ligne perso) à égale distance, la ligne perso posée sur le bas de la photo */
+  .profile__info .profile__head { margin-top: auto; }   /* son padding de 4 px tombe sous le bas de la photo */
 }
 
 
 /* En-tête : le métier à côté du nom, la disponibilité juste dessous, le CV rejoint les liens du contact.
    Deux groupes qui respirent : qui (en haut de la photo) et comment me joindre (en bas) */
-.contact__btn.contact__btn--text { display: inline-flex; align-items: center; gap: 4px; width: auto; padding: 0 14px; font: 600 14px/1 "Inter", sans-serif; letter-spacing: .01em; white-space: nowrap; }
+/* Le CV en légende à côté de la disponibilité : même taille, en noir et souligné, une flèche qui glisse au survol */
+.profile__cv { margin-left: 10px; color: #000; text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .25); text-underline-offset: 3px; white-space: nowrap; transition: text-decoration-color .2s; }
+.profile__cv:hover { text-decoration-color: #000; }
+.profile__cv span { display: inline-block; transition: translate .25s cubic-bezier(.34, 1.56, .64, 1); }
+.profile__cv:hover span { translate: 2px -2px; }
 .profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 14px; }
 .profile__head .profile__job { margin-top: 0; }
 .profile__status { margin-top: 14px; font-size: 13px; line-height: 16px; color: var(--soft); }
-.contact { width: 410px; gap: 8px; }
+.contact { gap: 8px; }
 @media (max-width: 810px) {
   .profile__head { row-gap: 18px; }
   .profile__status { margin-top: 12px; }
-  .contact { width: 100%; max-width: 410px; gap: 4px; padding-left: 16px; }
-  .contact .contact__btn { width: 38px; height: 38px; }
-  .contact .contact__btn.contact__btn--text { width: auto; padding: 0 10px; }
+  .contact { gap: 6px; }
 }
