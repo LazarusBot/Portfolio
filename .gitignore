@@ -3,5 +3,7 @@ test/
 dist/
 
 .DS_Store
-.claude/
+# Réglages locaux de Claude Code ; seuls les bots de l'équipe (Root, Holly, Foaly, Butler) sont versionnés
+.claude/*
+!.claude/agents/
 __pycache__/
