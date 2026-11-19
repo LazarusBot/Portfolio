@@ -57,7 +57,7 @@ const globals = {
   // Aperçu sur les réseaux (og:video / og:image) : adresse absolue du site, chaque page y ajoute son chemin
   site: 'https://maxence.fyi',
   pagePath: '',
-  description: 'Maxence Prioux — Product Designer based in Toulouse.',
+  description: 'Maxence Prioux — Product Designer moving from Toulouse to Paris.',
   chessLine: '',
   projectNav: '',
   photoStrip: photos.map(p => `<img src="assets/img/${p.image}" alt="">`).join(''),
