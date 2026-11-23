@@ -1606,7 +1606,7 @@ video::-webkit-media-controls { display: none !important; }
 /* Podz V2 : du cadre Paper au système. À gauche le vrai cadre, à droite une seule chose à lire à la fois :
    ce que Claude lit maintenant (via le MCP de Paper), puis la liste des jetons écrits dans design.md.
    site.js fait avancer data-step : 1 fond, 2 titre, 3 sous-titre, 4 boutons, 5 SwiftUI, 6 sombre */
-.ds { --sel: #2f7bf5; display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 64px; align-items: center; margin-top: 24px; padding: 48px 56px; background: #f6f6f6; border-radius: 20px; }
+.ds { --sel: #2f7bf5; display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 64px; align-items: center; margin-top: 24px; padding: 48px 56px; background: #f6f6f6; }
 .ds-frame { position: relative; aspect-ratio: 540 / 1179; border-radius: 46px; }
 .ds-frame__img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: opacity .6s cubic-bezier(.2, .8, .2, 1); }
 .ds-frame__img--dark { opacity: 0; }
