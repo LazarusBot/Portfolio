@@ -1379,7 +1379,7 @@ video::-webkit-media-controls { display: none !important; }
 .podz2 .k-tokens { margin-top: 20px; }
 .k-tokens { display: grid; grid-template-columns: repeat(4, 72px); gap: 8px; color: var(--k-mute); font-size: 13px; line-height: 18px; }
 .k-tokens span { display: grid; gap: 8px; }
-.k-tokens i { aspect-ratio: 1; background: linear-gradient(135deg, var(--l) 50%, var(--d) 50%); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
+.k-tokens i { aspect-ratio: 1; background: linear-gradient(135deg, var(--l) 50%, var(--d) 50%); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
 
 /* Études de cas, style calme : une seule taille de texte (Inter 15/24), titres en gris, texte en noir, presque aucune couleur */
 .quiet { --k-mute: var(--soft); }
@@ -1539,10 +1539,7 @@ video::-webkit-media-controls { display: none !important; }
 .xc-board { display: block; width: 100%; height: auto; margin-top: 24px; background: #f5f5f5; }
 .xc .section > p + .xc-board, .xc .pz-rail + p { margin-top: 24px; }
 /* Le design system : couleurs et typo côte à côte, puis icônes et boutons */
-.xc-ds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; align-items: start; }
-.xc-ds img { display: block; width: 100%; height: auto; background: #fff; box-shadow: 0 0 0 1px var(--line); }
 .xc-board + .pz-rail { margin-top: 24px; }
-@media (max-width: 720px) { .xc-ds { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .xc-hero__title { top: 8%; gap: 6px; } .xc-hero__logo { width: 88px; } .xc-hero__title span { font-size: 11px; } .xc-desk { grid-template-columns: 1fr; } }
 
 /* Carte XChange : la photo Marlink, le logo dans le ciel ; au survol (WebP animé, comme les GIF des autres cartes) un téléphone monte et joue le choix du crédit */
@@ -1626,3 +1623,53 @@ video::-webkit-media-controls { display: none !important; }
   .ds-now { height: 88px; margin: 16px 0 24px; }
 }
 .podz2 .section > .ds + p { margin-top: 32px; }
+
+/* XChange V2, le design system en vrai (plus de captures) : couleurs, échelle typo en IBM Plex Sans,
+   le bouton de connexion qu'on fait passer par chacun de ses états, puis les icônes */
+.xds { --mid: #001C39; display: grid; gap: 56px; margin-top: 40px; }
+.xds__row { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; padding-top: 16px; border-top: 1px solid var(--line); }
+.xds__label { color: var(--soft); }
+.xds-colors { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px 8px; list-style: none; margin: 0; padding: 0; }
+.xds-colors li { display: grid; gap: 2px; align-content: start; }
+.xds-colors i { display: block; aspect-ratio: 1; margin-bottom: 8px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+.xds-colors b { font-weight: 400; }
+.xds-colors span { color: var(--soft); }
+.xds-type { list-style: none; margin: 0; padding: 0; }
+.xds-type li { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.xds-type li:first-child { padding-top: 0; }
+.xds-type span em { display: block; font-style: normal; color: var(--soft); }
+.xds-type b { font-family: "IBM Plex Sans", sans-serif; color: var(--mid); font-weight: 700; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.xds-t--h1 { font-size: 64px; line-height: 1; }
+.xds-t--h2 { font-size: 40px; line-height: 1.1; }
+.xds-t--h3 { font-size: 24px; }
+.xds-t--sub { font-size: 24px; font-weight: 500 !important; letter-spacing: 0 !important; }
+.xds-t--body { font-size: 16px; line-height: 1.4; font-weight: 500 !important; letter-spacing: 0 !important; }
+.xds-t--pre { font-size: 10px; letter-spacing: .03em !important; }
+.xds-t--btn { font-size: 12px; letter-spacing: .03em !important; }
+.xds-t--link { font-size: 16px; letter-spacing: 0 !important; text-decoration: underline; color: #1875B2 !important; }
+.xds-btn { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: center; }
+.xds-btn__states { list-style: none; margin: 0; padding: 0; }
+.xds-btn__states button { padding: 4px 0; border: 0; background: none; font: inherit; color: var(--soft); cursor: pointer; text-align: left; transition: color .2s; }
+.xds-btn__states button:hover, .xds-btn__states button[aria-current="true"] { color: var(--text, #000); }
+.xds-btn__stage { display: grid; place-items: center; padding: 64px 24px; background: #f3f3f3; }
+.xds-btn__btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: min(100%, 320px); height: 48px; border: 0; border-radius: 0;
+                font: 700 12px/1 "IBM Plex Sans", sans-serif; letter-spacing: .03em; text-transform: uppercase; color: #fff; background: #00AF41; cursor: pointer;
+                transition: background .25s, color .25s; }
+.xds-btn__ic { display: none; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: xds-spin .8s linear infinite; }
+.xds-btn__btn[data-s="connecting"] .xds-btn__ic { display: block; }
+.xds-btn__btn[data-s="disconnect"], .xds-btn__btn[data-s="force"], .xds-btn__btn[data-s="nowallet"], .xds-btn__btn[data-s="credit"] { background: #F04C24; }
+.xds-btn__btn[data-s="na"], .xds-btn__btn[data-s="later"] { background: #E5E8EB; color: #A3A8B0; }
+.xds-btn__btn[data-s="refill"] { background: #001C39; }
+@keyframes xds-spin { to { rotate: 1turn; } }
+.xds-icons { display: block; width: 100%; height: auto; }
+@media (max-width: 720px) {
+  .xds { gap: 40px; }
+  .xds__row, .xds-btn, .xds-type li { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .xds-type li { gap: 4px; }
+  .xds-colors { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .xds-t--h1 { font-size: 44px; }
+  .xds-t--h2 { font-size: 32px; }
+  .xds-btn__states { display: flex; flex-wrap: wrap; gap: 0 16px; }
+  .xds-btn__stage { padding: 40px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .xds-btn__ic { animation-duration: 2.4s; } }

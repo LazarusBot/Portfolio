@@ -1061,6 +1061,20 @@ document.querySelectorAll('[data-logo]').forEach(box => {
   }).observe(box);
 });
 
+// XChange V2 : le bouton de connexion, un état à la fois. On choisit l'état dans la liste,
+// ou on tape le bouton pour passer au suivant ; rien ne bouge tout seul
+document.querySelectorAll('[data-xds-btn]').forEach(box => {
+  const btn = box.querySelector('.xds-btn__btn'), tx = box.querySelector('.xds-btn__tx');
+  const opts = [...box.querySelectorAll('[data-state]')];
+  const set = o => {
+    opts.forEach(x => x.toggleAttribute('aria-current', x === o));
+    if (o) o.setAttribute('aria-current', 'true');
+    btn.dataset.s = o.dataset.state; tx.textContent = o.textContent;
+  };
+  opts.forEach(o => o.addEventListener('click', () => set(o)));
+  btn.addEventListener('click', () => set(opts[(opts.findIndex(o => o.dataset.state === btn.dataset.s) + 1) % opts.length]));
+});
+
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
   const rail = sw.closest('section').querySelector('[data-ob-rail]');

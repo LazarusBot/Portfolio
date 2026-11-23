@@ -170,11 +170,48 @@
       <section class="section" data-reveal>
         <h2>The system</h2>
         <p>A design system of 500+ components covers mobile and web: IBM Plex Sans with a clear type scale, a blue brand palette with one colour per meaning (success, error, accent, dark), a set of icons drawn for the app, and a button for every state of the link, from Connect to Sealink to Refill my wallet. I built it in Figma and kept it in step with the Swift and SwiftUI code, so what was designed is what shipped.</p>
-        <div class="xc-ds">
-          <img src="assets/xchange/ds-colors.jpg" alt="XChange colours: primary, secondary and tertiary brand blues, dark, success, error, text, subtle text, accent, light, orange, dark background" width="780" height="1442" loading="lazy">
-          <img src="assets/xchange/ds-type.jpg" alt="XChange typography in IBM Plex Sans, from Title to Link" width="780" height="1442" loading="lazy">
-          <img src="assets/xchange/ds-icons.jpg" alt="XChange icons" width="975" height="762" loading="lazy">
-          <img src="assets/xchange/ds-buttons.jpg" alt="XChange buttons for every state: connect, connecting, disconnect, force disconnect, no wallet yet, need extra credit, refill my wallet" width="620" height="945" loading="lazy">
+        <div class="xds">
+          <div class="xds__row">
+            <span class="xds__label">Colour</span>
+            <ul class="xds-colors">
+              <li><i style="--c:#35A9E1"></i><b>Blue</b><span>#35A9E1</span><span>CTAs, active states</span></li>
+              <li><i style="--c:#1875B2"></i><b>Ocean blue</b><span>#1875B2</span><span>Links</span></li>
+              <li><i style="--c:#0E88CA"></i><b>Mid blue</b><span>#0E88CA</span><span>Accents, illustrations</span></li>
+              <li><i style="--c:#001C39"></i><b>Midnight</b><span>#001C39</span><span>Text, headings</span></li>
+              <li><i style="--c:#00AF41"></i><b>Green</b><span>#00AF41</span><span>Success, connect</span></li>
+              <li><i style="--c:#C1033F"></i><b>Omni red</b><span>#C1033F</span><span>Errors</span></li>
+              <li><i style="--c:#F04C24"></i><b>Orange</b><span>#F04C24</span><span>Disconnect, alerts</span></li>
+              <li><i style="--c:#7C7C7C"></i><b>Dark rock</b><span>#7C7C7C</span><span>Helper text</span></li>
+              <li><i style="--c:#E5E8EB"></i><b>Rock</b><span>#E5E8EB</span><span>Hairlines, unavailable</span></li>
+              <li><i style="--c:#FFFFFF"></i><b>Cloud</b><span>#FFFFFF</span><span>Light background</span></li>
+              <li><i style="--c:#2E2E2F"></i><b>Dark bg</b><span>#2E2E2F</span><span>Dark mode</span></li>
+              <li><i style="--c:#00FF5F"></i><b>Dark green</b><span>#00FF5F</span><span>Online, in dark mode</span></li>
+            </ul>
+          </div>
+          <div class="xds__row">
+            <span class="xds__label">Type</span>
+            <ul class="xds-type">
+              <li><span>Header 1<em>Bold 64, −2%</em></span><b class="xds-t--h1">62.320 GiB</b></li>
+              <li><span>Header 2<em>Bold 40, −2%</em></span><b class="xds-t--h2">Starlink Direct</b></li>
+              <li><span>Header 3<em>Bold 24, −2%</em></span><b class="xds-t--h3">Credit management</b></li>
+              <li><span>Subtitle<em>Medium 24</em></span><b class="xds-t--sub">Personal credit</b></li>
+              <li><span>Body<em>Medium 16, 140%</em></span><b class="xds-t--body">Last 7 days overview</b></li>
+              <li><span>Pre title<em>Bold 10, +3%</em></span><b class="xds-t--pre">EWALLET</b></li>
+              <li><span>Button<em>Bold 12, +3%</em></span><b class="xds-t--btn">CONNECT TO SEALINK</b></li>
+              <li><span>Link<em>Bold 16, underline</em></span><b class="xds-t--link">Change the link</b></li>
+            </ul>
+          </div>
+          <div class="xds__row">
+            <span class="xds__label">One button, every state</span>
+            <div class="xds-btn" data-xds-btn>
+              <ul class="xds-btn__states"><li><button type="button" data-state="connect" aria-current="true">Connect to Sealink</button></li><li><button type="button" data-state="connecting">Connecting to Sealink</button></li><li><button type="button" data-state="disconnect">Disconnect</button></li><li><button type="button" data-state="force">Force disconnect</button></li><li><button type="button" data-state="na">Not available</button></li><li><button type="button" data-state="later">Available in 2 hours</button></li><li><button type="button" data-state="nowallet">No wallet yet?</button></li><li><button type="button" data-state="credit">Need extra credit</button></li><li><button type="button" data-state="refill">Refill my wallet</button></li></ul>
+              <div class="xds-btn__stage"><button type="button" class="xds-btn__btn" data-s="connect" aria-label="Next state"><span class="xds-btn__ic" aria-hidden="true"></span><span class="xds-btn__tx">Connect to Sealink</span></button></div>
+            </div>
+          </div>
+          <div class="xds__row">
+            <span class="xds__label">Icons</span>
+            <img class="xds-icons" src="assets/xchange/ds-icons-grid.jpg" alt="XChange icons, drawn for the app: transactions, wallet, link, unlink, extra credit, voucher, eWallet, download and more" width="870" height="565" loading="lazy">
+          </div>
         </div>
       </section>
       <section class="section" data-reveal>
