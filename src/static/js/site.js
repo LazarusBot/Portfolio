@@ -1061,36 +1061,6 @@ document.querySelectorAll('[data-logo]').forEach(box => {
   }).observe(box);
 });
 
-// XChange V2 : le prototype, sans défilement automatique. Un onglet choisit le parcours,
-// un point choisit l'écran, un tap sur le téléphone passe à l'écran suivant
-document.querySelectorAll('[data-proto]').forEach(box => {
-  const phone = box.querySelector('.xc-proto__phone');
-  const cap = box.querySelector('.xc-proto__cap');
-  const dots = box.querySelector('.xc-proto__dots');
-  const tabs = [...box.querySelectorAll('[role="tab"]')];
-  let flow = tabs[0].dataset.flow, i = 0;
-  const frames = () => [...phone.querySelectorAll(`img[data-flow="${flow}"]`)];
-  const show = () => {
-    const fs = frames();
-    phone.querySelectorAll('img').forEach(im => im.classList.toggle('is-on', im === fs[i]));
-    fs[i].loading = 'eager';
-    if (fs[i + 1]) fs[i + 1].loading = 'eager';
-    cap.textContent = fs[i].dataset.cap;
-    dots.innerHTML = fs.map((f, k) => `<button type="button" aria-label="${f.dataset.cap}"${k === i ? ' class="is-on" aria-current="true"' : ''}></button>`).join('');
-  };
-  phone.addEventListener('click', () => { i = (i + 1) % frames().length; show(); });
-  dots.addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (!b) return;
-    i = [...dots.children].indexOf(b); show();
-  });
-  tabs.forEach(b => b.addEventListener('click', () => {
-    tabs.forEach(x => x.setAttribute('aria-selected', x === b));
-    flow = b.dataset.flow; i = 0; show();
-  }));
-  show();
-});
-
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
   const rail = sw.closest('section').querySelector('[data-ob-rail]');
