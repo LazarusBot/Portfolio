@@ -1075,6 +1075,24 @@ document.querySelectorAll('[data-xds-btn]').forEach(box => {
   btn.addEventListener('click', () => set(opts[(opts.findIndex(o => o.dataset.state === btn.dataset.s) + 1) % opts.length]));
 });
 
+// Podz V2 : les tenues de Lenny, l'une après l'autre, vite, tant que la section est à l'écran ;
+// un tap passe à la suivante. Avec « réduire les animations », rien ne tourne seul, le tap reste
+document.querySelectorAll('[data-lv]').forEach(box => {
+  const chars = [...box.querySelectorAll('.lv-char')], name = box.querySelector('.lv-name');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i = 0, timer = 0;
+  const pop = el => { el.classList.remove('is-pop'); void el.offsetWidth; el.classList.add('is-pop'); };
+  const next = () => {
+    chars[i].classList.remove('is-on', 'is-pop');
+    i = (i + 1) % chars.length;
+    chars[i].classList.add('is-on'); pop(chars[i]);
+    name.textContent = chars[i].dataset.name; pop(name);
+  };
+  const run = on => { clearInterval(timer); if (on && !calm) timer = setInterval(next, 700); };
+  box.addEventListener('click', () => { next(); run(true); });
+  new IntersectionObserver(([e]) => run(e.isIntersecting), { threshold: .3 }).observe(box);
+});
+
 // Podz V2 : les écrans d'onboarding en sombre ou en clair
 document.querySelectorAll('[data-ob-mode]').forEach(sw => {
   const rail = sw.closest('section').querySelector('[data-ob-rail]');
