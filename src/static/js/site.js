@@ -1101,23 +1101,32 @@ document.querySelectorAll('[data-ob-mode]').forEach(sw => {
   });
 });
 
-// Du cadre au système (Podz V2) : chaque élément du cadre Paper est sélectionné à son tour et écrit sa ligne
-// dans la fiche design.md ; à la fin le cadre passe en sombre avec les mêmes jetons, puis tout recommence.
-// La boucle ne tourne que visible ; avec « réduire les animations », on montre directement la fiche complète.
+// Du cadre au système (Podz V2) : Claude lit le cadre Paper par le MCP, un élément à la fois ;
+// chaque lecture écrit ses jetons dans design.md, puis le code, puis le même cadre en sombre.
+// La boucle ne tourne que visible ; avec « réduire les animations », la liste complète s'affiche sans bouger.
 document.querySelectorAll('[data-ds]').forEach(ds => {
   const boxes = [...ds.querySelectorAll('.ds-box')], rows = [...ds.querySelectorAll('[data-at]')];
-  const cap = ds.parentElement.querySelector('[data-ds-cap]');
-  const CAPS = ['DetailView, as drawn in Paper', 'The ground', 'The title', 'The subtitle', 'The buttons', 'Same tokens, dark appearance'];
+  const now = ds.querySelector('.ds-now');
+  const [what, call, res] = ['[data-ds-what]', '[data-ds-call]', '[data-ds-res]'].map(q => ds.querySelector(q));
+  // Ce qui est lu (ou écrit), l'appel réel au MCP de Paper, et ce qu'il renvoie
+  const STEPS = [['Reading the frame', 'get_basic_info()', 'DetailView, 393 × 852'],
+    ['The ground', 'get_computed_styles(frame)', '#FFFFFF'],
+    ['The title', 'get_computed_styles(title)', 'Inter semiBold 20, #000000'],
+    ['The subtitle', 'get_computed_styles(subtitle)', 'Inter regular 16, #989898'],
+    ['The buttons', 'get_computed_styles(buttons)', '83 tall, 13 apart, #F1F1F1'],
+    ['Writing the view', 'BookingControlStack.swift', '.background(.homePill)'],
+    ['Same frame, dark', 'get_computed_styles(dark frame)', 'Same tokens, dark values']];
   const show = step => {
     boxes.forEach(b => b.classList.toggle('is-on', +b.dataset.on === step));
     rows.forEach(r => r.classList.toggle('is-on', step > 0 && +r.dataset.at <= step));
-    ds.classList.toggle('is-dark', step === 5);
-    if (cap) cap.textContent = CAPS[step];
+    ds.classList.toggle('is-dark', step === 6);
+    [what.textContent, call.textContent, res.textContent] = STEPS[step];
+    now.classList.remove('is-new'); void now.offsetWidth; now.classList.add('is-new');
   };
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { show(4); boxes.forEach(b => b.classList.remove('is-on')); if (cap) cap.textContent = 'DetailView, from Paper to design.md'; return; }
-  const TIMES = [1400, 1500, 1500, 1500, 1800, 2600];
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { show(5); boxes.forEach(b => b.classList.remove('is-on')); return; }
+  const TIMES = [1800, 1700, 1700, 1700, 2000, 2200, 2800];
   let step = 0, timer = 0;
-  const tick = () => { show(step); timer = setTimeout(() => { step = (step + 1) % 6; tick(); }, TIMES[step]); };
+  const tick = () => { show(step); timer = setTimeout(() => { step = (step + 1) % 7; tick(); }, TIMES[step]); };
   show(0);
   new IntersectionObserver(([e]) => {
     clearTimeout(timer);

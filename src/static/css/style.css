@@ -1603,44 +1603,50 @@ video::-webkit-media-controls { display: none !important; }
 }
 
 
-/* Podz V2 : du cadre Paper au système. Le cadre à gauche, la fiche design.md à droite ;
-   site.js fait avancer data-step (1 fond, 2 titre, 3 sous-titre, 4 boutons, 5 tout + sombre) */
-.ds { --sel: #2f7bf5; display: grid; grid-template-columns: 240px 1fr; gap: 56px; align-items: center; margin-top: 24px; padding: 40px 48px; background: #f6f6f6; border-radius: 20px; }
+/* Podz V2 : du cadre Paper au système. À gauche le vrai cadre, à droite une seule chose à lire à la fois :
+   ce que Claude lit maintenant (via le MCP de Paper), puis la liste des jetons écrits dans design.md.
+   site.js fait avancer data-step : 1 fond, 2 titre, 3 sous-titre, 4 boutons, 5 SwiftUI, 6 sombre */
+.ds { --sel: #2f7bf5; display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 64px; align-items: center; margin-top: 24px; padding: 48px 56px; background: #f6f6f6; border-radius: 20px; }
 .ds-frame { position: relative; aspect-ratio: 540 / 1179; border-radius: 46px; }
-.ds-frame__img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; display: block; transition: opacity .6s cubic-bezier(.2, .8, .2, 1); }
+.ds-frame__img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: opacity .6s cubic-bezier(.2, .8, .2, 1); }
 .ds-frame__img--dark { opacity: 0; }
 .ds.is-dark .ds-frame__img--dark { opacity: 1; }
-/* La sélection, comme dans Paper : un contour bleu fin et une étiquette de mesure */
-.ds-box { position: absolute; border: 1.5px solid var(--sel); border-radius: 4px; opacity: 0; scale: 1.04; transition: opacity .3s, scale .4s cubic-bezier(.34, 1.56, .64, 1); pointer-events: none; }
+/* La sélection, comme dans Paper : un simple contour bleu */
+.ds-box { position: absolute; border: 1.5px solid var(--sel); border-radius: 4px; opacity: 0; scale: 1.03; transition: opacity .3s, scale .4s cubic-bezier(.34, 1.56, .64, 1); pointer-events: none; }
 .ds-box[data-on="1"] { border-radius: 46px; }
 .ds-box[data-on="4"] { border-radius: 99px; }
 .ds-box.is-on { opacity: 1; scale: 1; }
-.ds-box__tag { position: absolute; top: 50%; translate: 0 -50%; padding: 2px 6px; border-radius: 4px; background: var(--sel); color: #fff; font: normal 500 10px/14px Inter, system-ui, sans-serif; white-space: nowrap; }
-.ds-box__tag--r { left: calc(100% + 8px); }
-.ds-box__tag--l { right: calc(100% + 8px); }
-.ds-box[data-on="1"] .ds-box__tag { top: 18px; translate: 0 0; left: calc(100% + 8px); }
-.ds-box[data-on="2"] .ds-box__tag, .ds-box[data-on="3"] .ds-box__tag { left: 50%; translate: -50% 0; }
-.ds-box[data-on="2"] .ds-box__tag { top: auto; bottom: calc(100% + 4px); }
-.ds-box[data-on="3"] .ds-box__tag { top: calc(100% + 4px); }
-/* La fiche : lignes label à gauche, en gris ; chaque ligne s'écrit quand son élément est sélectionné */
-.ds-sheet { font-size: 14px; line-height: 22px; }
-.ds-sheet__file { display: block; margin-bottom: 14px; font: 400 12px/16px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--soft); }
-.ds-sheet h3 { margin: 18px 0 4px; font: inherit; font-weight: 400; color: var(--soft); }
-.ds-sheet h3:first-of-type { margin-top: 0; }
-.ds-sheet ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid #e6e6e6; }
-.ds-sheet li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 5px 0; border-bottom: 1px solid #e6e6e6; opacity: .18; transition: opacity .4s; }
-.ds-sheet li.is-on { opacity: 1; }
-.ds-sheet li > span:first-child { color: var(--soft); }
-.ds-sheet li > span:last-child { display: flex; align-items: center; gap: 8px; color: #000; }
-.ds-sw { flex: none; width: 14px; height: 14px; border-radius: 4px; background: var(--l); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1); transition: background .6s; }
+
+.ds-sheet { max-width: 360px; font-size: 15px; line-height: 24px; }
+.ds-via { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--soft); }
+.ds-via img { width: 18px; height: 18px; border-radius: 50%; }
+/* Le point focal : ce qui est lu maintenant. Hauteur fixe, rien ne bouge d'une étape à l'autre */
+.ds-now { display: grid; gap: 2px; height: 96px; margin: 20px 0 32px; align-content: start; }
+.ds-now__what { color: #000; }
+.ds-now code { font: 400 13px/20px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--soft); }
+.ds-now__res { color: #000; }
+.ds-now.is-new > * { animation: ds-in .45s cubic-bezier(.2, .8, .2, 1) both; }
+.ds-now.is-new > :nth-child(2) { animation-delay: .08s; }
+.ds-now.is-new > :nth-child(3) { animation-delay: .35s; }
+@keyframes ds-in { from { opacity: 0; translate: 0 4px; } }
+/* design.md : une ligne par jeton, la place est gardée pour toutes, elles apparaissent une à une */
+.ds-file { margin: 0 0 6px; color: var(--soft); }
+.ds-toks { list-style: none; margin: 0; padding: 0; border-top: 1px solid #e4e4e4; }
+.ds-toks li { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; align-items: center; gap: 12px; height: 36px; border-bottom: 1px solid #e4e4e4; opacity: 0; translate: 0 4px; transition: opacity .4s, translate .4s cubic-bezier(.2, .8, .2, 1); }
+.ds-toks li.is-on { opacity: 1; translate: 0 0; }
+.ds-toks li > span:nth-of-type(1) { color: #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-v { color: var(--soft); white-space: nowrap; }
+.ds-v span + span, .ds.is-dark .ds-v span:first-child { display: none; }
+.ds.is-dark .ds-v span + span { display: inline; }
+.ds-sw { width: 14px; height: 14px; border-radius: 4px; background: var(--l); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); transition: background .6s; }
 .ds.is-dark .ds-sw { background: var(--d); }
-.ds-hex { margin-left: auto; font: 400 12px/16px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--soft); }
-.ds-hex span + span, .ds.is-dark .ds-hex span:first-child { display: none; }
-.ds.is-dark .ds-hex span + span { display: inline; }
-.ds-cap { margin-top: 10px !important; font-size: 13px !important; line-height: 18px !important; color: var(--soft) !important; }
+.ds-aa { font: normal 600 11px/14px Inter, system-ui, sans-serif; color: #000; }
+.ds-pl { width: 16px; height: 9px; border-radius: 99px; background: #e2e2e2; }
 @media (max-width: 720px) {
-  .ds { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; justify-items: center; }
+  .ds { grid-template-columns: 1fr; gap: 36px; padding: 32px 20px; justify-items: center; }
   .ds-frame { width: 190px; border-radius: 36px; }
   .ds-box[data-on="1"] { border-radius: 36px; }
-  .ds-sheet { width: 100%; }
+  .ds-sheet { width: 100%; max-width: none; }
+  .ds-now { height: 88px; margin: 16px 0 24px; }
 }
+.podz2 .section > .ds + p { margin-top: 32px; }
