@@ -1061,15 +1061,14 @@ document.querySelectorAll('[data-logo]').forEach(box => {
   }).observe(box);
 });
 
-// XChange V2 : le prototype rejoué. Chaque parcours enchaîne ses écrans en fondu tant qu'il est à l'écran ;
-// un onglet change de parcours, un tap sur le téléphone avance d'une étape (et relance la minuterie)
+// XChange V2 : le prototype, sans défilement automatique. Un onglet choisit le parcours,
+// un point choisit l'écran, un tap sur le téléphone passe à l'écran suivant
 document.querySelectorAll('[data-proto]').forEach(box => {
   const phone = box.querySelector('.xc-proto__phone');
   const cap = box.querySelector('.xc-proto__cap');
   const dots = box.querySelector('.xc-proto__dots');
   const tabs = [...box.querySelectorAll('[role="tab"]')];
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let flow = tabs[0].dataset.flow, i = 0, timer = null, visible = false;
+  let flow = tabs[0].dataset.flow, i = 0;
   const frames = () => [...phone.querySelectorAll(`img[data-flow="${flow}"]`)];
   const show = () => {
     const fs = frames();
@@ -1077,16 +1076,18 @@ document.querySelectorAll('[data-proto]').forEach(box => {
     fs[i].loading = 'eager';
     if (fs[i + 1]) fs[i + 1].loading = 'eager';
     cap.textContent = fs[i].dataset.cap;
-    dots.innerHTML = fs.map((_, k) => `<i${k === i ? ' class="is-on"' : ''}></i>`).join('');
+    dots.innerHTML = fs.map((f, k) => `<button type="button" aria-label="${f.dataset.cap}"${k === i ? ' class="is-on" aria-current="true"' : ''}></button>`).join('');
   };
-  const next = () => { i = (i + 1) % frames().length; show(); };
-  const run = () => { clearInterval(timer); if (visible && !calm) timer = setInterval(next, 1800); };
-  phone.addEventListener('click', () => { next(); run(); });
+  phone.addEventListener('click', () => { i = (i + 1) % frames().length; show(); });
+  dots.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    i = [...dots.children].indexOf(b); show();
+  });
   tabs.forEach(b => b.addEventListener('click', () => {
     tabs.forEach(x => x.setAttribute('aria-selected', x === b));
-    flow = b.dataset.flow; i = 0; show(); run();
+    flow = b.dataset.flow; i = 0; show();
   }));
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; run(); }, { threshold: .3 }).observe(phone);
   show();
 });
 
