@@ -1100,3 +1100,27 @@ document.querySelectorAll('[data-ob-mode]').forEach(sw => {
     rail.classList.toggle('is-dark', b.dataset.mode === 'dark');
   });
 });
+
+// Du cadre au système (Podz V2) : chaque élément du cadre Paper est sélectionné à son tour et écrit sa ligne
+// dans la fiche design.md ; à la fin le cadre passe en sombre avec les mêmes jetons, puis tout recommence.
+// La boucle ne tourne que visible ; avec « réduire les animations », on montre directement la fiche complète.
+document.querySelectorAll('[data-ds]').forEach(ds => {
+  const boxes = [...ds.querySelectorAll('.ds-box')], rows = [...ds.querySelectorAll('[data-at]')];
+  const cap = ds.parentElement.querySelector('[data-ds-cap]');
+  const CAPS = ['DetailView, as drawn in Paper', 'The ground', 'The title', 'The subtitle', 'The buttons', 'Same tokens, dark appearance'];
+  const show = step => {
+    boxes.forEach(b => b.classList.toggle('is-on', +b.dataset.on === step));
+    rows.forEach(r => r.classList.toggle('is-on', step > 0 && +r.dataset.at <= step));
+    ds.classList.toggle('is-dark', step === 5);
+    if (cap) cap.textContent = CAPS[step];
+  };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { show(4); boxes.forEach(b => b.classList.remove('is-on')); if (cap) cap.textContent = 'DetailView, from Paper to design.md'; return; }
+  const TIMES = [1400, 1500, 1500, 1500, 1800, 2600];
+  let step = 0, timer = 0;
+  const tick = () => { show(step); timer = setTimeout(() => { step = (step + 1) % 6; tick(); }, TIMES[step]); };
+  show(0);
+  new IntersectionObserver(([e]) => {
+    clearTimeout(timer);
+    if (e.isIntersecting) { step = 0; tick(); }
+  }, { threshold: .4 }).observe(ds);
+});

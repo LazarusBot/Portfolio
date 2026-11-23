@@ -362,6 +362,43 @@
         </div>
       </section>
 
+      <!-- Le flux de travail : quatre étapes en lignes label à gauche, puis un vrai extrait de design.md -->
+      <section class="section" data-reveal>
+        <h2>From Paper to the phone</h2>
+        <p>I design and build Podz on my own, so the hand-off between design and code is a file, not a meeting. Ideas start in Figma, then every screen is drawn in Paper, and what it uses is written down in design.md, the file the code follows. One token, two appearances.</p>
+        <!-- Du cadre au système : le vrai cadre DetailView exporté de Paper ; chaque élément est sélectionné
+             à tour de rôle et remplit la fiche design.md, puis le cadre passe en sombre avec les mêmes jetons (site.js) -->
+        <div class="ds" data-ds>
+          <div class="ds-frame">
+            <img class="ds-frame__img" src="assets/podz/v2/ds/detail-white.webp" alt="The DetailView frame in Paper, light">
+            <img class="ds-frame__img ds-frame__img--dark" src="assets/podz/v2/ds/detail-dark.webp" alt="" aria-hidden="true">
+            <i class="ds-box" data-on="1" style="left:0.00%;top:0.00%;width:100.00%;height:100.00%"><em class="ds-box__tag ds-box__tag--r">393 × 852</em></i><i class="ds-box" data-on="2" style="left:14.76%;top:67.49%;width:70.48%;height:3.05%"><em class="ds-box__tag ds-box__tag--r">Inter 20 · 600</em></i><i class="ds-box" data-on="3" style="left:30.03%;top:73.00%;width:39.95%;height:3.05%"><em class="ds-box__tag ds-box__tag--r">Inter 16 · #989898</em></i><i class="ds-box" data-on="4" style="left:14.25%;top:81.57%;width:27.23%;height:9.74%"><em class="ds-box__tag ds-box__tag--l">83 tall</em></i><i class="ds-box" data-on="4" style="left:44.78%;top:81.57%;width:40.20%;height:9.74%"><em class="ds-box__tag ds-box__tag--r">13 apart</em></i>
+          </div>
+          <div class="ds-sheet">
+              <b class="ds-sheet__file">design.md</b>
+              <h3>Colors</h3>
+              <ol>
+                <li data-at="1"><span>Ground</span><span><i class="ds-sw" style="--l:#fff;--d:#000"></i>homeBackground <span class="ds-hex"><span>#FFFFFF</span><span>#000000</span></span></span></li>
+                <li data-at="2"><span>Text</span><span><i class="ds-sw" style="--l:#000;--d:#fff"></i>homeText <span class="ds-hex"><span>#000000</span><span>#FFFFFF</span></span></span></li>
+                <li data-at="3"><span>Subtitle</span><span><i class="ds-sw" style="--l:#989898;--d:#a0a0a0"></i>homeSubtitle <span class="ds-hex"><span>#989898</span><span>#A0A0A0</span></span></span></li>
+                <li data-at="4"><span>Pill</span><span><i class="ds-sw" style="--l:#f1f1f1;--d:#323232"></i>homePill <span class="ds-hex"><span>#F1F1F1</span><span>#323232</span></span></span></li>
+              </ol>
+              <h3>Type</h3>
+              <ol>
+                <li data-at="2"><span>Title</span><span>Inter semiBold 20</span></li>
+                <li data-at="3"><span>Body</span><span>Inter regular 16</span></li>
+                <li data-at="4"><span>Button</span><span>Inter regular 14</span></li>
+              </ol>
+              <h3>Buttons</h3>
+              <ol>
+                <li data-at="4"><span>Pill</span><span>Capsule, 83 tall, 13 apart</span></li>
+              </ol>
+            </div>
+        </div>
+        <p class="ds-cap" data-ds-cap>DetailView, as drawn in Paper</p>
+        <p>The loop also runs backwards. When something built looks better than the frame, the file changes, not just the code. The share button is one example: the icon from the Paper frame wasn't right, so design.md now says to use the system's link symbol.</p>
+      </section>
+
       <section class="section" data-reveal>
         <h2>Imagery</h2>
         <p>Architectural pods and cabins, shot in soft daylight.</p>
