@@ -197,10 +197,6 @@ function projectNav(order, slug, titleOf) {
         ${link(next, 'next')}
       </nav>`;
 }
-function crumbOf(order, slug) {
-  const p = order.find(p => p.slug === slug);
-  return p && p.section === 'visual' ? { crumbHref: 'visual.html', crumbLabel: 'Visual' } : { crumbHref: 'index.html', crumbLabel: 'Product' };
-}
 
 // Navigation de gauche : un arbre à plat, une seule taille de texte, la hiérarchie par le gris.
 // Générée depuis projectOrder() : elle suit toute seule l'ordre des cartes de Product et Visual.
@@ -211,9 +207,10 @@ function sidenav(order, current, titleOf) {
   const kids = (id, items) => `<div class="side__kids" id="${id}"><ul>${items.map(([label, href]) =>
     `<li><a href="${href}"${cur(href)}>${esc(label)}</a></li>`).join('')}</ul></div>`;
   // Groupe : le libellé mène à la page de la liste, la flèche ouvre la liste sur place
-  const group = (id, label, href, items, open) => `
+  // (Product mène aussi à l'accueil : c'est Home qui porte la page courante)
+  const group = (id, label, href, items, open, mark = true) => `
       <li class="side__group">
-        <div class="side__row"><a href="${href}"${cur(href)}>${label}</a><button class="side__fold" aria-expanded="${open}" aria-controls="${id}" aria-label="${label} projects">${chevron}</button></div>
+        <div class="side__row"><a href="${href}"${mark ? cur(href) : ''}>${label}</a><button class="side__fold" aria-expanded="${open}" aria-controls="${id}" aria-label="${label} projects">${chevron}</button></div>
         ${kids(id, items)}
       </li>`;
   const list = section => order.filter(p => p.section === section).map(p => [titleOf(p.slug), `${p.slug}.html`]);
@@ -222,7 +219,8 @@ function sidenav(order, current, titleOf) {
   <nav class="side" aria-label="Site">
     <button class="side__toggle" aria-expanded="true" aria-controls="side-panel" aria-label="Hide navigation" title="Hide navigation"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.75" y="3.75" width="14.5" height="12.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7.75 4v12" stroke="currentColor" stroke-width="1.3"/></svg></button>
     <div class="side__panel" id="side-panel">
-      <ul class="side__tree">${group('side-product', 'Product', 'index.html', list('product'), !inVisual)}${group('side-visual', 'Visual', 'visual.html', list('visual'), inVisual)}
+      <ul class="side__tree">
+      <li><a href="index.html"${cur('index.html')}>Home</a></li>${group('side-product', 'Product', 'index.html', list('product'), !inVisual, false)}${group('side-visual', 'Visual', 'visual.html', list('visual'), inVisual)}
       <li><a href="photographs.html"${cur('photographs.html')}>Photographs</a></li>
       <li><a href="about.html"${cur('about.html')}>About</a></li>
       </ul>
@@ -370,7 +368,7 @@ async function main() {
   const titles = Object.fromEntries(fs.readdirSync(path.join(SRC, 'projects')).filter(f => /^[a-z].*\.json$/.test(f))
     .map(f => { const p = JSON.parse(read(path.join(SRC, 'projects', f))); return [p.slug, p.title]; }));
   const titleOf = slug => titles[slug] || TITLES[slug] || slug;
-  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), sidenav: sidenav(order, slug, titleOf), ...crumbOf(order, slug) });
+  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), sidenav: sidenav(order, slug, titleOf) });
 
   // Pages
   const template = read(path.join(SRC, 'templates', 'project.html'));

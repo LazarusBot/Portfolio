@@ -27,7 +27,7 @@ a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
 .wrap { max-width: calc(var(--max) + 200px); margin: 0 auto; padding: 0 100px; }
-.wrap--narrow { max-width: calc(var(--narrow) + 200px); }
+.wrap--narrow { max-width: calc(var(--narrow) + 200px); padding-top: 50px; }
 
 /* ---------- Profil ---------- */
 .profile { display: flex; gap: 50px; align-items: center; padding: 50px 0 55px; border-bottom: 1px solid var(--line); }
@@ -144,8 +144,6 @@ img { display: block; max-width: 100%; }
 .micro-plus { width: 15px; height: 15px; background: #c2c2c2; -webkit-mask: url(../assets/micro-dot.svg) center/contain no-repeat; mask: url(../assets/micro-dot.svg) center/contain no-repeat; }
 
 /* ---------- Fil d'Ariane / pages internes ---------- */
-.crumb { padding: 50px 0 30px; font-size: 12px; color: var(--soft); }
-.crumb strong { color: #000; font-weight: 500; }
 .lead { color: var(--muted); margin-bottom: 30px; }
 .section { margin: 40px 0 60px; }
 .section h2 { font-size: 12px; font-weight: 600; margin-bottom: 10px; }
@@ -369,7 +367,7 @@ img { display: block; max-width: 100%; }
   .gallery { grid-template-columns: repeat(min(var(--cols, 2), 2), 1fr); gap: 10px; }
   .wall { grid-template-columns: repeat(2, 1fr); height: 600px; margin: 20px -24px 0; gap: 10px; }
   .wall__col:nth-child(n+3) { display: none; }
-  .crumb { padding-top: 30px; }
+  .wrap--narrow { padding-top: 30px; }
   .marquee { margin-right: -16px; }
   /* Mobile : une bande qu'on fait glisser au doigt, cartes plus grandes ; celle calée à gauche est la carte active */
   .art { margin-right: -16px; padding-right: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; touch-action: auto; }

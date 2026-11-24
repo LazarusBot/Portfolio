@@ -82,7 +82,7 @@ const sound = (() => {
     ['.pay', 'robot'],
     ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .side__menu, .side__fold, .side__toggle', 'tick'],
     ['.stage', 'tick'],
-    ['.card, .crumb a', 'tick'],
+    ['.card', 'tick'],
     ['a[href]', 'tick'],
     ['button, [role="button"], summary', 'tick'],
   ];
