@@ -8,8 +8,8 @@ const IMG = id => `assets/img/${id}`;
 // en bas à droite les coupe et le choix est gardé.
 const sound = (() => {
   // chess : le coup joué de Chess.com ; duolingo : la bonne réponse de Duolingo (ses fichiers d'origine)
-  const FILES = { select: 'assets/sounds/select.mp3', pop: 'assets/sounds/pop.mp3', robot: 'assets/sounds/robot.mp3', chess: 'assets/sounds/chess.mp3', duolingo: 'assets/sounds/duolingo.mp3' };
-  const VOL = { select: .3, pop: .45, robot: .22, chess: .6, duolingo: .35 };
+  const FILES = { pop: 'assets/sounds/pop.mp3', robot: 'assets/sounds/robot.mp3', chess: 'assets/sounds/chess.mp3', duolingo: 'assets/sounds/duolingo.mp3' };
+  const VOL = { pop: .45, robot: .22, chess: .6, duolingo: .35 };
   let ctx = null, buffers = {}, last = {};
   let on = true;
   try { on = localStorage.getItem('sound') !== 'off'; } catch {}
@@ -21,9 +21,28 @@ const sound = (() => {
     Object.entries(FILES).forEach(([k, url]) => fetch(url).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b)).then(buf => (buffers[k] = buf)).catch(() => {}));
   };
   ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, unlock, { once: true, capture: true }));
-  const play = (name, { rate = 1, vol = 1, gap = 70, exact = false } = {}) => {
-    if (!on || !ctx || !buffers[name]) return;
+  // « tick » : le petit pop aigu et discret du bloc contact, devenu le son de tout le site
+  const TICK = { rate: 1.35, vol: .35, gap: 50 };
+  // « push » (GitHub) : deux notes douces qui montent, synthétisées, comme un envoi
+  const push = () => {
+    const t = ctx.currentTime;
+    [[880, 0], [1320, .07]].forEach(([f, d]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t + d);
+      g.gain.linearRampToValueAtTime(.08, t + d + .008);
+      g.gain.exponentialRampToValueAtTime(.0001, t + d + .14);
+      o.connect(g).connect(ctx.destination);
+      o.start(t + d); o.stop(t + d + .16);
+    });
+  };
+  const play = (name, opts = {}) => {
+    if (name === 'tick') return play('pop', { ...TICK, ...opts });
+    const { rate = 1, vol = 1, gap = 70, exact = false } = opts;
+    if (!on || !ctx) return;
     const now = performance.now();
+    if (name === 'push') { if (now - (last.push || 0) < gap) return; last.push = now; if (ctx.state === 'suspended') ctx.resume(); return push(); }
+    if (!buffers[name]) return;
     if (now - (last[name] || 0) < gap) return;
     last[name] = now;
     if (ctx.state === 'suspended') ctx.resume();
@@ -50,22 +69,22 @@ const sound = (() => {
     on = !on;
     try { localStorage.setItem('sound', on ? 'on' : 'off'); } catch {}
     sync();
-    if (on) { unlock(); setTimeout(() => play('select'), 30); }
+    if (on) { unlock(); setTimeout(() => play('tick'), 30); }
   });
   sync();
   document.body.append(btn);
   // Sons déclenchés au clic, selon l'élément (le premier sélecteur qui correspond gagne).
-  // Par défaut, tout lien sonne « select » (on se déplace) et tout bouton « pop » (on agit).
+  // Par défaut, liens et boutons sonnent « tick », le son discret du bloc contact.
   // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
     ['.bag__pouch, .pz-chars__card, .chess, .contact, .profile__job, .robot, .art', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
-    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .side__menu, .side__fold, .side__toggle', 'select'],
-    ['.stage', 'pop'],
-    ['.card, .crumb a', 'select', { vol: .8, rate: .95 }],
-    ['a[href]', 'select', { vol: .7 }],
-    ['button, [role="button"], summary', 'pop', { vol: .8 }],
+    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .side__menu, .side__fold, .side__toggle', 'tick'],
+    ['.stage', 'tick'],
+    ['.card, .crumb a', 'tick'],
+    ['a[href]', 'tick'],
+    ['button, [role="button"], summary', 'tick'],
   ];
   addEventListener('click', e => {
     if (e.target.closest('.sound-toggle')) return;
@@ -76,7 +95,7 @@ const sound = (() => {
     const a = e.target.closest('a[href]');
     const leaves = a && !a.target && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.defaultPrevented
       && a.origin === location.origin && !a.getAttribute('href').startsWith('#') && a.href !== location.href;
-    if (leaves && on && ctx && buffers[hit[1]]) {
+    if (leaves && on && ctx && buffers[hit[1] === 'tick' ? 'pop' : hit[1]]) {
       e.preventDefault();
       play(hit[1], hit[2]);
       setTimeout(() => (location.href = a.href), 140);
@@ -93,7 +112,7 @@ const sound = (() => {
     const el = e.target.closest(HOVER);
     if (el === hovered) return;
     hovered = el;
-    if (el) play('pop', { rate: 1.35, vol: .35, gap: 50 });
+    if (el) play('tick');
   }, { passive: true });
   return { play };
 })();
@@ -195,7 +214,7 @@ document.querySelectorAll('.carousel').forEach(c => {
     clearTimeout(release);
     if (pull >= LIMIT) {
       gone = true;
-      sound.play('select');
+      sound.play('tick');
       setTimeout(() => (location.href = 'photographs.html'), 160);
       return;
     }
@@ -448,7 +467,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       plus.textContent = `+${g}`;
       line.append(plus);
       plus.addEventListener('animationend', () => plus.remove());
-      sound.play('select', { rate: 1.3, vol: .8 });
+      sound.play('tick');
     }
   };
   const show = (v, b) => (isGh(v) || isDuo(v) ? null : recent(v) ? celebrate(v, b) : calm || countUp(b, 0, v[1]));
@@ -466,7 +485,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     const v = values[i];
     // Chess.com et Duolingo arrivent avec leur propre son, GitHub avec le clic du site
     const kind = kindOf(v);
-    if (kind === 'github') sound.play('select', { vol: .6, rate: 1.1 });
+    if (kind === 'github') sound.play('push');
     else sound.play(kind, { exact: true });
     head(kindOf(v));
     line.title = titleOf(v);
@@ -551,7 +570,7 @@ document.querySelectorAll('.art').forEach(art => {
   cards.forEach(c => { c.tabIndex = 0; });
   art.addEventListener('click', e => {
     const c = e.target.closest('.art__card');
-    if (c && cards.indexOf(c) !== i) { go(cards.indexOf(c)); sound.play('select', { vol: .7 }); }
+    if (c && cards.indexOf(c) !== i) { go(cards.indexOf(c)); sound.play('tick'); }
   });
   art.addEventListener('keydown', e => {
     if (e.key === 'Enter' && e.target.closest('.art__card')) e.target.click();
@@ -609,7 +628,7 @@ if (robotsData) {
     sheet.querySelector('.robot-sheet__close').addEventListener('click', close);
 
     sheet.showModal();
-    sound.play('select');
+    sound.play('tick');
   };
   // Après la fermeture, le robot cliqué garde le focus et sa bulle resterait affichée par-dessus les autres :
   // on le libère si la fiche a été ouverte à la souris (au clavier, on garde le focus pour la navigation)
