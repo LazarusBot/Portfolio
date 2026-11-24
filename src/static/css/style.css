@@ -32,9 +32,6 @@ img { display: block; max-width: 100%; }
 /* ---------- Header ---------- */
 .header { display: flex; justify-content: space-between; align-items: center; height: 130px; }
 .logo { width: 75px; height: 17px; background: #000; -webkit-mask: var(--logo, url(../assets/signature.svg)) center/contain no-repeat; mask: var(--logo, url(../assets/signature.svg)) center/contain no-repeat; }
-.nav { display: flex; gap: 40px; font-size: 12px; }
-.nav a { color: var(--soft); transition: color .2s; }
-.nav a:hover, .nav a[aria-current] { color: #000; }
 
 /* ---------- Profil ---------- */
 .profile { display: flex; gap: 50px; align-items: center; padding: 45px 0 55px; border-bottom: 1px solid var(--line); }
@@ -318,17 +315,12 @@ img { display: block; max-width: 100%; }
 @keyframes wall-up { to { transform: translateY(-50%); } }
 @keyframes wall-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
 
-/* ---------- Bande de photos + menu (mobile uniquement) ---------- */
-.strip, .menu-btn { display: none; }
+/* ---------- Bande de photos (mobile uniquement) ---------- */
+.strip { display: none; }
 .strip { gap: 12px; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
 .strip::-webkit-scrollbar { display: none; }
 .strip img { width: 50px; height: 50px; flex: none; object-fit: cover; transition: transform .2s; }
 .strip img:active { transform: scale(.94); }
-.menu-btn { position: relative; width: 54px; height: 44px; border: 0; border-radius: 99px; background: #e8e8e8; cursor: pointer; z-index: 31; }
-.menu-btn span { position: absolute; left: 50%; top: 50%; width: 14px; height: 1.5px; background: #000; transform: translate(-50%, -50%); transition: transform .3s cubic-bezier(.2,.8,.2,1); }
-.menu-btn span:last-child { transform: translate(-50%, -50%) rotate(90deg); }
-.menu-open .menu-btn span:first-child { transform: translate(-50%, -50%) rotate(45deg); }
-.menu-open .menu-btn span:last-child { transform: translate(-50%, -50%) rotate(135deg); }
 
 /* ---------- Micro-interactions ---------- */
 .mi { margin: 40px 0 80px; }
@@ -361,15 +353,6 @@ img { display: block; max-width: 100%; }
 @media (max-width: 810px) {
   .wrap { padding: 0 24px; }
   .header { position: relative; height: 130px; }
-  .menu-btn { display: block; }
-  .nav { position: absolute; right: 0; top: calc(50% + 28px); flex-direction: column; align-items: flex-end; gap: 6px; z-index: 30; pointer-events: none; }
-  .nav a { display: grid; place-items: center; width: 84px; height: 44px; border-radius: 99px; background: #e8e8e8; color: var(--soft);
-           opacity: 0; transform: translateY(-12px) scale(.9); transition: opacity .25s, transform .35s cubic-bezier(.2,.8,.2,1), color .2s; }
-  .nav a[aria-current] { color: #000; }
-  .menu-open .nav { pointer-events: auto; }
-  .menu-open .nav a { opacity: 1; transform: none; }
-  .menu-open .nav a:nth-child(2) { transition-delay: .04s; }
-  .menu-open .nav a:nth-child(3) { transition-delay: .08s; }
   .profile { flex-direction: column; align-items: stretch; gap: 26px; padding: 30px 0 55px; }
   .carousel { display: none; }
   .strip { display: flex; }
@@ -1673,3 +1656,93 @@ video::-webkit-media-controls { display: none !important; }
   .xds-btn__stage { padding: 40px 16px; }
 }
 @media (prefers-reduced-motion: reduce) { .xds-btn__ic { animation-duration: 2.4s; } }
+
+/* ---------- Navigation de gauche ---------- */
+/* Un arbre à plat, une seule taille de texte : la hiérarchie ne passe que par le gris (lien gris, page courante noire).
+   Desktop (≥ 1100 px) : colonne fixe à gauche, qu'on replie avec le bouton du haut.
+   En dessous : une pastille « Menu » en bas à droite ouvre le même arbre dans une feuille. */
+:root { --side-w: 232px; --side-top: 0px; }
+/* En mode test, la barre noire reste collée en haut : la colonne commence dessous */
+body:has(.testbar) { --side-top: 33px; }
+.side__tree { list-style: none; font: 400 14px/28px Inter, system-ui, sans-serif; letter-spacing: -0.005em; }
+.side__tree ul { list-style: none; }
+.side__tree a { color: var(--soft); transition: color .2s; }
+.side__tree a:hover, .side__tree a[aria-current="page"] { color: var(--text); }
+.side__ext { color: var(--faint); }
+.side__row { display: flex; align-items: center; }
+/* Flèche du groupe : tournée vers le bas quand la liste est ouverte */
+.side__fold { display: inline-flex; align-items: center; height: 28px; padding: 0 6px; border: 0; background: none; color: var(--soft); font: inherit; cursor: pointer; transition: color .2s; }
+.side__fold:hover { color: var(--text); }
+.side__fold svg { width: 12px; height: 12px; transition: rotate .25s cubic-bezier(.2, .8, .2, 1); }
+.side__fold[aria-expanded="true"] svg { rotate: 90deg; }
+.side__fold--row { gap: 6px; padding: 0; }
+/* La liste s'ouvre sur place (0fr → 1fr) ; fermée, elle sort aussi de l'ordre du clavier */
+.side__kids { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .25s cubic-bezier(.2, .8, .2, 1), visibility .25s; }
+.side__kids > ul { min-height: 0; overflow: hidden; }
+.side__row:has([aria-expanded="true"]) + .side__kids { grid-template-rows: 1fr; visibility: visible; }
+/* Traits d'arbre ├─ et └─ en gris de décor, dessinés en CSS */
+.side__kids li { position: relative; padding-left: 22px; }
+.side__kids li::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; border-left: 1px solid var(--faint); }
+.side__kids li:last-child::before { bottom: auto; height: 14px; }
+.side__kids li::after { content: ""; position: absolute; left: 5px; top: 14px; width: 10px; border-top: 1px solid var(--faint); }
+.side a:focus-visible, .side button:focus-visible, .side__menu:focus-visible, .ticks button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: 4px; }
+
+.side__toggle { position: fixed; z-index: 32; top: calc(var(--side-top) + 24px); left: 19px; display: none; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 8px;
+                background: none; color: var(--soft); cursor: pointer; transition: color .2s, background .2s; }
+.side__toggle:hover { color: var(--text); background: var(--pill); }
+.side__toggle svg { width: 20px; height: 20px; }
+.side__menu { display: none; }
+
+@media (min-width: 1100px) {
+  body { padding-left: var(--side-w); transition: padding-left .3s cubic-bezier(.2, .8, .2, 1); }
+  /* La barre de test garde toute la largeur */
+  .testbar { margin-left: calc(-1 * var(--side-w)); transition: margin-left .3s cubic-bezier(.2, .8, .2, 1); }
+  .side__toggle { display: grid; }
+  .side__panel { position: fixed; z-index: 30; top: var(--side-top); bottom: 0; left: 0; width: var(--side-w); padding: 76px 20px 40px 28px; overflow-y: auto; scrollbar-width: none;
+                 background: #fff; transition: translate .3s cubic-bezier(.2, .8, .2, 1), visibility .3s; }
+  .side__panel::-webkit-scrollbar { display: none; }
+  /* Colonne repliée : la page reprend toute la largeur, seul le bouton reste */
+  .side-off body { padding-left: 0; }
+  .side-off .testbar { margin-left: 0; }
+  .side-off .side__panel { translate: -100% 0; visibility: hidden; }
+}
+
+@media (max-width: 1099px) {
+  /* Place pour finir de lire sous la pastille et le bouton son */
+  body { padding-bottom: 64px; }
+  .side__menu { position: fixed; z-index: 51; right: 16px; bottom: 16px; display: block; height: 36px; padding: 0 16px; border: 0; border-radius: 99px;
+                background: rgba(239, 239, 239, .85); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+                font: 500 14px/36px Inter, system-ui, sans-serif; color: var(--text); cursor: pointer; transition: scale .3s cubic-bezier(.34, 1.56, .64, 1); }
+  .side__menu:active { scale: .94; }
+  /* Le bouton son se range à gauche de la pastille */
+  .sound-toggle { right: 96px; }
+  /* Feuille : le même arbre, posé en bas de l'écran au-dessus d'un voile léger */
+  .side__panel { position: fixed; z-index: 50; left: 8px; right: 8px; bottom: 8px; max-height: calc(100dvh - 80px); overflow-y: auto; padding: 22px 24px 64px;
+                 border-radius: 20px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 20px 60px rgba(0, 0, 0, .12);
+                 opacity: 0; translate: 0 16px; visibility: hidden; transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility .3s; }
+  .side::before { content: ""; position: fixed; z-index: 49; inset: 0; background: rgba(255, 255, 255, .7); opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  .side-sheet .side__panel, .side-sheet .side::before { opacity: 1; translate: none; visibility: visible; }
+  /* À l'ouverture, visible tout de suite : le premier lien peut prendre le focus */
+  .side-sheet .side__panel { transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
+  .side__tree { font-size: 15px; line-height: 34px; }
+  .side__fold { height: 34px; padding: 0 12px; }
+  .side__fold--row { padding: 0; }
+  .side__kids li::after { top: 17px; }
+  .side__kids li:last-child::before { height: 17px; }
+}
+
+/* Repères de sections (études de cas, desktop) : un petit trait par section dans la marge gauche,
+   celui de la section lue est plus long et noir ; un clic y mène */
+.ticks { display: none; }
+@media (min-width: 1100px) {
+  .ticks { position: fixed; z-index: 20; top: 50%; left: calc(var(--side-w) + 28px); translate: 0 -50%; display: flex; flex-direction: column; transition: left .3s cubic-bezier(.2, .8, .2, 1); }
+  .side-off .ticks { left: 28px; }
+  .ticks button { display: flex; align-items: center; width: 32px; height: 12px; padding: 0; border: 0; background: none; cursor: pointer; }
+  .ticks button::before { content: ""; width: 10px; height: 1.5px; border-radius: 1px; background: var(--faint); transition: width .25s cubic-bezier(.2, .8, .2, 1), background .2s; }
+  .ticks button:hover::before { background: var(--soft); }
+  .ticks button[aria-current="true"]::before { width: 20px; background: var(--text); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body, .testbar, .side__panel, .side::before, .side__kids, .side__fold svg, .ticks, .ticks button::before { transition: none !important; }
+}

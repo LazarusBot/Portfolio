@@ -180,6 +180,45 @@ function crumbOf(order, slug) {
   return p && p.section === 'visual' ? { crumbHref: 'visual.html', crumbLabel: 'Visual' } : { crumbHref: 'index.html', crumbLabel: 'Product' };
 }
 
+// Navigation de gauche : un arbre à plat, une seule taille de texte, la hiérarchie par le gris.
+// Générée depuis projectOrder() : elle suit toute seule l'ordre des cartes de Product et Visual.
+// Le groupe de la page courante est ouvert (Product par défaut) ; la page courante a aria-current="page".
+// Contact reprend les liens du profil (partials/profile.html), rien d'inventé.
+const CONTACT = [
+  ['Email', 'mailto:contact@maxence.fyi'],
+  ['LinkedIn', 'https://www.linkedin.com/in/maxenceprioux'],
+  ['WhatsApp', 'https://wa.me/+330626228957'],
+  ['CV', 'assets/cv/maxence-prioux-cv.pdf'],
+];
+function sidenav(order, current, titleOf) {
+  const cur = href => (href === `${current}.html` ? ' aria-current="page"' : '');
+  const chevron = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const kids = (id, items) => `<div class="side__kids" id="${id}"><ul>${items.map(([label, href, ext]) =>
+    `<li><a href="${href}"${cur(href)}${ext ? ' target="_blank" rel="noopener"' : ''}>${esc(label)}${ext ? '<span class="side__ext" aria-hidden="true"> ↗</span>' : ''}</a></li>`).join('')}</ul></div>`;
+  // Groupe : le libellé mène à la page de la liste (s'il y en a une), la flèche ouvre la liste sur place
+  const group = (id, label, href, items, open) => `
+      <li class="side__group">
+        <div class="side__row">${href
+          ? `<a href="${href}"${cur(href)}>${label}</a><button class="side__fold" aria-expanded="${open}" aria-controls="${id}" aria-label="${label} projects">${chevron}</button>`
+          // Sans page à ouvrir (Contact), toute la ligne est le bouton
+          : `<button class="side__fold side__fold--row" aria-expanded="${open}" aria-controls="${id}">${label}${chevron}</button>`}</div>
+        ${kids(id, items)}
+      </li>`;
+  const list = section => order.filter(p => p.section === section).map(p => [titleOf(p.slug), `${p.slug}.html`]);
+  const inVisual = current === 'visual' || order.some(p => p.slug === current && p.section === 'visual');
+  return `<script>try { if (localStorage.getItem('side') === 'off') document.documentElement.classList.add('side-off'); } catch (e) {}</script>
+  <nav class="side" aria-label="Site">
+    <button class="side__toggle" aria-expanded="true" aria-controls="side-panel" aria-label="Hide navigation" title="Hide navigation"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.75" y="3.75" width="14.5" height="12.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7.75 4v12" stroke="currentColor" stroke-width="1.3"/></svg></button>
+    <div class="side__panel" id="side-panel">
+      <ul class="side__tree">${group('side-product', 'Product', 'index.html', list('product'), !inVisual)}${group('side-visual', 'Visual', 'visual.html', list('visual'), inVisual)}
+      <li><a href="photographs.html"${cur('photographs.html')}>Photographs</a></li>
+      <li><a href="about.html"${cur('about.html')}>About</a></li>${group('side-contact', 'Contact', null, CONTACT.map(([l, h]) => [l, h, !h.startsWith('mailto:')]), false)}
+      </ul>
+    </div>
+  </nav>
+  <button class="side__menu" aria-expanded="false" aria-controls="side-panel">Menu</button>`;
+}
+
 function render(tpl, vars) {
   let html = tpl;
   // Les partials peuvent eux-mêmes contenir des variables
@@ -319,7 +358,7 @@ async function main() {
   const titles = Object.fromEntries(fs.readdirSync(path.join(SRC, 'projects')).filter(f => /^[a-z].*\.json$/.test(f))
     .map(f => { const p = JSON.parse(read(path.join(SRC, 'projects', f))); return [p.slug, p.title]; }));
   const titleOf = slug => titles[slug] || TITLES[slug] || slug;
-  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), ...crumbOf(order, slug) });
+  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), sidenav: sidenav(order, slug, titleOf), ...crumbOf(order, slug) });
 
   // Pages
   const template = read(path.join(SRC, 'templates', 'project.html'));

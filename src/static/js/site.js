@@ -56,11 +56,11 @@ const sound = (() => {
   // Par défaut, tout lien sonne « select » (on se déplace) et tout bouton « pop » (on agit).
   // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
-    ['.bag__pouch, .pz-chars__card, .chess, .nav a, .contact, .profile__job, .robot, .art', null],
+    ['.bag__pouch, .pz-chars__card, .chess, .contact, .profile__job, .robot, .art', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
     ['.logo', 'select', { rate: 1.08 }],
-    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .menu-btn', 'select'],
+    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .side__menu, .side__fold, .side__toggle', 'select'],
     ['.stage', 'pop'],
     ['.card, .crumb a', 'select', { vol: .8, rate: .95 }],
     ['a[href]', 'select', { vol: .7 }],
@@ -81,9 +81,9 @@ const sound = (() => {
       setTimeout(() => (location.href = a.href), 140);
     } else setTimeout(() => play(hit[1], hit[2]), 0);
   });
-  // Survol : petit « pop » aigu et discret, seulement sur les onglets de navigation et le bloc contact
+  // Survol : petit « pop » aigu et discret, seulement sur le bloc contact
   // (mail, WhatsApp, X, LinkedIn). Ces éléments n'ont pas de son au clic, pour ne jamais doubler.
-  const HOVER = '.nav a, .contact__mail, .contact__btn, .profile__job';
+  const HOVER = '.contact__mail, .contact__btn, .profile__job';
   let hovered = null;
   // Robots (About) : leur propre son, le « robot », une fois par survol
   document.querySelectorAll('.robot').forEach(r => r.addEventListener('pointerenter', e => e.pointerType === 'mouse' && play('robot', { vol: 1.3, gap: 250 })));
@@ -202,24 +202,93 @@ document.querySelectorAll('.carousel').forEach(c => {
   }, { passive: false });
 });
 
-// Menu mobile : le bouton « + » déplie la nav en pastilles
-const menuBtn = document.querySelector('.menu-btn');
-if (menuBtn) {
-  const header = menuBtn.closest('.header');
-  const setOpen = open => {
-    header.classList.toggle('menu-open', open);
-    menuBtn.setAttribute('aria-expanded', open);
+// Navigation de gauche (générée par tools/build.js)
+const side = document.querySelector('.side');
+if (side) {
+  const root = document.documentElement;
+  const panel = side.querySelector('.side__panel');
+  const toggle = side.querySelector('.side__toggle');
+  const pill = document.querySelector('.side__menu');
+  const wide = matchMedia('(min-width: 1100px)');
+  // Groupes : la flèche ouvre ou ferme la liste sur place
+  side.querySelectorAll('.side__fold').forEach(b => b.addEventListener('click', () => {
+    b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') !== 'true');
+  }));
+  // Desktop : replier la colonne ; le choix est gardé d'une page à l'autre
+  const syncToggle = () => {
+    const off = root.classList.contains('side-off');
+    toggle.setAttribute('aria-expanded', !off);
+    toggle.setAttribute('aria-label', off ? 'Show navigation' : 'Hide navigation');
+    toggle.title = off ? 'Show navigation' : 'Hide navigation';
   };
-  menuBtn.addEventListener('click', e => { e.stopPropagation(); setOpen(!header.classList.contains('menu-open')); });
-  document.addEventListener('click', e => { if (!header.contains(e.target)) setOpen(false); });
-  document.addEventListener('keydown', e => e.key === 'Escape' && setOpen(false));
+  toggle.addEventListener('click', () => {
+    const off = root.classList.toggle('side-off');
+    try { localStorage.setItem('side', off ? 'off' : 'on'); } catch {}
+    syncToggle();
+    // La page change de largeur sans que la fenêtre change : on prévient les scripts qui mesurent
+    setTimeout(() => dispatchEvent(new Event('resize')), 320);
+  });
+  syncToggle();
+  // Mobile : la pastille « Menu » ouvre l'arbre dans une feuille ; Échap, le voile ou un lien la ferment
+  const setSheet = open => {
+    root.classList.toggle('side-sheet', open);
+    pill.setAttribute('aria-expanded', open);
+    pill.textContent = open ? 'Close' : 'Menu';
+    if (open) (panel.querySelector('[aria-current="page"]') || panel.querySelector('a, button')).focus({ preventScroll: true });
+  };
+  pill.addEventListener('click', e => { e.stopPropagation(); setSheet(!root.classList.contains('side-sheet')); });
+  document.addEventListener('click', e => {
+    if (root.classList.contains('side-sheet') && !panel.contains(e.target)) setSheet(false);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && root.classList.contains('side-sheet')) { setSheet(false); pill.focus(); }
+  });
+  // Le focus quitte la feuille (Tab) : elle se ferme, comme au clic à côté
+  document.addEventListener('focusin', e => {
+    if (root.classList.contains('side-sheet') && !panel.contains(e.target) && e.target !== pill) setSheet(false);
+  });
+  wide.addEventListener('change', () => wide.matches && setSheet(false));
 }
 
-// Lien actif dans la nav
-const page = location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.nav a').forEach(a => {
-  if (a.getAttribute('href') === page) a.setAttribute('aria-current', 'page');
-});
+// Repères de sections dans la marge des études de cas : un trait par section de la version affichée (Podz, XChange : V1 / V2)
+(() => {
+  const read = () => [...document.querySelectorAll('main:not([hidden]) :is(.section, .mi)')].filter(s => s.querySelector('h2, .mi__title'));
+  let sections = [], ticks = null, raf = 0;
+  const current = () => {
+    // La section lue est la dernière dont le titre a passé le tiers haut de l'écran
+    const line = innerHeight / 3;
+    let i = 0;
+    sections.forEach((s, k) => { if (s.getBoundingClientRect().top <= line) i = k; });
+    // Tout en bas de la page, la dernière section est la courante même si elle est courte
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) i = sections.length - 1;
+    ticks.querySelectorAll('button').forEach((b, k) => (k === i ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
+  };
+  const build = () => {
+    ticks?.remove();
+    ticks = null;
+    sections = read();
+    if (sections.length < 3) return;
+    ticks = document.createElement('nav');
+    ticks.className = 'ticks';
+    ticks.setAttribute('aria-label', 'Sections');
+    sections.forEach(s => {
+      const b = document.createElement('button');
+      const name = s.querySelector('h2, .mi__title').textContent.trim().replace(/\s+/g, ' ');
+      b.setAttribute('aria-label', name);
+      b.title = name;
+      // (40 px d'air au-dessus du titre)
+      b.addEventListener('click', () => scrollTo({ top: s.getBoundingClientRect().top + scrollY - 40, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+      ticks.append(b);
+    });
+    document.body.append(ticks);
+    current();
+  };
+  addEventListener('scroll', () => { if (ticks && !raf) raf = requestAnimationFrame(() => { raf = 0; current(); }); }, { passive: true });
+  addEventListener('resize', () => ticks && current());
+  // Changement de version : les sections ne sont plus les mêmes
+  document.querySelectorAll('[data-version-switch]').forEach(sw => sw.addEventListener('click', () => setTimeout(build, 0)));
+  build();
+})();
 
 // Copier l'email au clic
 document.querySelectorAll('.contact__mail').forEach(el => {
