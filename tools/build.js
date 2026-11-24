@@ -183,25 +183,15 @@ function crumbOf(order, slug) {
 // Navigation de gauche : un arbre à plat, une seule taille de texte, la hiérarchie par le gris.
 // Générée depuis projectOrder() : elle suit toute seule l'ordre des cartes de Product et Visual.
 // Le groupe de la page courante est ouvert (Product par défaut) ; la page courante a aria-current="page".
-// Contact reprend les liens du profil (partials/profile.html), rien d'inventé.
-const CONTACT = [
-  ['Email', 'mailto:contact@maxence.fyi'],
-  ['LinkedIn', 'https://www.linkedin.com/in/maxenceprioux'],
-  ['WhatsApp', 'https://wa.me/+330626228957'],
-  ['CV', 'assets/cv/maxence-prioux-cv.pdf'],
-];
 function sidenav(order, current, titleOf) {
   const cur = href => (href === `${current}.html` ? ' aria-current="page"' : '');
   const chevron = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const kids = (id, items) => `<div class="side__kids" id="${id}"><ul>${items.map(([label, href, ext]) =>
-    `<li><a href="${href}"${cur(href)}${ext ? ' target="_blank" rel="noopener"' : ''}>${esc(label)}${ext ? '<span class="side__ext" aria-hidden="true"> ↗</span>' : ''}</a></li>`).join('')}</ul></div>`;
-  // Groupe : le libellé mène à la page de la liste (s'il y en a une), la flèche ouvre la liste sur place
+  const kids = (id, items) => `<div class="side__kids" id="${id}"><ul>${items.map(([label, href]) =>
+    `<li><a href="${href}"${cur(href)}>${esc(label)}</a></li>`).join('')}</ul></div>`;
+  // Groupe : le libellé mène à la page de la liste, la flèche ouvre la liste sur place
   const group = (id, label, href, items, open) => `
       <li class="side__group">
-        <div class="side__row">${href
-          ? `<a href="${href}"${cur(href)}>${label}</a><button class="side__fold" aria-expanded="${open}" aria-controls="${id}" aria-label="${label} projects">${chevron}</button>`
-          // Sans page à ouvrir (Contact), toute la ligne est le bouton
-          : `<button class="side__fold side__fold--row" aria-expanded="${open}" aria-controls="${id}">${label}${chevron}</button>`}</div>
+        <div class="side__row"><a href="${href}"${cur(href)}>${label}</a><button class="side__fold" aria-expanded="${open}" aria-controls="${id}" aria-label="${label} projects">${chevron}</button></div>
         ${kids(id, items)}
       </li>`;
   const list = section => order.filter(p => p.section === section).map(p => [titleOf(p.slug), `${p.slug}.html`]);
@@ -212,7 +202,7 @@ function sidenav(order, current, titleOf) {
     <div class="side__panel" id="side-panel">
       <ul class="side__tree">${group('side-product', 'Product', 'index.html', list('product'), !inVisual)}${group('side-visual', 'Visual', 'visual.html', list('visual'), inVisual)}
       <li><a href="photographs.html"${cur('photographs.html')}>Photographs</a></li>
-      <li><a href="about.html"${cur('about.html')}>About</a></li>${group('side-contact', 'Contact', null, CONTACT.map(([l, h]) => [l, h, !h.startsWith('mailto:')]), false)}
+      <li><a href="about.html"${cur('about.html')}>About</a></li>
       </ul>
     </div>
   </nav>

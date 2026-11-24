@@ -29,12 +29,8 @@ img { display: block; max-width: 100%; }
 .wrap { max-width: calc(var(--max) + 200px); margin: 0 auto; padding: 0 100px; }
 .wrap--narrow { max-width: calc(var(--narrow) + 200px); }
 
-/* ---------- Header ---------- */
-.header { display: flex; justify-content: space-between; align-items: center; height: 130px; }
-.logo { width: 75px; height: 17px; background: #000; -webkit-mask: var(--logo, url(../assets/signature.svg)) center/contain no-repeat; mask: var(--logo, url(../assets/signature.svg)) center/contain no-repeat; }
-
 /* ---------- Profil ---------- */
-.profile { display: flex; gap: 50px; align-items: center; padding: 45px 0 55px; border-bottom: 1px solid var(--line); }
+.profile { display: flex; gap: 50px; align-items: center; padding: 50px 0 55px; border-bottom: 1px solid var(--line); }
 /* Carrousel de photos (composant Framer « Caroussel 2 ») : un clic l'ouvre, le nom glisse à droite */
 .carousel { display: flex; gap: 10px; flex: none; width: 200px; height: 200px; margin-right: 0; padding: 0; border: 0; background: none;
             overflow: hidden; scrollbar-width: none; cursor: pointer;
@@ -352,7 +348,6 @@ img { display: block; max-width: 100%; }
 /* ---------- Mobile ---------- */
 @media (max-width: 810px) {
   .wrap { padding: 0 24px; }
-  .header { position: relative; height: 130px; }
   .profile { flex-direction: column; align-items: stretch; gap: 26px; padding: 30px 0 55px; }
   .carousel { display: none; }
   .strip { display: flex; }
@@ -1162,31 +1157,6 @@ video::-webkit-media-controls { display: none !important; }
 .robot-sheet::backdrop { background: rgba(255, 255, 255, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: fade-in .3s ease; }
 .robot-sheet.is-closing { animation: sheet-out .22s ease forwards; }
 .robot-sheet.is-closing::backdrop { animation: fade-in .22s ease reverse forwards; }
-/* Signature personnalisable : même fenêtre que les fiches robots, en plus petit */
-.logo-sheet { width: min(420px, calc(100% - 32px)); max-width: none; margin: auto; padding: 30px 28px 24px; border: 0; border-radius: 20px; background: #fff; color: #000;
-              box-shadow: 0 30px 80px rgba(0, 0, 0, .25); animation: sheet-in .5s cubic-bezier(.34, 1.4, .64, 1); }
-.logo-sheet:not([open]) { display: none; }
-.logo-sheet::backdrop { background: rgba(255, 255, 255, .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: fade-in .3s ease; }
-.logo-sheet.is-closing { animation: sheet-out .22s ease forwards; }
-.logo-sheet.is-closing::backdrop { animation: fade-in .22s ease reverse forwards; }
-.logo-sheet h3 { font: 500 26px/1 var(--display); letter-spacing: -.05em; }
-.logo-sheet__hint { margin-top: 10px; font-size: 14px; line-height: 1.45; color: var(--muted); }
-.logo-sheet__tabs { display: inline-flex; gap: 2px; margin-top: 20px; padding: 3px; border-radius: 99px; background: #efefef; }
-.logo-sheet__tabs button { height: 28px; padding: 0 14px; border: 0; border-radius: 99px; background: none; font: 500 12px/1 var(--display); color: var(--soft); cursor: pointer; transition: background .2s, color .2s; }
-.logo-sheet__tabs [aria-selected="true"] { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0, 0, 0, .08); }
-.logo-sheet__pad { position: relative; height: 140px; margin-top: 12px; border-radius: 14px; background: #f5f5f5; overflow: hidden; }
-.logo-sheet__input { position: absolute; inset: 0; width: 100%; border: 0; background: none; outline: none; text-align: center; font: 400 46px/1 "Caveat", cursive; color: #000; }
-.logo-sheet__input::placeholder { color: #cfcfcf; }
-.logo-sheet__canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
-.logo-sheet__pad[data-mode="write"] .logo-sheet__canvas, .logo-sheet__pad[data-mode="draw"] .logo-sheet__input { display: none; }
-.logo-sheet__clear { position: absolute; right: 8px; bottom: 8px; height: 24px; padding: 0 10px; border: 0; border-radius: 99px; background: rgba(0, 0, 0, .06); font: 500 11px/1 var(--display); color: var(--muted); cursor: pointer; }
-.logo-sheet__clear:hover { background: rgba(0, 0, 0, .12); color: #000; }
-.logo-sheet__actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; }
-.logo-sheet__reset { border: 0; background: none; padding: 0; font: 400 12px/1 var(--display); color: var(--soft); cursor: pointer; transition: color .2s; }
-.logo-sheet__reset:hover { color: #000; }
-.logo-sheet__ok { height: 40px; padding: 0 22px; border: 0; border-radius: 99px; background: #000; color: #fff; font: 500 14px/1 var(--display); cursor: pointer; transition: opacity .2s, scale .2s; }
-.logo-sheet__ok:disabled { opacity: .25; cursor: default; }
-.logo-sheet__ok:not(:disabled):active { scale: .96; }
 @keyframes sheet-in { from { opacity: 0; scale: .94; translate: 0 16px; } }
 @keyframes sheet-out { to { opacity: 0; scale: .97; translate: 0 8px; } }
 @keyframes fade-in { from { opacity: 0; } }
@@ -1668,14 +1638,12 @@ body:has(.testbar) { --side-top: 33px; }
 .side__tree ul { list-style: none; }
 .side__tree a { color: var(--soft); transition: color .2s; }
 .side__tree a:hover, .side__tree a[aria-current="page"] { color: var(--text); }
-.side__ext { color: var(--faint); }
 .side__row { display: flex; align-items: center; }
 /* Flèche du groupe : tournée vers le bas quand la liste est ouverte */
 .side__fold { display: inline-flex; align-items: center; height: 28px; padding: 0 6px; border: 0; background: none; color: var(--soft); font: inherit; cursor: pointer; transition: color .2s; }
 .side__fold:hover { color: var(--text); }
 .side__fold svg { width: 12px; height: 12px; transition: rotate .25s cubic-bezier(.2, .8, .2, 1); }
 .side__fold[aria-expanded="true"] svg { rotate: 90deg; }
-.side__fold--row { gap: 6px; padding: 0; }
 /* La liste s'ouvre sur place (0fr → 1fr) ; fermée, elle sort aussi de l'ordre du clavier */
 .side__kids { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .25s cubic-bezier(.2, .8, .2, 1), visibility .25s; }
 .side__kids > ul { min-height: 0; overflow: hidden; }
@@ -1726,7 +1694,6 @@ body:has(.testbar) { --side-top: 33px; }
   .side-sheet .side__panel { transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
   .side__tree { font-size: 15px; line-height: 34px; }
   .side__fold { height: 34px; padding: 0 12px; }
-  .side__fold--row { padding: 0; }
   .side__kids li::after { top: 17px; }
   .side__kids li:last-child::before { height: 17px; }
 }
