@@ -108,6 +108,7 @@ img { display: block; max-width: 100%; }
 .chess:hover .chess__icon { rotate: -12deg; }
 /* Survol de l'étape GitHub : le logo prend le violet de GitHub */
 .chess:hover .chess__icon--gh { color: #9400ff; }
+.chess:hover .chess__icon--duo { color: #ff9600; }
 
 /* ---------- Grille de projets ---------- */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; padding: 75px 0 150px; }

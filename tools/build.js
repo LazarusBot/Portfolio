@@ -124,8 +124,29 @@ async function githubData() {
     return saved;
   }
 }
+// Série Duolingo (API non officielle, sans clé ; Duolingo refuse les navigateurs : lue au build seulement).
+// On garde la langue en cours et les dates de la série, la page masque la série si elle est cassée depuis le build.
+const DUO_FILE = path.join(SRC, 'static', 'data', 'duolingo.json');
+async function duolingoData() {
+  const saved = JSON.parse(read(DUO_FILE));
+  try {
+    const res = await fetch(`https://www.duolingo.com/2017-06-30/users?username=${saved.username}`, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (maxence.fyi portfolio build)' }, signal: AbortSignal.timeout(8000),
+    });
+    const u = (await res.json()).users?.[0];
+    if (!u) throw new Error('profil introuvable');
+    const s = u.streakData?.currentStreak;
+    const course = u.courses?.find(c => c.id === u.currentCourseId)?.title?.replace(/ \(.*\)$/, '') ?? null;
+    const fresh = { username: saved.username, streak: s?.length ?? u.streak ?? 0, end: s?.endDate ?? null, course };
+    fs.writeFileSync(DUO_FILE, JSON.stringify(fresh, null, 2) + '\n');
+    return fresh;
+  } catch (e) {
+    console.warn(`  ! Duolingo indisponible (${e.message}), dernière valeur gardée`);
+    return saved;
+  }
+}
 // Le chiffre change de catégorie à chaque survol : Rapid → Blitz → Puzzles (meilleurs scores), puis le dernier commit GitHub
-function chessLine(c, gh) {
+function chessLine(c, gh, duo) {
   // Une seule valeur Chess.com : le meilleur classement en Puzzles (un record, qui ne baisse jamais)
   // [libellé, valeur, date du record (s), record précédent] : la page fête un record de moins de 7 jours
   const rec = k => [c.records?.[k]?.date ?? null, c.records?.[k]?.prev ?? null];
@@ -134,10 +155,11 @@ function chessLine(c, gh) {
           <span class="chess__label">Last games</span>`;
   // GitHub d'abord quand on a un dernier push : c'est ce qu'on voit en arrivant, Chess.com vient au survol
   const ghHead = `<svg class="chess__icon chess__icon--gh" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="chess__label">Last push</span>`;
+  const duoHead = `<svg class="chess__icon chess__icon--duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.6 2.5c.5 3-1.6 4.4-3 6.2-1.3 1.7-2.1 3.2-2.1 5.1a4.5 4.5 0 009 0c0-1.1-.3-2.1-.9-3 .9.2 1.6.8 2 1.6.3-2.9-1.1-6.4-5-9.9zM12 20a2.5 2.5 0 01-2.5-2.5c0-1.5 1.2-2.5 2.5-3.9 1.3 1.4 2.5 2.4 2.5 3.9A2.5 2.5 0 0112 20z"/></svg><span class="chess__label">Duolingo</span>`;
   const first = gh ? 'github' : 'chess';
   const value = gh ? `<small>${esc(gh.repo)}</small> <b>recently</b>` : values.length ? `<small>${values[0][0]}</small> <b>${values[0][1]}</b>` : '';
-  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}' data-github='${JSON.stringify(gh)}'>
-          <template class="chess__heads"><span data-kind="chess">${chessHead}</span><span data-kind="github">${ghHead}</span></template>
+  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}' data-github='${JSON.stringify(gh)}'${duo?.streak ? ` data-duolingo='${JSON.stringify(duo)}'` : ''}>
+          <template class="chess__heads"><span data-kind="chess">${chessHead}</span><span data-kind="github">${ghHead}</span><span data-kind="duolingo">${duoHead}</span></template>
           <span class="chess__head" data-kind="${first}">${gh ? ghHead : chessHead}</span>
           <span class="chess__elo" aria-live="polite"><span class="chess__value">${value}</span></span>
         </span>`;
@@ -343,7 +365,7 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const written = [];
 
-  const chess = chessLine(await chessData(), await githubData());
+  const chess = chessLine(await chessData(), await githubData(), await duolingoData());
   const order = projectOrder();
   const titles = Object.fromEntries(fs.readdirSync(path.join(SRC, 'projects')).filter(f => /^[a-z].*\.json$/.test(f))
     .map(f => { const p = JSON.parse(read(path.join(SRC, 'projects', f))); return [p.slug, p.title]; }));

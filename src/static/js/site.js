@@ -394,6 +394,13 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   // GitHub ouvre le cycle : c'est la première chose qu'on lit
   if (gh) values.unshift(['GitHub', 0, null, null]);
   const isGh = v => v[0] === 'GitHub';
+  // Série Duolingo (lue au build) : juste après GitHub, sauf si la série est cassée depuis (dernier jour avant hier)
+  const duo = line.dataset.duolingo ? JSON.parse(line.dataset.duolingo) : null;
+  const yesterday = new Date(Date.now() - 864e5).toLocaleDateString('en-CA');
+  if (duo?.streak && duo.end >= yesterday) values.splice(gh ? 1 : 0, 0, ['Duolingo', duo.streak, null, null]);
+  const isDuo = v => v[0] === 'Duolingo';
+  const kindOf = v => (isGh(v) ? 'github' : isDuo(v) ? 'duolingo' : 'chess');
+  const titleOf = v => (isGh(v) ? `Last push to ${gh.repo}` : isDuo(v) ? `${duo.streak}-day Duolingo streak${duo.course ? `, learning ${duo.course}` : ''}` : '');
   const ago = iso => {
     const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4));
     return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
@@ -416,6 +423,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   const recent = v => v[2] && Date.now() - v[2] * 1000 < WEEK;
   const gain = v => (recent(v) && v[3] && v[1] > v[3] ? v[1] - v[3] : 0);
   const markup = v => (isGh(v) ? `<small>${gh.repo}</small> <b>${ago(gh.pushed)}</b>`
+    : isDuo(v) ? `${duo.course ? `<small>${duo.course}</small> ` : ''}<b>${v[1]}</b> <small>day streak</small>`
     : `<small>${v[0]}</small> <b>${v[1]}</b>${recent(v) ? '<em class="chess__new" title="Personal best, less than 7 days ago">PB</em>' : ''}`);
   const countUp = (b, from, to) => {
     const t0 = performance.now(), dur = 900;
@@ -441,11 +449,11 @@ document.querySelectorAll('[data-chess]').forEach(line => {
       sound.play('select', { rate: 1.3, vol: .8 });
     }
   };
-  const show = (v, b) => (isGh(v) ? null : recent(v) ? celebrate(v, b) : calm || countUp(b, 0, v[1]));
+  const show = (v, b) => (isGh(v) || isDuo(v) ? null : recent(v) ? celebrate(v, b) : calm || countUp(b, 0, v[1]));
   // Au chargement : GitHub s'il y est, sinon un record récent pour qu'il se voie
   const start = gh ? 0 : Math.max(0, values.findIndex(recent));
   i = start;
-  if (isGh(values[i])) line.title = `Last push to ${gh.repo}`;
+  line.title = titleOf(values[i]);
   pill.querySelector('.chess__value').innerHTML = markup(values[i]);
   show(values[i], pill.querySelector('b'));
   // L'ancienne valeur monte et s'efface, la nouvelle arrive par en dessous
@@ -455,8 +463,8 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     sound.play('select', { vol: .6, rate: 1.1 });
     i = (i + 1) % values.length;
     const v = values[i];
-    head(isGh(v) ? 'github' : 'chess');
-    line.title = isGh(v) ? `Last push to ${gh.repo}` : '';
+    head(kindOf(v));
+    line.title = titleOf(v);
     const old = pill.querySelector('.chess__value');
     const neu = document.createElement('span');
     neu.className = 'chess__value is-in';
