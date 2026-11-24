@@ -108,7 +108,9 @@ img { display: block; max-width: 100%; }
 .chess:hover .chess__icon { rotate: -12deg; }
 /* Survol de l'étape GitHub : le logo prend le violet de GitHub */
 .chess:hover .chess__icon--gh { color: #9400ff; }
-.chess:hover .chess__icon--duo { color: #ff9600; }
+/* Duolingo : Duo en gris, il reprend ses couleurs au survol */
+.chess__icon--duo { border-radius: 4px; filter: grayscale(1); opacity: .55; transition: filter .25s, opacity .25s, rotate .4s cubic-bezier(.34, 1.56, .64, 1); }
+.chess:hover .chess__icon--duo { filter: none; opacity: 1; }
 
 /* ---------- Grille de projets ---------- */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; padding: 75px 0 150px; }
