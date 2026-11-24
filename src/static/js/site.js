@@ -7,8 +7,9 @@ const IMG = id => `assets/img/${id}`;
 // (recherche, paiement). Ils ne jouent qu'après un premier geste (règle des navigateurs) ; le bouton
 // en bas à droite les coupe et le choix est gardé.
 const sound = (() => {
-  const FILES = { select: 'assets/sounds/select.mp3', pop: 'assets/sounds/pop.mp3', robot: 'assets/sounds/robot.mp3' };
-  const VOL = { select: .3, pop: .45, robot: .22 };
+  // chess : le coup joué de Chess.com ; duolingo : la bonne réponse de Duolingo (ses fichiers d'origine)
+  const FILES = { select: 'assets/sounds/select.mp3', pop: 'assets/sounds/pop.mp3', robot: 'assets/sounds/robot.mp3', chess: 'assets/sounds/chess.mp3', duolingo: 'assets/sounds/duolingo.mp3' };
+  const VOL = { select: .3, pop: .45, robot: .22, chess: .6, duolingo: .35 };
   let ctx = null, buffers = {}, last = {};
   let on = true;
   try { on = localStorage.getItem('sound') !== 'off'; } catch {}
@@ -20,7 +21,7 @@ const sound = (() => {
     Object.entries(FILES).forEach(([k, url]) => fetch(url).then(r => r.arrayBuffer()).then(b => ctx.decodeAudioData(b)).then(buf => (buffers[k] = buf)).catch(() => {}));
   };
   ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, unlock, { once: true, capture: true }));
-  const play = (name, { rate = 1, vol = 1, gap = 70 } = {}) => {
+  const play = (name, { rate = 1, vol = 1, gap = 70, exact = false } = {}) => {
     if (!on || !ctx || !buffers[name]) return;
     const now = performance.now();
     if (now - (last[name] || 0) < gap) return;
@@ -29,7 +30,8 @@ const sound = (() => {
     const src = ctx.createBufferSource(), g = ctx.createGain();
     src.buffer = buffers[name];
     // Légère variation de hauteur : un son répété ne sonne jamais deux fois pareil
-    src.playbackRate.value = rate * (0.96 + Math.random() * 0.08);
+    // (sauf les sons de marque, joués tels quels)
+    src.playbackRate.value = exact ? rate : rate * (0.96 + Math.random() * 0.08);
     g.gain.value = VOL[name] * vol;
     src.connect(g).connect(ctx.destination);
     src.start();
@@ -460,9 +462,12 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   const next = () => {
     if (busy || values.length < 2) return;
     busy = true;
-    sound.play('select', { vol: .6, rate: 1.1 });
     i = (i + 1) % values.length;
     const v = values[i];
+    // Chess.com et Duolingo arrivent avec leur propre son, GitHub avec le clic du site
+    const kind = kindOf(v);
+    if (kind === 'github') sound.play('select', { vol: .6, rate: 1.1 });
+    else sound.play(kind, { exact: true });
     head(kindOf(v));
     line.title = titleOf(v);
     const old = pill.querySelector('.chess__value');
