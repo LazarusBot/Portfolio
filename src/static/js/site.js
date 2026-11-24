@@ -423,7 +423,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   const recent = v => v[2] && Date.now() - v[2] * 1000 < WEEK;
   const gain = v => (recent(v) && v[3] && v[1] > v[3] ? v[1] - v[3] : 0);
   const markup = v => (isGh(v) ? `<small>${gh.repo}</small> <b>${ago(gh.pushed)}</b>`
-    : isDuo(v) ? `${duo.course ? `<small>${duo.course}</small> ` : ''}<b>${v[1]}</b> <small>day streak</small>`
+    : isDuo(v) ? `${duo.course ? `<small>${duo.course}</small> ` : ''}<b>${v[1]} day streak</b>`
     : `<small>${v[0]}</small> <b>${v[1]}</b>${recent(v) ? '<em class="chess__new" title="Personal best, less than 7 days ago">PB</em>' : ''}`);
   const countUp = (b, from, to) => {
     const t0 = performance.now(), dur = 900;
