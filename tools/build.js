@@ -264,7 +264,12 @@ function garage() {
       <ol class="garage__list">${rows.join('')}
       </ol>`;
   const backlog = garageEntries().filter(e => e.date && !e.slug);
-  return `<main class="garage">${section('Projects', garageProjects().map(e => row(e, e.card)))}${section('Backlog', backlog.map(e => row(e)))}
+  // Le Backlog montre les plus récents ; le reste est dans la page, caché, et « View more » l'affiche (site.js)
+  const SHOWN = 6;
+  const rows = backlog.map((e, i) => { const r = row(e); return i < SHOWN ? r : r.replace('<li class="garage__entry"', '<li class="garage__entry" hidden'); });
+  const more = backlog.length > SHOWN ? `
+      <button class="garage__more" type="button" data-garage-more>… View more</button>` : '';
+  return `<main class="garage">${section('Projects', garageProjects().map(e => row(e, e.card)))}${section('Backlog', rows)}${more}
     </main>`;
 }
 const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions', xchange: 'XChange' };

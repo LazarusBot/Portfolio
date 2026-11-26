@@ -2,26 +2,8 @@
   {
     "date": "2026-11-26",
     "tag": "Code",
-    "title": "The handwritten note, in SVG",
-    "text": "Traced from the image, so it takes the same grey as the text. The header spacing gets tighter and even."
-  },
-  {
-    "date": "2026-11-26",
-    "tag": "Site",
-    "title": "A softer menu on phones",
-    "text": "The blur behind the menu now covers the whole screen, and it's lighter. The handwritten note moves up under the name."
-  },
-  {
-    "date": "2026-11-26",
-    "tag": "Code",
     "title": "Cards behind the profile line",
     "text": "Hover GitHub for a grid of this year's commits, Duolingo for the streak, Chess.com for the ratings."
-  },
-  {
-    "date": "2026-11-26",
-    "tag": "Writing",
-    "title": "Open to design engineering",
-    "text": "The profile now says what I'm looking for: design and build, in Europe or remote."
   },
   {
     "date": "2026-11-24",
@@ -30,37 +12,10 @@
     "text": "Chess.com's move, Duolingo's correct answer, and two soft rising notes for a GitHub push."
   },
   {
-    "date": "2026-11-24",
-    "tag": "Writing",
-    "title": "Marlink, 2024 → 2026",
-    "text": "The XChange years end this year.",
-    "href": "about.html"
-  },
-  {
-    "date": "2026-11-23",
-    "tag": "Writing",
-    "title": "Carddi, simpler",
-    "text": "A short text, the logo full width, then the screens.",
-    "href": "carddi.html"
-  },
-  {
-    "date": "2026-11-19",
-    "tag": "Writing",
-    "title": "Toulouse, then Paris",
-    "text": "About now says where I am, and where I'm going.",
-    "href": "about.html"
-  },
-  {
     "date": "2026-11-18",
     "tag": "AI",
     "title": "A team of Claude Code bots",
     "text": "Root reviews the story, Holly the visuals, Foaly builds the UI, Butler builds and ships."
-  },
-  {
-    "date": "2026-11-07",
-    "tag": "Site",
-    "title": "One set of greys",
-    "text": "Text in #666, labels in #767676, and #c2c2c2 never for text, everywhere."
   },
   {
     "date": "2026-11-07",
@@ -75,13 +30,6 @@
     "title": "The Podz logo draws itself",
     "text": "Points placed one by one, the stroke, then the black fill, on a loop while it's on screen.",
     "href": "podz.html"
-  },
-  {
-    "date": "2026-11-04",
-    "tag": "Design",
-    "title": "Raising Studio, just the GIF",
-    "text": "The post mosaic goes, the brand GIF stays as it is.",
-    "href": "raisingstd.html"
   },
   {
     "date": "2026-11-04",
@@ -144,13 +92,6 @@
     "title": "A new Podz logo",
     "text": "A climbing hold that also reads as a P. Every point placed by hand.",
     "media": "assets/podz/v2/logo.svg",
-    "href": "podz.html"
-  },
-  {
-    "date": "2026-11-06",
-    "tag": "SwiftUI",
-    "title": "Lenny's screens, to SwiftUI sizes",
-    "text": "Search, results and the empty state, redrawn from the real build.",
     "href": "podz.html"
   },
   {
@@ -220,5 +161,69 @@
     "tag": "Brand",
     "title": "Sensia",
     "text": "Logo and landing page for a consumer-insights AI."
+  },
+  {
+    "date": "2026-10-29",
+    "tag": "Code",
+    "title": "The last GitHub push, live",
+    "text": "The profile line now says when I last pushed code, refreshed on every build."
+  },
+  {
+    "date": "2026-10-26",
+    "tag": "Code",
+    "title": "Aer, told as a chat",
+    "text": "The case study opens on an iMessage thread with the manufacturer, one step of the clothes per message.",
+    "href": "aerrunning.html"
+  },
+  {
+    "date": "2026-10-25",
+    "tag": "Killed",
+    "title": "A crown for every record",
+    "text": "The Chess.com knight fell over and got a crown on each new best. Too much. Out."
+  },
+  {
+    "date": "2026-10-25",
+    "tag": "Code",
+    "title": "A sheet for each robot",
+    "text": "Click a robot on About for its parts list and mechanical specs.",
+    "href": "about.html"
+  },
+  {
+    "date": "2026-10-25",
+    "tag": "Code",
+    "title": "Previous, next",
+    "text": "Every case study links to its neighbours, with the arrow keys too."
+  },
+  {
+    "date": "2026-10-25",
+    "tag": "Design",
+    "title": "Five more visual projects",
+    "text": "Axeinos, Sensia, Carddi and two others join the visual work."
+  },
+  {
+    "date": "2026-10-24",
+    "tag": "Code",
+    "title": "Stickers in a bag",
+    "text": "A clear pouch on the brand pages; click and one sticker slides out of the top.",
+    "href": "peregresss.html"
+  },
+  {
+    "date": "2026-10-24",
+    "tag": "Code",
+    "title": "Sound design",
+    "text": "A soft pop on everything you can click, and a button to mute it."
+  },
+  {
+    "date": "2026-10-24",
+    "tag": "Code",
+    "title": "Micro-interactions, all recoded",
+    "text": "The five missing demos, rebuilt from the Figma file.",
+    "href": "microinteractions.html"
+  },
+  {
+    "date": "2026-10-24",
+    "tag": "Site",
+    "title": "Out of Framer",
+    "text": "The whole portfolio recoded by hand in HTML and CSS, so I can build anything on it."
   }
 ]

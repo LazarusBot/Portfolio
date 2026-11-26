@@ -1122,3 +1122,16 @@ document.querySelectorAll('[data-ds]').forEach(ds => {
   // Les couvertures sont chargées d'avance, après la page ; les GIF (lourds) seulement au survol
   addEventListener('load', () => rows.forEach(r => { new Image().src = r.dataset.peek; }));
 })();
+
+/* Garage : « View more » affiche le reste du Backlog, puis disparaît ; le focus passe à la première ligne révélée */
+(() => {
+  const btn = document.querySelector('[data-garage-more]');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const rest = [...document.querySelectorAll('.garage__entry[hidden]')];
+    rest.forEach(r => r.hidden = false);
+    btn.remove();
+    const first = rest[0] && rest[0].querySelector('a');
+    if (first) first.focus({ preventScroll: true });
+  });
+})();

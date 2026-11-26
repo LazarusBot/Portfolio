@@ -30,7 +30,7 @@ img { display: block; max-width: 100%; }
 .wrap--narrow { max-width: calc(var(--narrow) + 200px); padding-top: 50px; }
 
 /* ---------- Profil ---------- */
-.profile { --ph: 90.6px; display: flex; gap: 28px; align-items: center; padding: 50px 0 55px; border-bottom: 1px solid var(--line); }
+.profile { --ph: 97.4px; display: flex; gap: 28px; align-items: center; padding: 50px 0 55px; border-bottom: 1px solid var(--line); }
 /* Une seule photo, étroite et haute (9:16) : 98 × 175 px, du haut du nom au bas de la ligne GitHub */
 .profile__photo { flex: none; width: var(--ph); height: calc(var(--ph) * 16 / 9); object-fit: cover; }
 .profile { position: relative; }
@@ -1384,10 +1384,10 @@ video::-webkit-media-controls { display: none !important; }
 .profile__cv:hover span { translate: 2px -2px; }
 .profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 14px; }
 .profile__head .profile__job { margin-top: 0; }
-.profile__status { margin-top: 10px; font-size: 15px; line-height: 22px; color: var(--soft); }   /* même taille que la liste du Garage */
+.profile__status { margin-top: 16px; font-size: 15px; line-height: 22px; color: var(--soft); }   /* même taille que la liste du Garage */
 .profile__status .profile__cv { margin-left: 8px; }   /* CV suit le texte, même quand il passe à la ligne */
 /* Note manuscrite sous le profil : pourquoi le Garage existe. Une vraie écriture à la main (image), encre adoucie en gris */
-.profile__note { margin-top: 18px; }   /* le SVG est recadré sur l'encre : l'écart se voit tel quel */
+.profile__note { margin-top: 24px; }   /* le SVG est recadré sur l'encre : l'écart se voit tel quel */
 /* La note est un SVG : couleur via color (fill: currentColor), taille via width */
 .profile__note { color: var(--soft); }   /* même gris que la disponibilité */
 .profile__note-svg { display: block; width: 500px; max-width: 100%; height: auto; }
@@ -1399,8 +1399,8 @@ video::-webkit-media-controls { display: none !important; }
 
 @media (max-width: 810px) {
   .profile__head { row-gap: 18px; }
-  .profile__note { margin-top: 14px; }
-  .profile__status { margin-top: 10px; }
+  .profile__note { margin-top: 20px; }
+  .profile__status { margin-top: 16px; }
   .profile .chess { margin-top: 6px; }
 }
 
@@ -1676,6 +1676,10 @@ a.garage__title::after { content: ""; position: absolute; inset: -14px -12px; bo
 a.garage__title { text-decoration: none; }
 .garage__meta { flex: none; color: var(--soft); font-variant-numeric: tabular-nums; }
 .garage__text { color: var(--soft); }
+/* Backlog : les plus récents d'abord, le reste derrière « View more » */
+.garage__more { align-self: flex-start; margin-top: 28px; padding: 0; border: 0; background: none; font: inherit; color: var(--soft); cursor: pointer;
+                text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .2); text-underline-offset: 3px; transition: color .2s, text-decoration-color .2s; }
+.garage__more:hover { color: #000; text-decoration-color: #000; }
 /* L'image d'une entrée n'apparaît qu'au survol de sa ligne, à droite de la liste, à la hauteur de la ligne (souris seulement).
    Pour un projet : sa couverture, puis son GIF ou sa vidéo. */
 .garage { position: relative; }
