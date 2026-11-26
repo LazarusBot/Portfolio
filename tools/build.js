@@ -239,8 +239,8 @@ function garageProjects() {
 function projectOrder() {
   return garageProjects().map(e => ({ slug: e.slug, cover: e.card.cover, caption: e.text || e.card.caption }));
 }
-// Deux sections pour qu'on sache ce qu'on regarde : Backlog (ce qui a changé, daté, du plus récent au plus ancien)
-// puis Projects (tous les projets, produit et visuel). Même ligne partout : titre, étiquette et date, description.
+// Deux sections pour qu'on sache ce qu'on regarde : Projects (tous les projets, produit et visuel)
+// puis Backlog (ce qui a changé, daté, du plus récent au plus ancien). Même ligne partout : titre, étiquette et date, description.
 function garage() {
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const day = d => (d && d.length > 7 ? `${+d.slice(8, 10)} ${MONTHS[+d.slice(5, 7) - 1]}` : '');
@@ -264,7 +264,7 @@ function garage() {
       <ol class="garage__list">${rows.join('')}
       </ol>`;
   const backlog = garageEntries().filter(e => e.date && !e.slug);
-  return `<main class="garage">${section('Backlog', backlog.map(e => row(e)))}${section('Projects', garageProjects().map(e => row(e, e.card)))}
+  return `<main class="garage">${section('Projects', garageProjects().map(e => row(e, e.card)))}${section('Backlog', backlog.map(e => row(e)))}
     </main>`;
 }
 const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions', xchange: 'XChange' };
