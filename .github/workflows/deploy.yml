@@ -28,6 +28,9 @@ jobs:
 
       - name: Build
         run: node tools/build.js --prod
+        env:
+          # Jeton du dépôt : l'API GitHub accepte plus de requêtes (grille d'activité de la carte GitHub)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/configure-pages@v5
 

@@ -77,10 +77,10 @@ const sound = (() => {
   // Par défaut, liens et boutons sonnent « tick », le son discret du bloc contact.
   // Les éléments qui jouent leur propre son (stickers, personnages, Chess.com) sont exclus.
   const CLICKS = [
-    ['.bag__pouch, .pz-chars__card, .chess, .contact, .profile__job, .robot, .art', null],
+    ['.bag__pouch, .pz-chars__card, .chess, .foot, .profile__job, .robot, .art', null],
     ['.pz-states__tabs [data-state="search"]', 'robot'],
     ['.pay', 'robot'],
-    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .carousel, .side__menu, .side__fold, .side__toggle', 'tick'],
+    ['.pz-icon__modes button, .pz-evo__steps button, .pz-states__tabs button, .side__menu, .side__toggle', 'tick'],
     ['.stage', 'tick'],
     ['.card', 'tick'],
     ['a[href]', 'tick'],
@@ -103,7 +103,7 @@ const sound = (() => {
   });
   // Survol : petit « pop » aigu et discret, seulement sur le bloc contact
   // (mail, WhatsApp, X, LinkedIn). Ces éléments n'ont pas de son au clic, pour ne jamais doubler.
-  const HOVER = '.contact__mail, .contact__btn, .profile__job';
+  const HOVER = '.foot a, .profile__job';
   let hovered = null;
   // Robots (About) : leur propre son, le « robot », une fois par survol
   document.querySelectorAll('.robot').forEach(r => r.addEventListener('pointerenter', e => e.pointerType === 'mouse' && play('robot', { vol: 1.3, gap: 250 })));
@@ -151,77 +151,6 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && 'IntersectionObs
   document.querySelectorAll('.card__hover[data-gif]:not([data-gif$=".gif"]), .card__hover[data-src]').forEach(m => preload.observe(m));
 }
 
-// Carrousel de photos du profil : un clic l'ouvre (les autres photos apparaissent), un autre le referme
-document.querySelectorAll('.carousel').forEach(c => {
-  c.addEventListener('click', () => {
-    const open = c.getAttribute('aria-expanded') !== 'true';
-    c.setAttribute('aria-expanded', open);
-    c.setAttribute('aria-label', open ? 'Hide the photos' : 'Show more photos');
-    if (!open) c.scrollTo({ left: 0, behavior: 'smooth' });
-  });
-  // Une fois refermé, on revient toujours sur la photo de profil
-  c.addEventListener('transitionend', e => {
-    if (e.propertyName === 'width' && c.getAttribute('aria-expanded') !== 'true') c.scrollLeft = 0;
-  });
-
-  // Arrivé au bout, continuer à faire glisser étire la dernière photo, qui file et blanchit peu à peu ;
-  // au-delà d'un seuil, on part sur la page Photographs. Si on lâche avant, elle revient en place.
-  const last = c.querySelector('img:last-child');
-  const hint = document.createElement('span');
-  hint.className = 'carousel-hint';
-  hint.innerHTML = 'Photographs <span aria-hidden="true">→</span>';
-  c.after(hint);
-  const BASE = 200, LIMIT = 220;
-  // Filtre SVG de flou horizontal : en s'étirant, la photo file comme une traînée, sans se casser
-  const NS = 'http://www.w3.org/2000/svg';
-  const fx = document.createElementNS(NS, 'svg');
-  fx.setAttribute('width', 0); fx.setAttribute('height', 0); fx.setAttribute('aria-hidden', 'true');
-  fx.style.position = 'absolute';
-  fx.innerHTML = '<filter id="carousel-smear" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur stdDeviation="0 0" edgeMode="duplicate"/></filter>';
-  document.body.append(fx);
-  const smear = fx.querySelector('feGaussianBlur');
-  let pull = 0, release, gone = false;
-  const render = () => {
-    last.style.width = `${BASE + pull}px`;
-    // Plus on tire, plus la photo file à l'horizontale et blanchit, comme si elle s'effaçait dans la page
-    const kk = Math.min(1, pull / LIMIT);
-    smear.setAttribute('stdDeviation', `${(kk * kk * 9).toFixed(2)} 0`);
-    last.style.setProperty('--fade-out', (kk * .9).toFixed(3));
-    c.scrollLeft = c.scrollWidth;
-    const k = Math.min(1, pull / LIMIT);
-    hint.style.opacity = k;
-    hint.style.translate = `${(1 - k) * -12}px 0`;
-    // Position de l'indication : sur le bord droit du carrousel, quelle que soit sa largeur
-    hint.style.left = `${c.offsetLeft + c.offsetWidth - hint.offsetWidth - 14}px`;
-    hint.style.top = `${c.offsetTop + c.offsetHeight - hint.offsetHeight - 12}px`;
-    c.classList.toggle('is-pulling', pull > 0);
-  };
-  const letGo = () => {
-    c.classList.add('is-releasing');
-    pull = 0; render();
-    setTimeout(() => c.classList.remove('is-releasing'), 700);
-  };
-  c.addEventListener('wheel', e => {
-    if (gone || c.getAttribute('aria-expanded') !== 'true') return;
-    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
-    const atEnd = c.scrollLeft + c.clientWidth >= c.scrollWidth - 2;
-    if (!(atEnd && (d > 0 || pull > 0))) return;
-    e.preventDefault();
-    // Plus on tire, plus ça résiste
-    pull = Math.max(0, pull + d * (1 - pull / (LIMIT * 1.5)) * .95);
-    c.classList.remove('is-releasing');
-    render();
-    clearTimeout(release);
-    if (pull >= LIMIT) {
-      gone = true;
-      sound.play('tick');
-      setTimeout(() => (location.href = 'photographs.html'), 160);
-      return;
-    }
-    release = setTimeout(letGo, 180);
-  }, { passive: false });
-});
-
 // Navigation de gauche (générée par tools/build.js)
 const side = document.querySelector('.side');
 if (side) {
@@ -230,10 +159,6 @@ if (side) {
   const toggle = side.querySelector('.side__toggle');
   const pill = document.querySelector('.side__menu');
   const wide = matchMedia('(min-width: 1100px)');
-  // Groupes : la flèche ouvre ou ferme la liste sur place
-  side.querySelectorAll('.side__fold').forEach(b => b.addEventListener('click', () => {
-    b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') !== 'true');
-  }));
   // Desktop : replier la colonne ; le choix est gardé d'une page à l'autre
   const syncToggle = () => {
     const off = root.classList.contains('side-off');
@@ -312,6 +237,7 @@ if (side) {
 
 // Copier l'email au clic
 document.querySelectorAll('.contact__mail').forEach(el => {
+  // Le lien ouvre l'app mail ; l'adresse est aussi copiée, au cas où
   el.addEventListener('click', () => {
     navigator.clipboard?.writeText(el.textContent.trim());
     const t = el.textContent;
@@ -402,8 +328,8 @@ document.querySelectorAll('[data-bag] .bag__pouch').forEach(pouch => {
   addEventListener('resize', apply);
 });
 
-// Meilleurs classements Chess.com, puis le dernier commit GitHub. Le premier défile depuis 0 au chargement ; chaque survol
-// (ou toucher, sur mobile) passe au suivant : Rapid → Blitz → Puzzles → GitHub (l'icône et le texte glissent aussi). Un record de moins de 7 jours est fêté : le cavalier
+// Dernier push GitHub, série Duolingo, record Chess.com. Chaque clic (ou toucher) passe à l'étape suivante :
+// GitHub → Duolingo → Chess.com (l'icône et le texte glissent aussi). Au survol, chaque étape ouvre sa petite carte. Un record de moins de 7 jours est fêté : le cavalier
 // reçoit une couronne, le chiffre monte depuis l'ancien record, « +N » s'envole en vert et une étiquette « PB » reste.
 // Les valeurs enregistrées au build sont remplacées par celles du moment dès que Chess.com répond.
 document.querySelectorAll('[data-chess]').forEach(line => {
@@ -421,10 +347,13 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   if (duo?.streak && duo.end >= yesterday) values.splice(gh ? 1 : 0, 0, ['Duolingo', duo.streak, null, null]);
   const isDuo = v => v[0] === 'Duolingo';
   const kindOf = v => (isGh(v) ? 'github' : isDuo(v) ? 'duolingo' : 'chess');
-  const titleOf = v => (isGh(v) ? `Last push to ${gh.repo}` : isDuo(v) ? `${duo.streak}-day Duolingo streak${duo.course ? `, learning ${duo.course}` : ''}` : '');
+  // Pas d'infobulle du navigateur : la carte de survol la remplace
+  const titleOf = () => '';
   const ago = iso => {
     const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 6e4));
-    return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`;
+    // En toutes lettres, comme la série Duolingo (« 2 days ago », « 7-day streak »)
+    const n = (v, unit) => `${v} ${unit}${v === 1 ? '' : 's'} ago`;
+    return m < 1 ? 'just now' : m < 60 ? n(m, 'minute') : m < 1440 ? n(Math.round(m / 60), 'hour') : n(Math.round(m / 1440), 'day');
   };
   // Les deux en-têtes (icône + texte) sont écrits au build dans un <template>
   const tpl = line.querySelector('.chess__heads').content;
@@ -444,7 +373,7 @@ document.querySelectorAll('[data-chess]').forEach(line => {
   const recent = v => v[2] && Date.now() - v[2] * 1000 < WEEK;
   const gain = v => (recent(v) && v[3] && v[1] > v[3] ? v[1] - v[3] : 0);
   const markup = v => (isGh(v) ? `<small>${gh.repo}</small> <b>${ago(gh.pushed)}</b>`
-    : isDuo(v) ? `${duo.course ? `<small>${duo.course}</small> ` : ''}<b>${v[1]} day streak</b>`
+    : isDuo(v) ? `${duo.course ? `<small>${duo.course}</small> ` : ''}<b>${v[1]}-day streak</b>`
     : `<small>${v[0]}</small> <b>${v[1]}</b>${recent(v) ? '<em class="chess__new" title="Personal best, less than 7 days ago">PB</em>' : ''}`);
   const countUp = (b, from, to) => {
     const t0 = performance.now(), dur = 900;
@@ -503,8 +432,54 @@ document.querySelectorAll('[data-chess]').forEach(line => {
     if (recent(v)) celebrate(v, neu.querySelector('b'));
     setTimeout(() => { old.remove(); pill.style.width = ''; busy = false; }, calm ? 0 : 480);
   };
-  line.addEventListener('pointerenter', e => e.pointerType === 'mouse' && next());
-  line.addEventListener('click', next);
+  // Carte de survol (souris seulement) : activité GitHub, série et langues Duolingo, classements Chess.com
+  const card = document.createElement('span');
+  card.className = 'chess__card';
+  card.setAttribute('role', 'tooltip');
+  line.append(card);
+  const html = t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const num = n => Number(n).toLocaleString('en-US');
+  const day = d => new Date(`${d}T12:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  const row = (label, value, cls = '') => `<span class="chess__card-row"><small>${label}</small><span${cls ? ` class="${cls}"` : ''}>${value}</span></span>`;
+  // GitHub : la grille d'activité, une case par jour depuis la semaine du premier commit de l'année (calculée au build).
+  // Quatre rangées seulement : les jours se suivent en colonnes de quatre, et les cases remplissent la largeur de la carte.
+  const ROWS = 4;
+  const grid = act => {
+    const first = act.days.search(/[1-4]/);
+    if (first < 0) return '';
+    const days = act.days.slice(first - (first % 7)), cols = Math.ceil(days.length / ROWS);
+    const size = Math.max(3, Math.min(10, Math.floor((328 + 2) / cols) - 2));
+    return `<span class="chess__grid" style="--c:${size}px;--rows:${ROWS}" aria-hidden="true">${[...days].map(l => `<i data-l="${l}"></i>`).join('')}</span>`;
+  };
+  const chessCard = line.dataset.chessCard ? JSON.parse(line.dataset.chessCard) : {};
+  const puzzles = () => (values.find(v => v[0] === 'Puzzles') || [])[1];
+  const cardHTML = kind => (kind === 'github'
+    // GitHub : carte plus large, la grille en grand en haut, le profil et les chiffres dessous
+    ? (gh.activity ? grid(gh.activity) : '')
+      + `<span class="chess__card-head"><img src="assets/img/github-avatar.png" alt="" width="24" height="24"><b>${html(gh.user)}</b>${gh.repos ? `<small>${gh.repos} public repos</small>` : ''}</span>`
+      + (gh.activity ? `<small class="chess__card-note">${num(gh.activity.total)} commits in the last year</small>` : '')
+      + `<a class="chess__card-link" href="https://github.com/${html(gh.user)}" target="_blank" rel="noopener">View on GitHub <span aria-hidden="true">↗</span></a>`
+    : kind === 'duolingo'
+    ? `<span class="chess__card-head"><img src="assets/img/duolingo-avatar.png" alt="" width="24" height="24"><b>${html(duo.username)}</b><small>Duolingo</small></span>`
+      + row('Streak', `${duo.streak} days${duo.start ? `, since ${day(duo.start)}` : ''}`)
+      + (duo.courses || []).map(c => row(html(c.title), `${num(c.xp)} XP`)).join('')
+    : `<span class="chess__card-head"><img src="assets/img/chess-avatar.jpg" alt="" width="24" height="24"><b>${html(line.dataset.chess)}</b><small>Chess.com</small></span>`
+      + (puzzles() ? row('Puzzles', `${num(puzzles())} best`) : '')
+      + (chessCard.rapid ? row('Rapid', `${num(chessCard.rapid.rating)}, best ${num(chessCard.rapid.best)}`) : '')
+      + (chessCard.blitz ? row('Blitz', `${num(chessCard.blitz)} best`) : '')
+      + (chessCard.rapid ? row('Games', `${chessCard.rapid.win} W · ${chessCard.rapid.loss} L · ${chessCard.rapid.draw} D`) : ''));
+  let hover = false;
+  const syncCard = () => {
+    const kind = kindOf(values[i]);
+    const on = hover;
+    if (on && card.dataset.kind !== kind) { card.innerHTML = cardHTML(kind); card.dataset.kind = kind; }
+    card.classList.toggle('is-open', on);
+  };
+  line.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { hover = true; syncCard(); } });
+  line.addEventListener('pointerleave', () => { hover = false; syncCard(); });
+  // Un clic dans la carte (ses liens) ne change pas d'étape
+  card.addEventListener('click', e => e.stopPropagation());
+  line.addEventListener('click', () => { next(); syncCard(); });
   fetch(`https://api.chess.com/pub/player/${line.dataset.chess}/stats`)
     .then(r => (r.ok ? r.json() : Promise.reject()))
     .then(({ tactics: t }) => {
@@ -656,7 +631,7 @@ const pnavPrev = document.querySelector('[data-prev]'), pnavNext = document.quer
 if (pnavPrev && pnavNext) {
   addEventListener('keydown', e => {
     if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || document.querySelector('dialog[open]')) return;
-    if (e.target.closest?.('input, textarea, select, [contenteditable], [data-drag], .carousel')) return;
+    if (e.target.closest?.('input, textarea, select, [contenteditable], [data-drag]')) return;
     const link = e.key === 'ArrowLeft' ? pnavPrev : e.key === 'ArrowRight' ? pnavNext : null;
     if (link) link.click();
   });
@@ -1092,3 +1067,58 @@ document.querySelectorAll('[data-ds]').forEach(ds => {
     if (e.isIntersecting) { step = 0; tick(); }
   }, { threshold: .4 }).observe(ds);
 });
+
+// Garage : au survol d'une ligne, son image apparaît à droite de la liste, à la hauteur de la ligne.
+// Pour un projet, la couverture s'affiche tout de suite, puis son animation (GIF, WebP ou vidéo) la remplace une fois chargée.
+// Seulement à la souris, sur écran large ; s'il n'y a pas assez de place à droite, l'aperçu ne s'affiche pas.
+(() => {
+  const list = document.querySelector('.garage');
+  const rows = [...document.querySelectorAll('.garage__entry[data-peek]')];
+  if (!list || !rows.length || !matchMedia('(hover: hover)').matches) return;
+  const peek = document.createElement('div');
+  peek.className = 'garage__peek';
+  peek.setAttribute('aria-hidden', 'true');
+  const still = document.createElement('img');
+  still.alt = '';
+  peek.append(still);
+  list.append(peek);
+  let motion = null, current = null;
+  // Aperçu le plus large possible (jusqu'à 520 px) dans l'espace libre à droite de la liste, centré :
+  // la même marge (au moins 40 px) entre la liste et l'image qu'entre l'image et le bord de l'écran
+  const room = () => {
+    const free = innerWidth - list.getBoundingClientRect().right;
+    const w = Math.min(520, free - 80);
+    return { w, x: (free - w) / 2 };
+  };
+  const show = row => {
+    const { w, x } = room();
+    if (w < 220) return;
+    peek.style.setProperty('--peek-w', `${w}px`);
+    peek.style.setProperty('--peek-x', `${x}px`);
+    peek.style.top = `${row.offsetTop}px`;
+    if (current !== row) {
+      current = row;
+      still.src = row.dataset.peek;
+      motion?.remove(); motion = null;
+      const src = row.dataset.peekMotion;
+      if (src) {
+        const m = motion = document.createElement(/\.(mp4|webm)$/.test(src) ? 'video' : 'img');
+        m.className = 'is-motion';
+        if (m.tagName === 'VIDEO') Object.assign(m, { muted: true, loop: true, playsInline: true, autoplay: true });
+        else m.alt = '';
+        m.addEventListener(m.tagName === 'VIDEO' ? 'loadeddata' : 'load', () => m.classList.add('is-ready'), { once: true });
+        m.src = src;
+        peek.append(m);
+      }
+    }
+    peek.classList.add('is-on');
+  };
+  // Fenêtre redimensionnée : l'aperçu caché ne doit jamais dépasser à droite (pas de défilement horizontal)
+  addEventListener('resize', () => { if (!peek.classList.contains('is-on')) peek.style.setProperty('--peek-w', '0px'); });
+  rows.forEach(row => {
+    row.addEventListener('pointerenter', e => e.pointerType === 'mouse' && show(row));
+    row.addEventListener('pointerleave', () => peek.classList.remove('is-on'));
+  });
+  // Les couvertures sont chargées d'avance, après la page ; les GIF (lourds) seulement au survol
+  addEventListener('load', () => rows.forEach(r => { new Image().src = r.dataset.peek; }));
+})();

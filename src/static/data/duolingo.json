@@ -1,6 +1,18 @@
 {
   "username": "bosoveille",
-  "streak": 5,
-  "end": "2026-11-24",
-  "course": "Chinese"
+  "streak": 7,
+  "start": "2026-11-20",
+  "end": "2026-11-26",
+  "course": "Chinese",
+  "xp": 6636,
+  "courses": [
+    {
+      "title": "Chinese",
+      "xp": 3675
+    },
+    {
+      "title": "English",
+      "xp": 1830
+    }
+  ]
 }

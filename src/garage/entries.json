@@ -1,0 +1,212 @@
+[
+  {
+    "date": "2026-11-26",
+    "tag": "Code",
+    "title": "Cards behind the profile line",
+    "text": "Hover GitHub for a grid of this year's commits, Duolingo for the streak, Chess.com for the ratings."
+  },
+  {
+    "date": "2026-11-26",
+    "tag": "Writing",
+    "title": "Open to design engineering",
+    "text": "The profile now says what I'm looking for: design and build, in Europe or remote."
+  },
+  {
+    "date": "2026-11-24",
+    "tag": "Code",
+    "title": "The profile line gets sounds",
+    "text": "Chess.com's move, Duolingo's correct answer, and two soft rising notes for a GitHub push."
+  },
+  {
+    "date": "2026-11-24",
+    "tag": "Writing",
+    "title": "Marlink, 2024 → 2026",
+    "text": "The XChange years end this year.",
+    "href": "about.html"
+  },
+  {
+    "date": "2026-11-23",
+    "tag": "Writing",
+    "title": "Carddi, simpler",
+    "text": "A short text, the logo full width, then the screens.",
+    "href": "carddi.html"
+  },
+  {
+    "date": "2026-11-19",
+    "tag": "Writing",
+    "title": "Toulouse, then Paris",
+    "text": "About now says where I am, and where I'm going.",
+    "href": "about.html"
+  },
+  {
+    "date": "2026-11-18",
+    "tag": "AI",
+    "title": "A team of Claude Code bots",
+    "text": "Root reviews the story, Holly the visuals, Foaly builds the UI, Butler builds and ships."
+  },
+  {
+    "date": "2026-11-07",
+    "tag": "Site",
+    "title": "One set of greys",
+    "text": "Text in #666, labels in #767676, and #c2c2c2 never for text, everywhere."
+  },
+  {
+    "date": "2026-11-07",
+    "tag": "Design",
+    "title": "Aer Running, taped collabs",
+    "text": "Each collab gets a strip of tape with its name by hand, and the clothing labels at real size.",
+    "href": "aerrunning.html"
+  },
+  {
+    "date": "2026-11-06",
+    "tag": "Code",
+    "title": "The Podz logo draws itself",
+    "text": "Points placed one by one, the stroke, then the black fill, on a loop while it's on screen.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-04",
+    "tag": "Design",
+    "title": "Raising Studio, just the GIF",
+    "text": "The post mosaic goes, the brand GIF stays as it is.",
+    "href": "raisingstd.html"
+  },
+  {
+    "date": "2026-11-04",
+    "tag": "Design",
+    "title": "Podz V2, the quiet way",
+    "text": "One text size, grey labels on the left, the onboarding on grey. Then the same calm style on every case study.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-26",
+    "tag": "Site",
+    "title": "The garage door is up",
+    "text": "Product and Visual become one dated feed that grows with every change. The Photographs page goes."
+  },
+  {
+    "date": "2026-11-24",
+    "tag": "Site",
+    "title": "A file tree instead of a menu",
+    "text": "The site gets a left column, like a code editor. The breadcrumbs and the signature go, the work moves up."
+  },
+  {
+    "date": "2026-11-23",
+    "tag": "Killed",
+    "title": "Lenny's outfits",
+    "text": "Same face, outfits swapping fast. Fun for a minute, then just noise. Removed.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-23",
+    "tag": "AI",
+    "title": "From Paper to the phone",
+    "text": "Claude reads the Paper frame through its MCP and fills a design.md, element by element, before any SwiftUI.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-23",
+    "tag": "Code",
+    "title": "The XChange design system, live",
+    "text": "Colours, type scale and the connect button you can push through its 9 states, in code instead of screenshots.",
+    "media": "assets/xchange/ds-icons-grid.jpg",
+    "href": "xchange.html"
+  },
+  {
+    "date": "2026-11-23",
+    "tag": "Killed",
+    "title": "See it move",
+    "text": "Replaying the Figma prototype with dots didn't work as UX. Out.",
+    "href": "xchange.html"
+  },
+  {
+    "date": "2026-11-07",
+    "tag": "Shipped",
+    "slug": "xchange",
+    "title": "XChange",
+    "text": "Getting crews online at sea, for 200K+ users at Marlink. Designed and built from 2024 to 2026."
+  },
+  {
+    "date": "2026-11-06",
+    "tag": "Design",
+    "title": "A new Podz logo",
+    "text": "A climbing hold that also reads as a P. Every point placed by hand.",
+    "media": "assets/podz/v2/logo.svg",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-06",
+    "tag": "SwiftUI",
+    "title": "Lenny's screens, to SwiftUI sizes",
+    "text": "Search, results and the empty state, redrawn from the real build.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-04",
+    "tag": "SwiftUI",
+    "title": "An onboarding you can drag through",
+    "text": "The Podz V2 onboarding, rebuilt in the browser: start, fill the fields, pick a region.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-03",
+    "tag": "In progress",
+    "slug": "podz",
+    "title": "Podz V2",
+    "text": "Book a mountain bed in a few taps. Designed in Paper, built in SwiftUI."
+  },
+  {
+    "slug": "microinteractions",
+    "tag": "Code",
+    "title": "Micro-interactions",
+    "text": "Seven micro-interactions, recoded from Figma."
+  },
+  {
+    "slug": "carddi",
+    "tag": "Concept",
+    "title": "Carddi",
+    "text": "A task app concept built on decks of cards you swipe."
+  },
+  {
+    "slug": "peregresss",
+    "tag": "Brand",
+    "title": "Peregresss",
+    "text": "New artistic direction for a travel agency."
+  },
+  {
+    "slug": "aerrunning",
+    "tag": "Brand",
+    "title": "Aer Running",
+    "text": "Brand design for a new running club, and its clothes."
+  },
+  {
+    "slug": "raisingstd",
+    "tag": "Brand",
+    "title": "Raising Studio",
+    "text": "Design agency for companies."
+  },
+  {
+    "slug": "logoset",
+    "tag": "Brand",
+    "title": "Logo set",
+    "text": "Set of logos redesign."
+  },
+  {
+    "slug": "quantum",
+    "tag": "Brand",
+    "title": "Quantum Pulse",
+    "text": "Brand design for an AI SaaS."
+  },
+  {
+    "slug": "axeinos",
+    "tag": "Brand",
+    "title": "Axeinos",
+    "text": "Brand identity for an AI SaaS, drawn from Greek myth."
+  },
+  {
+    "slug": "sensia",
+    "tag": "Brand",
+    "title": "Sensia",
+    "text": "Logo and landing page for a consumer-insights AI."
+  }
+]

@@ -50,7 +50,6 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const partials = Object.fromEntries(fs.readdirSync(path.join(SRC, 'partials'))
   .map(f => [path.basename(f, '.html'), read(path.join(SRC, 'partials', f))]));
 if (PROD) partials.topbar = '';
-const photos = JSON.parse(read(path.join(SRC, 'static', 'data', 'photos.json')));
 
 const globals = {
   lang: 'en',
@@ -60,9 +59,6 @@ const globals = {
   description: 'Maxence Prioux — Product Designer moving from Toulouse to Paris.',
   chessLine: '',
   projectNav: '',
-  photoStrip: photos.map(p => `<img src="assets/img/${p.image}" alt="">`).join(''),
-  // Carrousel du profil (desktop) : la première photo est la photo de profil
-  photoCarousel: photos.map((p, i) => `<img src="assets/img/${p.image}" alt="${i ? '' : 'Maxence Prioux'}"${i ? ' loading="lazy"' : ''}>`).join(''),
 };
 
 // Meilleur classement Chess.com (Rapid) affiché sur l'accueil. Relu à chaque build ; si Chess.com ne répond pas,
@@ -93,6 +89,9 @@ async function chessData() {
         puzzles: record('puzzles', d.tactics?.highest?.rating, d.tactics?.highest?.date),
       },
       updated: new Date().toISOString().slice(0, 10) };
+    // Avatar Chess.com pour la carte de survol
+    const me = await fetch(`https://api.chess.com/pub/player/${saved.username}`, { signal: AbortSignal.timeout(8000) }).then(r => r.json()).catch(() => null);
+    if (me?.avatar) await saveAvatar(me.avatar, 'chess-avatar.jpg');
     fs.writeFileSync(CHESS_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
   } catch (e) {
@@ -106,17 +105,55 @@ const latestPush = (repos, events) => [
   ...(Array.isArray(repos) ? repos : []).map(r => ({ repo: r.name, pushed: r.pushed_at })),
   ...(Array.isArray(events) ? events : []).filter(e => e.type === 'PushEvent').map(e => ({ repo: e.repo.name.split('/')[1], pushed: e.created_at })),
 ].filter(p => p.pushed).sort((a, b) => b.pushed.localeCompare(a.pushed));
+// Avatar d'un profil (GitHub, Duolingo) copié dans le site au build : la carte de survol ne dépend pas de leurs serveurs.
+// Si le téléchargement échoue, l'avatar déjà enregistré reste.
+async function saveAvatar(url, name) {
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (maxence.fyi portfolio build)' }, signal: AbortSignal.timeout(8000) });
+    if (!res.ok) throw new Error(res.status);
+    fs.writeFileSync(path.join(IMG_DIR, name), Buffer.from(await res.arrayBuffer()));
+  } catch (e) { console.warn(`  ! avatar ${name} non téléchargé (${e.message})`); }
+}
+// Grille d'activité de la carte GitHub : mes commits de l'année sur mes dépôts publics, comptés par jour.
+// (Le graphe officiel de GitHub compte 0 pour ce compte, il ne sert pas.) Une case par jour, semaines du dimanche au samedi
+// comme sur GitHub, niveau 0 à 4 selon le nombre de commits.
+async function githubActivity(user) {
+  const headers = { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)', ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }) };
+  const get = url => fetch(url, { headers, signal: AbortSignal.timeout(8000) }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  const day = d => d.toISOString().slice(0, 10);
+  const end = new Date(); end.setUTCHours(0, 0, 0, 0);
+  const start = new Date(end); start.setUTCDate(start.getUTCDate() - 364 - start.getUTCDay());
+  const counts = {};
+  const repos = (await get(`https://api.github.com/users/${user}/repos?per_page=100&type=owner`)).filter(r => !r.fork && new Date(r.pushed_at) >= start);
+  for (const r of repos) {
+    for (let page = 1; page <= 10; page++) {
+      const list = await get(`https://api.github.com/repos/${user}/${r.name}/commits?author=${user}&since=${start.toISOString()}&per_page=100&page=${page}`);
+      list.forEach(c => { const d = c.commit.author.date.slice(0, 10); counts[d] = (counts[d] || 0) + 1; });
+      if (list.length < 100) break;
+    }
+  }
+  let days = '', total = 0;
+  for (const d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+    const n = counts[day(d)] || 0; total += n;
+    days += n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 9 ? 3 : 4;
+  }
+  return { start: day(start), days, total };
+}
 async function githubData() {
   const saved = JSON.parse(read(GITHUB_FILE));
   try {
     // Mes dépôts (à jour) + l'activité publique (pushs sur les dépôts des autres, avec du retard) : on garde le plus récent
-    const get = q => fetch(`https://api.github.com/users/${saved.user}/${q}`, {
-      headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)' }, signal: AbortSignal.timeout(8000),
+    const get = q => fetch(`https://api.github.com/users/${saved.user}${q ? `/${q}` : ''}`, {
+      headers: { 'User-Agent': 'maxence.fyi portfolio build (contact@maxence.fyi)', ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }) }, signal: AbortSignal.timeout(8000),
     }).then(r => r.json());
     const [repos, events] = await Promise.all([get('repos?sort=pushed&per_page=1'), get('events/public?per_page=100')]);
     const [last] = latestPush(repos, events);
     if (!last) throw new Error('pas de push');
-    const fresh = { ...saved, ...last };
+    const me = await get('').catch(() => null);
+    if (me?.avatar_url) await saveAvatar(`${me.avatar_url}&s=96`, 'github-avatar.png');
+    const activity = await githubActivity(saved.user).catch(e => { console.warn(`  ! activité GitHub non lue (${e.message})`); return saved.activity ?? null; });
+    const { message, ...kept } = saved;
+    const fresh = { ...kept, ...last, repos: me?.public_repos ?? saved.repos ?? null, activity };
     fs.writeFileSync(GITHUB_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
   } catch (e) {
@@ -127,6 +164,8 @@ async function githubData() {
 // Série Duolingo (API non officielle, sans clé ; Duolingo refuse les navigateurs : lue au build seulement).
 // On garde la langue en cours et les dates de la série, la page masque la série si elle est cassée depuis le build.
 const DUO_FILE = path.join(SRC, 'static', 'data', 'duolingo.json');
+// Langues qu'on ne montre pas sur la carte
+const DUO_HIDDEN = ['Spanish'];
 async function duolingoData() {
   const saved = JSON.parse(read(DUO_FILE));
   try {
@@ -137,7 +176,11 @@ async function duolingoData() {
     if (!u) throw new Error('profil introuvable');
     const s = u.streakData?.currentStreak;
     const course = u.courses?.find(c => c.id === u.currentCourseId)?.title?.replace(/ \(.*\)$/, '') ?? null;
-    const fresh = { username: saved.username, streak: s?.length ?? u.streak ?? 0, end: s?.endDate ?? null, course };
+    // Pour la carte de survol : début de la série, XP total, chaque langue et son XP, l'avatar
+    const courses = (u.courses || []).map(c => ({ title: c.title.replace(/ \(.*\)$/, ''), xp: c.xp }))
+      .filter(c => !DUO_HIDDEN.includes(c.title)).sort((x, y) => y.xp - x.xp);
+    if (u.picture) await saveAvatar(`https:${u.picture}/large`, 'duolingo-avatar.png');
+    const fresh = { username: saved.username, streak: s?.length ?? u.streak ?? 0, start: s?.startDate ?? null, end: s?.endDate ?? null, course, xp: u.totalXp ?? null, courses };
     fs.writeFileSync(DUO_FILE, JSON.stringify(fresh, null, 2) + '\n');
     return fresh;
   } catch (e) {
@@ -145,7 +188,7 @@ async function duolingoData() {
     return saved;
   }
 }
-// Le chiffre change de catégorie à chaque survol : Rapid → Blitz → Puzzles (meilleurs scores), puis le dernier commit GitHub
+// La ligne change d'étape à chaque clic : GitHub → Duolingo → Chess.com ; GitHub et Duolingo ont une carte au survol
 function chessLine(c, gh, duo) {
   // Une seule valeur Chess.com : le meilleur classement en Puzzles (un record, qui ne baisse jamais)
   // [libellé, valeur, date du record (s), record précédent] : la page fête un record de moins de 7 jours
@@ -158,29 +201,71 @@ function chessLine(c, gh, duo) {
   const duoHead = `<img class="chess__icon chess__icon--duo" src="assets/icons/duolingo.png" alt="" width="15" height="15"><span class="chess__label">Duolingo</span>`;
   const first = gh ? 'github' : 'chess';
   const value = gh ? `<small>${esc(gh.repo)}</small> <b>recently</b>` : values.length ? `<small>${values[0][0]}</small> <b>${values[0][1]}</b>` : '';
-  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}' data-github='${JSON.stringify(gh)}'${duo?.streak ? ` data-duolingo='${JSON.stringify(duo)}'` : ''}>
+  return `<span class="chess" data-chess="${c.username}" data-chess-values='${JSON.stringify(values)}' data-github='${JSON.stringify(gh)}' data-chess-card='${JSON.stringify({ rapid: c.rapid, blitz: c.blitz })}'${duo?.streak ? ` data-duolingo='${JSON.stringify(duo)}'` : ''}>
           <template class="chess__heads"><span data-kind="chess">${chessHead}</span><span data-kind="github">${ghHead}</span><span data-kind="duolingo">${duoHead}</span></template>
           <span class="chess__head" data-kind="${first}">${gh ? ghHead : chessHead}</span>
           <span class="chess__elo" aria-live="polite"><span class="chess__value">${value}</span></span>
         </span>`;
 }
 
-// Navigation entre projets : l'ordre est celui des cartes de Product (index) puis de Visual.
-// Chaque étude de cas reçoit un lien vers la précédente et la suivante, et son fil d'Ariane pointe vers sa page.
-function projectOrder() {
-  const list = [];
-  for (const [page, section] of [['index.html', 'product'], ['visual.html', 'visual']]) {
-    const src = read(path.join(SRC, 'pages', page));
-    for (const m of src.matchAll(/<a class="card" href="([\w-]+)\.html">\s*<div class="card__media[^>]*>([\s\S]*?)<\/div>\s*<p class="card__caption">([\s\S]*?)<\/p>/g)) {
-      const [, slug, media, caption] = m;
-      // Image fixe de la carte, sinon son animation de survol (Micro-interactions n'a pas d'image fixe)
-      const cover = (media.match(/<img(?![^>]*card__(?:hover|badge))[^>]*\ssrc="([^"]+)"/) || media.match(/data-gif="([^"]+)"/) || [])[1];
-      if (!cover) continue;
-      if (slug === 'photographs' || list.some(p => p.slug === slug)) continue;
-      list.push({ slug, cover, section, caption: caption.replace(/<[^>]+>[^<]*<\/[^>]+>/g, '').replace(/<[^>]+>/g, '').trim() });
-    }
+// Le Garage : un seul fil, du plus récent au plus ancien. Chaque entrée (src/garage/entries.json) est
+// une note datée, ou un projet (« slug ») qui reprend sa carte de src/garage/cards.html et mène à l'étude de cas.
+// Les entrées sans date vont en bas, sous « Earlier », dans l'ordre du fichier.
+const GARAGE_DIR = path.join(SRC, 'garage');
+function garageCards() {
+  const cards = {};
+  for (const m of read(path.join(GARAGE_DIR, 'cards.html')).matchAll(/<a class="card" href="([\w-]+)\.html">\s*(<div class="card__media[\s\S]*?)\n\s*<p class="card__caption">([\s\S]*?)<\/p>\s*<\/a>/g)) {
+    const [, slug, media, caption] = m;
+    // Image fixe de la carte, sinon son animation de survol (Micro-interactions n'a pas d'image fixe)
+    const cover = (media.match(/<img(?![^>]*card__(?:hover|badge))[^>]*\ssrc="([^"]+)"/) || media.match(/data-gif="([^"]+)"/) || [])[1];
+    // Animation de survol de la carte (GIF, ou sa version WebP / vidéo), pour l'aperçu du Garage
+    const motion = (media.match(/data-gif="([^"]+)"/) || media.match(/data-src="([^"]+)"/) || [])[1] || '';
+    cards[slug] = { media, cover, motion, caption: caption.replace(/<[^>]+>[^<]*<\/[^>]+>/g, '').replace(/<[^>]+>/g, '').trim() };
   }
-  return list;
+  return cards;
+}
+function garageEntries() {
+  const list = JSON.parse(read(path.join(GARAGE_DIR, 'entries.json')));
+  const dated = list.filter(e => e.date).sort((x, y) => y.date.localeCompare(x.date));
+  return [...dated, ...list.filter(e => !e.date)];
+}
+// Les projets, dans l'ordre des cartes (src/garage/cards.html : produit, puis visuel), avec leur entrée du Garage
+function garageProjects() {
+  const cards = garageCards();
+  const bySlug = Object.fromEntries(garageEntries().filter(e => e.slug).map(e => [e.slug, e]));
+  return Object.keys(cards).filter(slug => bySlug[slug]).map(slug => ({ ...bySlug[slug], card: cards[slug] }));
+}
+// Navigation entre projets (Précédent / Suivant) : dans l'ordre de la section Projects
+function projectOrder() {
+  return garageProjects().map(e => ({ slug: e.slug, cover: e.card.cover, caption: e.text || e.card.caption }));
+}
+// Deux sections pour qu'on sache ce qu'on regarde : Backlog (ce qui a changé, daté, du plus récent au plus ancien)
+// puis Projects (tous les projets, produit et visuel). Même ligne partout : titre, étiquette et date, description.
+function garage() {
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = d => (d && d.length > 7 ? `${+d.slice(8, 10)} ${MONTHS[+d.slice(5, 7) - 1]}` : '');
+  const row = (e, card) => {
+    // Le titre mène à la page du travail (le projet, ou la page modifiée) ; sans page, il reste du texte
+    const href = e.href || (card ? `${e.slug}.html` : '');
+    const title = href ? `<a class="garage__title" href="${href}">${esc(e.title)}</a>` : `<span class="garage__title">${esc(e.title)}</span>`;
+    // L'image n'est pas dans la liste : au survol de la ligne, elle apparaît à droite de la liste (voir site.js).
+    // Pour un projet : sa couverture tout de suite, puis son animation (GIF, WebP ou vidéo) dès qu'elle est chargée.
+    const peek = card ? card.cover : e.media || '';
+    const motion = card && card.motion && card.motion !== peek ? card.motion : '';
+    const meta = [esc(e.tag || ''), !card && e.date ? `<time datetime="${e.date}">${day(e.date)}</time>` : ''].filter(Boolean).join(' · ');
+    return `
+        <li class="garage__entry"${peek ? ` data-peek="${peek}"` : ''}${motion ? ` data-peek-motion="${motion}"` : ''}>
+          <p class="garage__head">${title}<span class="garage__meta">${meta}</span></p>
+          <p class="garage__text">${esc(e.text || '')}</p>
+        </li>`;
+  };
+  const section = (name, rows) => `
+      <h2 class="garage__month">${name}</h2>
+      <ol class="garage__list">${rows.join('')}
+      </ol>`;
+  const backlog = garageEntries().filter(e => e.date && !e.slug);
+  return `<main class="garage">${section('Backlog', backlog.map(e => row(e)))}${section('Projects', garageProjects().map(e => row(e, e.card)))}
+    </main>`;
 }
 const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions', xchange: 'XChange' };
 function projectNav(order, slug, titleOf) {
@@ -199,29 +284,15 @@ function projectNav(order, slug, titleOf) {
 }
 
 // Navigation de gauche : un arbre à plat, une seule taille de texte, la hiérarchie par le gris.
-// Générée depuis projectOrder() : elle suit toute seule l'ordre des cartes de Product et Visual.
-// Le groupe de la page courante est ouvert (Product par défaut) ; la page courante a aria-current="page".
-function sidenav(order, current, titleOf) {
+// Le Garage porte tous les projets : l'arbre n'a plus que trois entrées. La page courante a aria-current="page".
+function sidenav(current) {
   const cur = href => (href === `${current}.html` ? ' aria-current="page"' : '');
-  const chevron = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const kids = (id, items) => `<div class="side__kids" id="${id}"><ul>${items.map(([label, href]) =>
-    `<li><a href="${href}"${cur(href)}>${esc(label)}</a></li>`).join('')}</ul></div>`;
-  // Groupe : le libellé mène à la page de la liste, la flèche ouvre la liste sur place
-  // (Product mène aussi à l'accueil : c'est Home qui porte la page courante)
-  const group = (id, label, href, items, open, mark = true) => `
-      <li class="side__group">
-        <div class="side__row"><a href="${href}"${mark ? cur(href) : ''}>${label}</a><button class="side__fold" aria-expanded="${open}" aria-controls="${id}" aria-label="${label} projects">${chevron}</button></div>
-        ${kids(id, items)}
-      </li>`;
-  const list = section => order.filter(p => p.section === section).map(p => [titleOf(p.slug), `${p.slug}.html`]);
-  const inVisual = current === 'visual' || order.some(p => p.slug === current && p.section === 'visual');
   return `<script>try { if (localStorage.getItem('side') === 'off') document.documentElement.classList.add('side-off'); } catch (e) {}</script>
   <nav class="side" aria-label="Site">
     <button class="side__toggle" aria-expanded="true" aria-controls="side-panel" aria-label="Hide navigation" title="Hide navigation"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.75" y="3.75" width="14.5" height="12.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7.75 4v12" stroke="currentColor" stroke-width="1.3"/></svg></button>
     <div class="side__panel" id="side-panel">
       <ul class="side__tree">
-      <li><a href="index.html"${cur('index.html')}>Home</a></li>${group('side-product', 'Product', 'index.html', list('product'), !inVisual, false)}${group('side-visual', 'Visual', 'visual.html', list('visual'), inVisual)}
-      <li><a href="photographs.html"${cur('photographs.html')}>Photographs</a></li>
+      <li><a href="index.html"${cur('index.html')}>Garage</a></li>
       <li><a href="about.html"${cur('about.html')}>About</a></li>
       </ul>
     </div>
@@ -368,7 +439,8 @@ async function main() {
   const titles = Object.fromEntries(fs.readdirSync(path.join(SRC, 'projects')).filter(f => /^[a-z].*\.json$/.test(f))
     .map(f => { const p = JSON.parse(read(path.join(SRC, 'projects', f))); return [p.slug, p.title]; }));
   const titleOf = slug => titles[slug] || TITLES[slug] || slug;
-  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), sidenav: sidenav(order, slug, titleOf) });
+  const garageHtml = garage();
+  const navVars = slug => ({ projectNav: projectNav(order, slug, titleOf), sidenav: sidenav(slug), garage: garageHtml });
 
   // Pages
   const template = read(path.join(SRC, 'templates', 'project.html'));
@@ -401,7 +473,6 @@ async function main() {
   const ids = new Set();
   const scan = txt => (txt.match(/\b[A-Za-z0-9]{16,40}\.(?:png|jpe?g|gif|webp)\b/g) || []).forEach(id => ids.add(id));
   written.forEach(f => scan(read(path.join(OUT, f))));
-  scan(read(path.join(SRC, 'static', 'data', 'photos.json')));
   fs.readdirSync(path.join(SRC, 'static', 'js')).forEach(f => scan(read(path.join(SRC, 'static', 'js', f))));
   fs.readdirSync(path.join(SRC, 'pages')).forEach(f => scan(read(path.join(SRC, 'pages', f))));
   const fetched = await downloadMissing(ids);
