@@ -1,6 +1,12 @@
 [
   {
     "date": "2026-11-26",
+    "tag": "Site",
+    "title": "A softer menu on phones",
+    "text": "The blur behind the menu now covers the whole screen, and it's lighter. The handwritten note moves up under the name."
+  },
+  {
+    "date": "2026-11-26",
     "tag": "Code",
     "title": "Cards behind the profile line",
     "text": "Hover GitHub for a grid of this year's commits, Duolingo for the streak, Chess.com for the ratings."
