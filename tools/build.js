@@ -239,8 +239,8 @@ function garageProjects() {
 function projectOrder() {
   return garageProjects().map(e => ({ slug: e.slug, cover: e.card.cover, caption: e.text || e.card.caption }));
 }
-// Deux sections pour qu'on sache ce qu'on regarde : Projects (tous les projets, produit et visuel)
-// puis Backlog (ce qui a changé, daté, du plus récent au plus ancien). Même ligne partout : titre, étiquette et date, description.
+// Trois sections : Projects (le produit), Backlog (ce qui a changé, daté, du plus récent au plus ancien), Brand work.
+// Les projets tiennent sur une ligne (titre, quelques mots en gris) ; le Backlog garde sa date et sa phrase.
 function garage() {
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const day = d => (d && d.length > 7 ? `${+d.slice(8, 10)} ${MONTHS[+d.slice(5, 7) - 1]}` : '');
@@ -250,18 +250,26 @@ function garage() {
     const title = href ? `<a class="garage__title" href="${href}">${esc(e.title)}</a>` : `<span class="garage__title">${esc(e.title)}</span>`;
     // L'image n'est pas dans la liste : au survol de la ligne, elle apparaît à droite de la liste (voir site.js).
     // Pour un projet : sa couverture tout de suite, puis son animation (GIF, WebP ou vidéo) dès qu'elle est chargée.
-    const peek = card ? card.cover : e.media || '';
-    const motion = card && card.motion && card.motion !== peek ? card.motion : '';
-    const meta = [esc(e.tag || ''), !card && e.date ? `<time datetime="${e.date}">${day(e.date)}</time>` : ''].filter(Boolean).join(' · ');
+    const peek = card ? e.media || card.cover : e.media || '';   // une entrée peut remplacer la couverture de sa carte (media)
+    // Une entrée peut donner sa propre animation (« motion ») quand la carte n'en a pas
+    const motion = (card && card.motion && card.motion !== peek ? card.motion : '') || e.motion || '';
+    const attrs = `${peek ? ` data-peek="${peek}"` : ''}${motion ? ` data-peek-motion="${motion}"` : ''}`;
+    // Un projet tient sur une ligne : le titre, puis quelques mots en gris (« short »)
+    if (card) return `
+        <li class="garage__entry garage__entry--line"${attrs}>
+          <p class="garage__line">${title}<span class="garage__short">${esc(e.short || e.text || '')}</span></p>
+        </li>`;
+    // Une entrée du Backlog : le titre et sa date, la phrase dessous
+    const meta = e.date ? `<time datetime="${e.date}">${day(e.date)}</time>` : '';
     return `
-        <li class="garage__entry"${peek ? ` data-peek="${peek}"` : ''}${motion ? ` data-peek-motion="${motion}"` : ''}>
+        <li class="garage__entry"${attrs}>
           <p class="garage__head">${title}<span class="garage__meta">${meta}</span></p>
           <p class="garage__text">${esc(e.text || '')}</p>
         </li>`;
   };
-  const section = (name, rows) => `
+  const section = (name, rows, line) => `
       <h2 class="garage__month">${name}</h2>
-      <ol class="garage__list">${rows.join('')}
+      <ol class="garage__list${line ? ' garage__list--line' : ''}">${rows.join('')}
       </ol>`;
   const backlog = garageEntries().filter(e => e.date && !e.slug);
   // Le Backlog montre les plus récents ; le reste est dans la page, caché, et « View more » l'affiche (site.js)
@@ -269,7 +277,10 @@ function garage() {
   const rows = backlog.map((e, i) => { const r = row(e); return i < SHOWN ? r : r.replace('<li class="garage__entry"', '<li class="garage__entry" hidden'); });
   const more = backlog.length > SHOWN ? `
       <button class="garage__more" type="button" data-garage-more>… View more</button>` : '';
-  return `<main class="garage">${section('Projects', garageProjects().map(e => row(e, e.card)))}${section('Backlog', rows)}${more}
+  // Le produit d'abord (Projects), puis ce qui change (Backlog), et le travail de marque en dernier (Brand work)
+  const projects = garageProjects();
+  const product = projects.filter(e => e.tag !== 'Brand'), brand = projects.filter(e => e.tag === 'Brand');
+  return `<main class="garage">${section('Projects', product.map(e => row(e, e.card)), true)}${section('Backlog', rows)}${more}${section('Brand work', brand.map(e => row(e, e.card)), true)}
     </main>`;
 }
 const TITLES = { podz: 'Podz', microinteractions: 'Micro-interactions', xchange: 'XChange' };

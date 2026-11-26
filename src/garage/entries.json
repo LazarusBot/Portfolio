@@ -1,229 +1,223 @@
 [
   {
-    "date": "2026-11-26",
-    "tag": "Code",
-    "title": "Cards behind the profile line",
-    "text": "Hover GitHub for a grid of this year's commits, Duolingo for the streak, Chess.com for the ratings."
-  },
-  {
-    "date": "2026-11-24",
-    "tag": "Code",
-    "title": "The profile line gets sounds",
-    "text": "Chess.com's move, Duolingo's correct answer, and two soft rising notes for a GitHub push."
-  },
-  {
     "date": "2026-11-18",
-    "tag": "AI",
-    "title": "A team of Claude Code bots",
-    "text": "Root reviews the story, Holly the visuals, Foaly builds the UI, Butler builds and ships."
+    "tag": "Design",
+    "title": "Lenny becomes a blob",
+    "text": "A plain circle that reshapes only when he reacts: a tap, a keystroke, a search.",
+    "href": "podz.html"
   },
   {
-    "date": "2026-11-07",
-    "tag": "Design",
-    "title": "Aer Running, taped collabs",
-    "text": "Each collab gets a strip of tape with its name by hand, and the clothing labels at real size.",
-    "href": "aerrunning.html"
+    "date": "2026-11-08",
+    "tag": "Code",
+    "title": "A faster Home",
+    "text": "Photos decoded once, off the main thread, and Home stays loaded between tabs.",
+    "href": "podz.html"
   },
   {
     "date": "2026-11-06",
+    "tag": "Design",
+    "title": "A new app icon",
+    "text": "The blob logo, in light, dark and tinted.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-11-05",
     "tag": "Code",
-    "title": "The Podz logo draws itself",
-    "text": "Points placed one by one, the stroke, then the black fill, on a loop while it's on screen.",
+    "title": "Lenny plans hut-to-hut routes",
+    "text": "Across a whole area, along real hiking trails, with stage lengths, climbs and only bookable huts.",
     "href": "podz.html"
   },
   {
     "date": "2026-11-04",
     "tag": "Design",
-    "title": "Podz V2, the quiet way",
-    "text": "One text size, grey labels on the left, the onboarding on grey. Then the same calm style on every case study.",
+    "title": "Lenny replaces alerts and spinners",
+    "text": "Notes, questions and three dots instead of system pop-ups and loaders.",
     "href": "podz.html"
   },
   {
-    "date": "2026-11-26",
-    "tag": "Site",
-    "title": "The garage door is up",
-    "text": "Product and Visual become one dated feed that grows with every change. The Photographs page goes."
+    "date": "2026-11-03",
+    "tag": "Shipped",
+    "title": "Ready for TestFlight",
+    "text": "Terms, privacy, first-party analytics and crash reports. iPhone only.",
+    "href": "podz.html"
   },
   {
-    "date": "2026-11-24",
-    "tag": "Site",
-    "title": "A file tree instead of a menu",
-    "text": "The site gets a left column, like a code editor. The breadcrumbs and the signature go, the work moves up."
-  },
-  {
-    "date": "2026-11-23",
+    "date": "2026-11-02",
     "tag": "Killed",
-    "title": "Lenny's outfits",
-    "text": "Same face, outfits swapping fast. Fun for a minute, then just noise. Removed.",
+    "title": "The host side",
+    "text": "Wardens need their own tools, so they get a separate app later. 12 MB of assets and dead code gone.",
     "href": "podz.html"
   },
   {
-    "date": "2026-11-23",
-    "tag": "AI",
-    "title": "From Paper to the phone",
-    "text": "Claude reads the Paper frame through its MCP and fills a design.md, element by element, before any SwiftUI.",
-    "href": "podz.html"
-  },
-  {
-    "date": "2026-11-23",
+    "date": "2026-11-02",
     "tag": "Code",
-    "title": "The XChange design system, live",
-    "text": "Colours, type scale and the connect button you can push through its 9 states, in code instead of screenshots.",
-    "media": "assets/xchange/ds-icons-grid.jpg",
-    "href": "xchange.html"
+    "title": "Huts that work offline",
+    "text": "Photos, map and details of liked and booked huts stay on the phone, readable with no signal.",
+    "href": "podz.html"
   },
   {
-    "date": "2026-11-23",
-    "tag": "Killed",
-    "title": "See it move",
-    "text": "Replaying the Figma prototype with dots didn't work as UX. Out.",
-    "href": "xchange.html"
+    "date": "2026-11-02",
+    "tag": "Code",
+    "title": "Podz in French",
+    "text": "The whole traveler app, through one translation table.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-10-31",
+    "tag": "Code",
+    "title": "8,000 huts, smoothly",
+    "text": "Shelves and search are worked out when the data changes, not on every redraw.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-10-30",
+    "tag": "Design",
+    "title": "Lenny's plan summary",
+    "text": "A numbered route, photos with distance and beds, then Lenny asks guests, dates, and Reserve.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-10-28",
+    "tag": "Design",
+    "title": "V2 starts with a quiet Home",
+    "text": "A big question, one search pill with Lenny, hut cards and three tabs, drawn in Paper first.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-10-27",
+    "tag": "Design",
+    "title": "Sign in with a code",
+    "text": "One email, a six-digit code, no password.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-09-27",
+    "tag": "Design",
+    "title": "A new hut page",
+    "text": "An editorial overlay on a stack of photos you swipe.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-09-09",
+    "tag": "Code",
+    "title": "A trip pass in Apple Wallet",
+    "text": "The booking, offline, with its code and the way to the hut.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-09-03",
+    "tag": "Code",
+    "title": "A host side",
+    "text": "Become a host, list a hut, manage it. Cut two months later.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-09-01",
+    "tag": "Code",
+    "title": "Booking, before payment",
+    "text": "A reservation flow, and VoiceOver labels on every icon-only button.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-08-27",
+    "tag": "Code",
+    "title": "Friends and shared folders",
+    "text": "Friend requests, liked huts shared in folders, and a mailbox.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-08-23",
+    "tag": "Code",
+    "title": "The first build",
+    "text": "Sign-in, Home, likes, profile, Lenny's search and a design system.",
+    "href": "podz.html"
+  },
+  {
+    "date": "2026-08-10",
+    "tag": "Code",
+    "title": "First commit",
+    "text": "Podz starts in SwiftUI, on Supabase.",
+    "href": "podz.html"
   },
   {
     "date": "2026-11-07",
     "tag": "Shipped",
     "slug": "xchange",
     "title": "XChange",
-    "text": "Getting crews online at sea, for 200K+ users at Marlink. Designed and built from 2024 to 2026."
-  },
-  {
-    "date": "2026-11-06",
-    "tag": "Design",
-    "title": "A new Podz logo",
-    "text": "A climbing hold that also reads as a P. Every point placed by hand.",
-    "media": "assets/podz/v2/logo.svg",
-    "href": "podz.html"
-  },
-  {
-    "date": "2026-11-04",
-    "tag": "SwiftUI",
-    "title": "An onboarding you can drag through",
-    "text": "The Podz V2 onboarding, rebuilt in the browser: start, fill the fields, pick a region.",
-    "href": "podz.html"
+    "text": "Getting crews online at sea, for 200K+ users at Marlink. Designed and built from 2024 to 2026.",
+    "short": "Crews online at sea, shipped to 200K+ users",
+    "motion": "assets/xchange/link-hover.mp4",
+    "media": "assets/xchange/link-hover.jpg"
   },
   {
     "date": "2026-11-03",
     "tag": "In progress",
     "slug": "podz",
-    "title": "Podz V2",
-    "text": "Book a mountain bed in a few taps. Designed in Paper, built in SwiftUI."
+    "title": "Podz",
+    "text": "Book a mountain bed in a few taps. Designed in Paper, built in SwiftUI.",
+    "short": "Mountain beds, in SwiftUI"
   },
   {
     "slug": "microinteractions",
     "tag": "Code",
     "title": "Micro-interactions",
-    "text": "Seven micro-interactions, recoded from Figma."
+    "text": "Seven micro-interactions, recoded from Figma.",
+    "short": "Recoded from Figma"
   },
   {
     "slug": "carddi",
     "tag": "Concept",
     "title": "Carddi",
-    "text": "A task app concept built on decks of cards you swipe."
+    "text": "A task app concept built on decks of cards you swipe.",
+    "short": "Tasks as decks of cards"
   },
   {
     "slug": "peregresss",
     "tag": "Brand",
     "title": "Peregresss",
-    "text": "New artistic direction for a travel agency."
+    "text": "New artistic direction for a travel agency.",
+    "short": "Travel agency"
   },
   {
     "slug": "aerrunning",
     "tag": "Brand",
     "title": "Aer Running",
-    "text": "Brand design for a new running club, and its clothes."
+    "text": "Brand design for a new running club, and its clothes.",
+    "short": "Running club and its clothes"
   },
   {
     "slug": "raisingstd",
     "tag": "Brand",
     "title": "Raising Studio",
-    "text": "Design agency for companies."
+    "text": "Identity for a design agency.",
+    "short": "Design agency"
   },
   {
     "slug": "logoset",
     "tag": "Brand",
     "title": "Logo set",
-    "text": "Set of logos redesign."
+    "text": "A set of logo redesigns.",
+    "short": "Logo redesigns"
   },
   {
     "slug": "quantum",
     "tag": "Brand",
     "title": "Quantum Pulse",
-    "text": "Brand design for an AI SaaS."
+    "text": "Brand design for an AI SaaS.",
+    "short": "AI SaaS"
   },
   {
     "slug": "axeinos",
     "tag": "Brand",
     "title": "Axeinos",
-    "text": "Brand identity for an AI SaaS, drawn from Greek myth."
+    "text": "Brand identity for an AI SaaS, drawn from Greek myth.",
+    "short": "AI SaaS, from Greek myth"
   },
   {
     "slug": "sensia",
     "tag": "Brand",
     "title": "Sensia",
-    "text": "Logo and landing page for a consumer-insights AI."
-  },
-  {
-    "date": "2026-10-29",
-    "tag": "Code",
-    "title": "The last GitHub push, live",
-    "text": "The profile line now says when I last pushed code, refreshed on every build."
-  },
-  {
-    "date": "2026-10-26",
-    "tag": "Code",
-    "title": "Aer, told as a chat",
-    "text": "The case study opens on an iMessage thread with the manufacturer, one step of the clothes per message.",
-    "href": "aerrunning.html"
-  },
-  {
-    "date": "2026-10-25",
-    "tag": "Killed",
-    "title": "A crown for every record",
-    "text": "The Chess.com knight fell over and got a crown on each new best. Too much. Out."
-  },
-  {
-    "date": "2026-10-25",
-    "tag": "Code",
-    "title": "A sheet for each robot",
-    "text": "Click a robot on About for its parts list and mechanical specs.",
-    "href": "about.html"
-  },
-  {
-    "date": "2026-10-25",
-    "tag": "Code",
-    "title": "Previous, next",
-    "text": "Every case study links to its neighbours, with the arrow keys too."
-  },
-  {
-    "date": "2026-10-25",
-    "tag": "Design",
-    "title": "Five more visual projects",
-    "text": "Axeinos, Sensia, Carddi and two others join the visual work."
-  },
-  {
-    "date": "2026-10-24",
-    "tag": "Code",
-    "title": "Stickers in a bag",
-    "text": "A clear pouch on the brand pages; click and one sticker slides out of the top.",
-    "href": "peregresss.html"
-  },
-  {
-    "date": "2026-10-24",
-    "tag": "Code",
-    "title": "Sound design",
-    "text": "A soft pop on everything you can click, and a button to mute it."
-  },
-  {
-    "date": "2026-10-24",
-    "tag": "Code",
-    "title": "Micro-interactions, all recoded",
-    "text": "The five missing demos, rebuilt from the Figma file.",
-    "href": "microinteractions.html"
-  },
-  {
-    "date": "2026-10-24",
-    "tag": "Site",
-    "title": "Out of Framer",
-    "text": "The whole portfolio recoded by hand in HTML and CSS, so I can build anything on it."
+    "text": "Logo and landing page for a consumer-insights AI.",
+    "short": "Consumer-insights AI"
   }
 ]

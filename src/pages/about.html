@@ -4,94 +4,46 @@
 {{> topbar}}
 {{> sidenav}}
 
-  <div class="wrap">
-{{> profile}}
+  <div class="wrap wrap--col">
 
-    <main>
-      <div class="intro">
-        <p>I’m an independent product designer based in "la ville rose" also known as Toulouse, now moving to the capital, Paris.</p>
-        <p>Currently looking for a project that I truly believe in and into which I can pour all my creativity.</p>
+    <!-- About : la même colonne et les mêmes lignes que le Garage. Une courte prose, puis des lignes d'une ligne -->
+    <main class="garage about">
+      <h2 class="garage__month">Now</h2>
+      <div class="about__prose">
+        <p>I design and build products, from the first sketch to the shipped code. Based in Toulouse, moving to Paris.</p>
       </div>
 
-      <details class="acc" open>
-        <summary>Experience</summary>
-        <div class="acc__body">
-          <div class="row"><span>Product Designer, <a class="co" href="https://marlink.com/fr/" target="_blank" rel="noopener">Marlink</a></span><span>2024 → 2026</span></div>
-          <div class="row"><span>iOS Developer, <a class="co" href="https://www.rtx.com/collinsaerospace" target="_blank" rel="noopener">Collins Aerospace</a></span><span>2023 → 2024</span></div>
-          <div class="row"><span>Product Designer &amp; iOS Developer, <a class="co" href="https://marlink.com/fr/" target="_blank" rel="noopener">Marlink</a></span><span>2022 → 2023</span></div>
-        </div>
-      </details>
+      <h2 class="garage__month">Experience</h2>
+      <!-- Chaque poste : l'entreprise, le rôle en gris, les années ; une ligne de périmètre dessous (tirée du CV) -->
+      <ol class="garage__list about__jobs">
+        <li class="garage__entry">
+          <p class="garage__head"><span><a class="garage__title" href="https://marlink.com/fr/" target="_blank" rel="noopener">Marlink</a><span class="garage__short">Lead Product Designer</span></span><span class="garage__meta">2025 → 2026</span></p>
+          <p class="garage__text">XChange, designed and built, shipped to 200K+ users.</p>
+        </li>
+        <li class="garage__entry">
+          <p class="garage__head"><span><a class="garage__title" href="https://www.rtx.com/collinsaerospace" target="_blank" rel="noopener">Collins Aerospace</a><span class="garage__short">iOS Developer</span></span><span class="garage__meta">2024 → 2025</span></p>
+          <p class="garage__text">iOS apps for major airlines, and design QA before each release.</p>
+        </li>
+        <li class="garage__entry">
+          <p class="garage__head"><span><a class="garage__title" href="https://marlink.com/fr/" target="_blank" rel="noopener">Marlink</a><span class="garage__short">Product Designer, iOS</span></span><span class="garage__meta">2023 → 2024</span></p>
+          <p class="garage__text">A 500+ component design system, from Figma to SwiftUI.</p>
+        </li>
+        <li class="garage__entry">
+          <p class="garage__head"><span><a class="garage__title" href="https://www.safran-group.com" target="_blank" rel="noopener">Safran Seats</a><span class="garage__short">Aerospace Engineer</span></span><span class="garage__meta">2020 → 2022</span></p>
+          <p class="garage__text">Airbus programs, and autonomous mobile robots on the production lines.</p>
+        </li>
+      </ol>
 
-      <details class="acc">
-        <summary>Sports</summary>
-        <div class="acc__body">
-          <div class="sport">
-            <div class="sport__head"><span class="u">Tennis</span><span class="years"><span data-count-to="20">+20</span> years</span></div>
-            <p>It has taught me discipline and how to handle pressure. Every point is a split-second decision.</p>
-            <img src="assets/img/DQlbEr9qRo6KCxI5UX4d485a21M.gif" alt="Tennis" loading="lazy">
-            <div class="sport__foot"><span>UTR <b>10.24</b> or FR <b>3/6</b></span><span>Stade Toulousain Tennis Club</span></div>
-          </div>
-          <div class="sport">
-            <div class="sport__head"><span class="u">Basket</span><span>only 2 years</span></div>
-            <p>Teamwork, reading the field, and adapting on the fly: skills that naturally translate to teamwork.</p>
-            <img src="assets/img/JXG330tUsQhTrd8JXgZqX7snfs.png" alt="Basket" loading="lazy">
-            <div class="sport__foot"><span>Can't even dunk <b>:/</b></span><span>Local ranked</span></div>
-          </div>
-        </div>
-      </details>
-
-      <details class="acc" open>
-        <summary>Things of interest</summary>
-        <div class="acc__body">
-          <div class="topic">
-            <h3 class="u">Topics: Art <span class="issue" title="Carrousel recodé (clic, glisser)">#9</span></h3>
-            <p>This is everywhere, from a little touch of red on a painting to a spatial turbine piece.</p>
-            <!-- Les 4 images : la carte active se lève et montre sa légende ; clic, glisser ou flèches pour changer (site.js) -->
-            <div class="art" data-bleed>
-              <div class="art__track">
-                <figure class="art__card"><span class="art__media"><img src="assets/img/DAkowFJZXowYyjt18Cf18qX7pBU.jpg" alt="iPod, Apple, first generation, 2001"><em class="art__tag">Product</em></span><figcaption><b>iPod</b><span>Apple, first generation, 2001</span></figcaption></figure>
-                <figure class="art__card"><span class="art__media"><img src="assets/img/TIL3po9cFJKGmrLLXOPNJwUS4N8.jpg" alt="Eames Shell Armchair, Charles &amp; Ray Eames, Herman Miller"><em class="art__tag">Furniture</em></span><figcaption><b>Eames Shell Armchair</b><span>Charles &amp; Ray Eames, Herman Miller</span></figcaption></figure>
-                <figure class="art__card" style="--z:1.45;--o:13% 50%"><span class="art__media"><img src="assets/img/fcFSEtR4zArpgD4I0hBVsW2J9R8.jpg" alt="White Angora Cat, Jean-Jacques Bachelier, 1761"><em class="art__tag">Painting</em></span><figcaption><b>White Angora Cat</b><span>Jean-Jacques Bachelier, 1761</span></figcaption></figure>
-                <figure class="art__card" style="--p:50% 78%"><span class="art__media"><img src="assets/img/VtQw3mBDaHxQVAsekb8MbuqN0KQ.jpeg" alt="Defender 90, Land Rover, the boxy icon"><em class="art__tag">Automotive</em></span><figcaption><b>Defender 90</b><span>Land Rover, the boxy icon</span></figcaption></figure>
-              </div>
-            </div>
-          </div>
-
-          <div class="topic">
-            <h3 class="u">Topics: Visual Graphic <span class="issue" title="Défilement infini recodé en CSS">#9</span></h3>
-            <p>I love it when suddenly all the images, typographies and layout are matching in chorus.</p>
-            <div class="marquee" data-bleed>
-              <div class="marquee__track" id="marquee"></div>
-            </div>
-          </div>
-
-          <div class="topic" style="border:0">
-            <h3 class="u">Topics: Humanoid Robots</h3>
-            <p>Ever since my first job in the welding robotics industry, I’ve been constantly learning more about the robotics field. I’d like to contribute to it as a designer in the future.</p>
-            <!-- Survol : contour noir, nom du robot dans une bulle et son « robot ». Clic : fiche du robot (données dans robots-data plus bas) -->
-            <div class="robots">
-              <span class="robot" tabindex="0" role="button" data-robot="sprout" aria-haspopup="dialog"><img src="assets/img/GC9KAG5Ma0qwurTvvXSGFuY0g4.webp" alt="Sprout, Fauna Robotics"><span class="robot__name">Sprout<small>, Fauna Robotics</small></span></span>
-              <span class="robot" tabindex="0" role="button" data-robot="digit" aria-haspopup="dialog"><img src="assets/img/T6ofIyk8pncUSCzj0roNAUbsa0.jpg" alt="Digit, Agility Robotics"><span class="robot__name">Digit<small>, Agility Robotics</small></span></span>
-              <span class="robot" tabindex="0" role="button" data-robot="g1" aria-haspopup="dialog"><img src="assets/img/mMJnQViIkquW0XzJNIh27ZMVCTs.webp" alt="G1, Unitree"><span class="robot__name">G1<small>, Unitree</small></span></span>
-              <span class="robot" tabindex="0" role="button" data-robot="neo" aria-haspopup="dialog"><img src="assets/img/d4ME8lz1fRiaI3u36uHWb9Du36c.jpg" alt="NEO, 1X"><span class="robot__name">NEO<small>, 1X</small></span></span>
-            </div>
-            <script type="application/json" id="robots-data">{"sprout": {"name": "Sprout", "maker": "Fauna Robotics", "year": "2026", "img": "GC9KAG5Ma0qwurTvvXSGFuY0g4.webp", "design": "A small, soft humanoid made to share a room with people. The body is padded and rounded so it is safe to touch, and two antenna “eyebrows” with light animations carry its emotions instead of a human face.", "specs": [["Height", "1.07 m · 445 mm wide"], ["Weight", "22.7 kg"], ["Degrees of freedom", "29"], ["Hands", "Integrated 1-DoF grippers"], ["Battery", "48 V, 5 or 10 Ah, swappable"], ["Compute", "NVIDIA Jetson AGX Orin"]], "source": {"text": "Fauna Robotics, arXiv:2601.18963 · CC BY 4.0", "url": "https://arxiv.org/abs/2601.18963"}, "parts": [["stereo", "Stereo camera", 1, "ZED 2i · 120 mm baseline"], ["tof", "ToF sensors", null, "Front and back, for safety"], ["mic", "Microphone array", 1, ""], ["speaker", "Speakers", 2, ""], ["leds", "RGB LED array", 1, "100 pixels"], ["eyebrows", "Motorised eyebrows", 2, "Expressions"], ["actuator", "Joint actuators", 29, "Low torque, compliant"], ["gripper", "Integrated grippers", 2, "1 DoF each"], ["battery", "Swappable battery", 1, "48 V · 5 or 10 Ah"], ["chip", "Compute", 1, "NVIDIA Jetson AGX Orin"], ["estop", "Physical e-stop", 1, "On the back"], ["handle", "Gantry handle", 1, "Carry and mount"], ["ethernet", "Ethernet port", 1, ""]]}, "digit": {"name": "Digit", "maker": "Agility Robotics", "year": "2020 →", "img": "T6ofIyk8pncUSCzj0roNAUbsa0.jpg", "design": "Built for warehouses, not for looking human. Its legs bend backwards like a bird’s for an efficient, stable gait, the torso is shaped around carrying plastic totes, and a simple LED face signals where it is going.", "specs": [["Height", "1.75 m"], ["Payload", "16 kg (Digit 5: 22 kg)"], ["Legs", "Bird-like, backward knees"], ["Hands", "Grippers made for totes"], ["Battery (Digit 5)", "≈ 90 min, 9 min recharge"], ["Use", "Logistics, moving totes"]], "parts": [["face", "LED face", 1, "Shows where it is going"], ["screen", "Chest display", 1, "Status"], ["gripper", "Tote grippers", 2, "Made for plastic totes"], ["leg", "Bird-like legs", 2, "Knees bend backwards"], ["battery", "Battery", 1, "Digit 5: ≈ 90 min, 9 min recharge"]]}, "g1": {"name": "G1", "maker": "Unitree", "year": "2024", "img": "mMJnQViIkquW0XzJNIh27ZMVCTs.webp", "design": "A compact research humanoid that trades size for agility. Hollow joints keep the wiring inside, the frame folds for transport, and the dark visor head hides its depth camera and lidar.", "specs": [["Height", "1.32 m"], ["Weight", "≈ 35 kg"], ["Degrees of freedom", "23 to 43"], ["Knee torque", "up to 120 N·m"], ["Battery", "9 000 mAh, ≈ 2 h"], ["Speed", "up to 2 m/s"]], "parts": [["lidar", "3D lidar", 1, "Livox MID-360"], ["camera", "Depth camera", 1, "Intel RealSense D435"], ["mic", "Microphone array", 1, "Noise and echo cancelling"], ["speaker", "Speaker", 1, "5 W"], ["actuator", "Joint motors", "23–43", "Up to 120 N·m at the knee"], ["leg", "Legs", 2, "6 DoF each: hip 3, knee 1, ankle 2"], ["hand", "Dex3 hands", 2, "3 fingers, 7 DoF · optional"], ["battery", "Quick-release battery", 1, "9 000 mAh · ≈ 2 h"], ["chip", "Compute", 1, "8-core CPU · Jetson Orin on EDU"], ["wiring", "Hollow joint wiring", null, "No external cables"]]}, "neo": {"name": "NEO", "maker": "1X", "year": "2025", "img": "d4ME8lz1fRiaI3u36uHWb9Du36c.jpg", "design": "A home robot designed to feel soft and quiet. Tendon-driven muscles replace rigid gearboxes, and the whole body wears a machine-washable knit suit, with two round eyes on a calm, faceless head.", "specs": [["Height", "1.68 m"], ["Weight", "≈ 30 kg"], ["Degrees of freedom", "≈ 55 (22 per hand)"], ["Actuation", "Tendon drive"], ["Lift", "up to 68 kg (maker claim)"], ["Skin", "Washable knit suit"]], "parts": [["eyes", "Eyes", 2, "Vision"], ["ring", "Emotive ear rings", 2, "Light rings"], ["speaker", "Speakers", null, "Built-in “boom box”"], ["tendon", "Tendon-driven actuators", null, "Instead of rigid gearboxes"], ["hand", "Hands", 2, "22 DoF each"], ["knit", "Knit suit", 1, "Machine-washable"], ["charge", "Self-charging", null, "Docks on its own"]]}}</script>
-          </div>
-        </div>
-      </details>
-      <div style="height:120px"></div>
+      <h2 class="garage__month">Outside work</h2>
+      <ol class="garage__list garage__list--line">
+        <li class="garage__entry garage__entry--line"><p class="garage__line"><span class="garage__title">Tennis</span><span class="garage__short">20 years, UTR 10.24</span></p></li>
+        <li class="garage__entry garage__entry--line"><p class="garage__line"><span class="garage__title">Basketball</span><span class="garage__short">Still can't dunk</span></p></li>
+        <li class="garage__entry garage__entry--line"><p class="garage__line"><span class="garage__title">Humanoid robots</span><span class="garage__short">Since my first job, in welding robotics</span></p></li>
+      </ol>
     </main>
 {{> footer}}
   </div>
 
-<script src="js/parts.js"></script>
 {{> scripts}}
-  <script>
-    // Le défilement est doublé pour boucler sans saut
-    const posters = ['C0b0R3tB6paHghignbOE2XXEQ.png', 't40z2YvFVQMQg3u5aMIq38JLoI4.png', 'THFzKBq4UbI4dOWhIRNMkIsGKAw.png',
-                     'V9rbhVdFnfeUc6IeMGH83kS4HV0.png', 'pFnawRAd2vf75IAf3itWvQanJQ.png', 'hk6Zf00a4kspZgVoszIPAwLKQOU.png'];
-    const html = posters.map(p => `<img src="${IMG(p)}" alt="" loading="lazy">`).join('');
-    document.getElementById('marquee').innerHTML = html + html;
-  </script>
 </body>
 </html>
