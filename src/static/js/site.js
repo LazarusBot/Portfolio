@@ -1095,7 +1095,10 @@ document.querySelectorAll('[data-ds]').forEach(ds => {
     if (w < 220) return;
     peek.style.setProperty('--peek-w', `${w}px`);
     peek.style.setProperty('--peek-x', `${x}px`);
-    peek.style.top = `${row.offsetTop}px`;
+    // À hauteur de la ligne, mais toujours dans la fenêtre : près du bas de l'écran, l'aperçu remonte (24 px de marge)
+    const r = row.getBoundingClientRect(), h = w * 3 / 4;
+    const lift = Math.min(Math.max(0, r.top + h - (innerHeight - 24)), Math.max(0, r.top - 24));
+    peek.style.top = `${row.offsetTop - lift}px`;
     if (current !== row) {
       current = row;
       still.src = row.dataset.peek;
