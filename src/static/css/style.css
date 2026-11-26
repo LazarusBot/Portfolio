@@ -30,7 +30,7 @@ img { display: block; max-width: 100%; }
 .wrap--narrow { max-width: calc(var(--narrow) + 200px); padding-top: 50px; }
 
 /* ---------- Profil ---------- */
-.profile { --ph: 98.4px; display: flex; gap: 28px; align-items: center; padding: 50px 0 55px; border-bottom: 1px solid var(--line); }
+.profile { --ph: 90.6px; display: flex; gap: 28px; align-items: center; padding: 50px 0 55px; border-bottom: 1px solid var(--line); }
 /* Une seule photo, étroite et haute (9:16) : 98 × 175 px, du haut du nom au bas de la ligne GitHub */
 .profile__photo { flex: none; width: var(--ph); height: calc(var(--ph) * 16 / 9); object-fit: cover; }
 .profile { position: relative; }
@@ -1371,7 +1371,7 @@ video::-webkit-media-controls { display: none !important; }
 /* Photo petite et calée en haut : le nom commence à sa hauteur, le reste s'empile dessous */
 @media (min-width: 811px) {
   .profile { align-items: flex-start; }
-  .profile__info .chess { margin-top: 14px; }
+  .profile__info .chess { margin-top: 6px; }   /* la ligne a 4 px de marge interne : ~12 px visibles, comme au-dessus */
 }
 
 
@@ -1384,11 +1384,13 @@ video::-webkit-media-controls { display: none !important; }
 .profile__cv:hover span { translate: 2px -2px; }
 .profile__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 14px; }
 .profile__head .profile__job { margin-top: 0; }
-.profile__status { margin-top: 14px; font-size: 15px; line-height: 22px; color: var(--soft); }   /* même taille que la liste du Garage */
+.profile__status { margin-top: 10px; font-size: 15px; line-height: 22px; color: var(--soft); }   /* même taille que la liste du Garage */
 .profile__status .profile__cv { margin-left: 8px; }   /* CV suit le texte, même quand il passe à la ligne */
 /* Note manuscrite sous le profil : pourquoi le Garage existe. Une vraie écriture à la main (image), encre adoucie en gris */
-.profile__note { margin-top: 14px; }
-.profile__note img { display: block; width: 500px; max-width: 100%; height: auto; opacity: .75; }
+.profile__note { margin-top: 18px; }   /* le SVG est recadré sur l'encre : l'écart se voit tel quel */
+/* La note est un SVG : couleur via color (fill: currentColor), taille via width */
+.profile__note { color: var(--soft); }   /* même gris que la disponibilité */
+.profile__note-svg { display: block; width: 500px; max-width: 100%; height: auto; }
 /* Bas de page : le contact en une phrase, même taille et même gris ; les liens en noir avec un souligné léger, comme CV */
 /* Un trait au-dessus, le même que sous le profil : la page s'ouvre et se ferme pareil */
 .foot { margin-top: 40px; padding: 40px 0 120px; border-top: 1px solid var(--line); font-size: 15px; line-height: 22px; color: var(--soft); }
@@ -1397,7 +1399,9 @@ video::-webkit-media-controls { display: none !important; }
 
 @media (max-width: 810px) {
   .profile__head { row-gap: 18px; }
-  .profile__status, .profile__note { margin-top: 18px; }   /* même écart entre chaque ligne sous le nom */
+  .profile__note { margin-top: 14px; }
+  .profile__status { margin-top: 10px; }
+  .profile .chess { margin-top: 6px; }
 }
 
 /* Ligne GitHub / Chess.com sans pastille : une info, pas un bouton. La valeur suit le texte après un point médian,
@@ -1629,9 +1633,11 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
   .side__panel { position: fixed; z-index: 50; right: 32px; bottom: 64px; max-height: calc(100dvh - 96px); overflow-y: auto; padding: 0; text-align: right;   /* bord droit sur le texte de « Close » */
                 
                  opacity: 0; translate: 0 12px; visibility: hidden; transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility .3s; }
-  /* Le voile déborde en haut et en bas : sur iPhone, les barres de Safari laissaient voir la page derrière */
-  .side::before { content: ""; position: fixed; z-index: 49; inset: -25vh 0; background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-                  opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  /* Le voile : c'est la page elle-même qui se floute et pâlit. Un calque fixe flouté s'arrêtait aux barres de Safari sur iPhone,
+     alors que la page, elle, passe dessous. Le ::before reste, transparent, pour fermer au toucher. */
+  .side::before { content: ""; position: fixed; z-index: 49; inset: 0; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  body > :not(.side, .side__menu, .sound-toggle, script) { transition: filter .2s, opacity .2s; }
+  .side-sheet body > :not(.side, .side__menu, .sound-toggle, script) { filter: blur(6px); opacity: .45; }
   .side-sheet .side__panel, .side-sheet .side::before { opacity: 1; translate: none; visibility: visible; }
   /* À l'ouverture, visible tout de suite : le premier lien peut prendre le focus */
   .side-sheet .side__panel { transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
