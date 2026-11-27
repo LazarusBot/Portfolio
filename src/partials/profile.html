@@ -1,7 +1,8 @@
     <!-- En-tête : une colonne, comme le reste. Petite photo, le nom à la taille du texte, la disponibilité, la note -->
     <section class="profile">
       <img class="profile__photo" src="assets/img/profile.jpg" alt="Maxence Prioux" width="40" height="40">
-      <h1 class="profile__name">Maxence Prioux</h1>
-      <p class="profile__status">Open to design engineering roles in Europe or remote <a class="profile__cv" href="assets/cv/maxence-prioux-cv.pdf" target="_blank" rel="noopener" title="CV (PDF)">CV <span aria-hidden="true">↗</span></a></p>
+      <!-- Sur téléphone, le CV passe à côté du nom : la disponibilité tient sur une ligne -->
+      <div class="profile__name-row"><h1 class="profile__name">Maxence Prioux</h1><span class="profile__cv-name"><a class="profile__cv" href="assets/cv/maxence-prioux-cv.pdf" target="_blank" rel="noopener" title="CV (PDF)">CV <span aria-hidden="true">↗</span></a></span></div>
+      <p class="profile__status">Open to design engineering roles in Europe or remote <span class="profile__cv-status"><a class="profile__cv" href="assets/cv/maxence-prioux-cv.pdf" target="_blank" rel="noopener" title="CV (PDF)">CV <span aria-hidden="true">↗</span></a></span></p>
       <p class="profile__note">{{> garage-note}}</p>
     </section>
