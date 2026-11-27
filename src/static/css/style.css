@@ -1699,7 +1699,6 @@ a.garage__title { text-decoration: none; }
 @media (max-width: 480px) {
   .profile__cv-name { display: inline; }
   .profile__cv-status { display: none; }
-  .profile__status { font-size: 13px; line-height: 20px; }   /* un peu plus petit : la disponibilité tient sur une ligne */
 }
 
 /* La ligne GitHub / Duolingo / Chess.com passe en bas de page ; sa carte s'ouvre vers le haut */
