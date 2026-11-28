@@ -1139,21 +1139,13 @@ document.querySelectorAll('[data-ds]').forEach(ds => {
   });
 })();
 
-/* Mobile : on descend, les boutons du bas s'effacent ; on remonte, ou on s'arrête un instant, ils reviennent.
-   Jamais quand le menu est ouvert, ni en haut de la page */
+/* Le son et « Menu » réunis dans une seule pastille (.dock) ; sur ordinateur elle ne compte pas (voir style.css) */
 (() => {
-  if (!document.querySelector('.side__menu')) return;
-  const root = document.documentElement, mobile = matchMedia('(max-width: 1099px)');
-  let last = scrollY, idle;
-  const show = () => root.classList.remove('ui-hide');
-  addEventListener('scroll', () => {
-    const y = scrollY, dy = y - last;
-    if (Math.abs(dy) < 6) return;
-    last = y;
-    if (mobile.matches && dy > 0 && y > 80 && !root.classList.contains('side-sheet')) root.classList.add('ui-hide');
-    else show();
-    clearTimeout(idle);
-    idle = setTimeout(show, 900);
-  }, { passive: true });
+  const menu = document.querySelector('.side__menu'), sound = document.querySelector('.sound-toggle');
+  if (!menu || !sound) return;
+  const dock = document.createElement('div');
+  dock.className = 'dock';
+  menu.before(dock);
+  dock.append(sound, menu);
 })();
 
