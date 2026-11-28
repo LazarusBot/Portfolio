@@ -1582,9 +1582,20 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
   /* Le voile : c'est la page elle-même qui se floute et pâlit. Un calque fixe flouté s'arrêtait aux barres de Safari sur iPhone,
      alors que la page, elle, passe dessous. Le ::before reste, transparent, pour fermer au toucher. */
   .side::before { content: ""; position: fixed; z-index: 49; inset: 0; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
-  body > :not(.side, .side__menu, .sound-toggle, script) { transition: filter .2s, opacity .2s; }
-  .side-sheet body > :not(.side, .side__menu, .sound-toggle, script) { filter: blur(6px); opacity: .45; }
+  body > :not(.side, .side__menu, .sound-toggle, script) { transition: filter 0s, opacity 0s; }
+  /* Même flou que le haut de la bande : 6 px, et 40 % de la page sous 60 % de blanc */
+  .side-sheet body > :not(.side, .side__menu, .sound-toggle, script) { filter: blur(6px); opacity: .4; transition: filter 0s .4s, opacity 0s .4s; }
   .side-sheet .side__panel, .side-sheet .side::before { opacity: 1; translate: none; visibility: visible; }
+  /* Une bande floutée sous le son et « Menu », qui s'efface vers le haut ; à l'ouverture du menu, elle monte sur tout l'écran */
+  .side::after { content: ""; position: fixed; z-index: 48; left: 0; right: 0; bottom: 0; height: 180px; pointer-events: none;
+                 background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+                 /* fondu en courbe douce (pas de ligne visible) */
+                 -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 18%, rgba(0, 0, 0, .86) 32%, rgba(0, 0, 0, .7) 45%, rgba(0, 0, 0, .5) 57%, rgba(0, 0, 0, .31) 68%, rgba(0, 0, 0, .16) 79%, rgba(0, 0, 0, .06) 89%, transparent); mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 18%, rgba(0, 0, 0, .86) 32%, rgba(0, 0, 0, .7) 45%, rgba(0, 0, 0, .5) 57%, rgba(0, 0, 0, .31) 68%, rgba(0, 0, 0, .16) 79%, rgba(0, 0, 0, .06) 89%, transparent);
+                 transition: height .4s cubic-bezier(.2, .8, .2, 1), opacity 0s; }
+  /* La bande monte seule sur tout l'écran ; arrivée en haut, elle passe le relais à la page floutée dans la même image (même rendu, jamais de flou doublé).
+     À la fermeture : la bande revient d'un coup en plein écran, la page redevient nette, et la bande redescend */
+  .side-sheet .side::after { height: 100lvh; opacity: 0; -webkit-mask-image: linear-gradient(to top, #000 100%, transparent); mask-image: linear-gradient(to top, #000 100%, transparent);
+                             transition: height .4s cubic-bezier(.2, .8, .2, 1), opacity 0s .4s; }
   /* À l'ouverture, visible tout de suite : le premier lien peut prendre le focus */
   .side-sheet .side__panel { transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
   .side__tree { font-size: 14px; line-height: 28px; }   /* même taille que « Close » */
@@ -1603,7 +1614,7 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body, .testbar, .side__panel, .side::before, .ticks, .ticks button::before { transition: none !important; }
+  body, .testbar, .side__panel, .side::before, .side::after, .ticks, .ticks button::before { transition: none !important; }
 }
 
 /* ---------- Garage : le fil de l'accueil, du plus récent au plus ancien ---------- */
