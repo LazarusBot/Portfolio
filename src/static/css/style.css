@@ -1568,7 +1568,7 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
 
 @media (max-width: 1099px) {
   /* Place pour finir de lire sous la pastille et le bouton son */
-  body { padding-bottom: 64px; }
+  body { padding-bottom: 0; }   /* la bande floutée du bas (dernier élément de la page) fait l'espace sous le bas de page */
   .side__menu { position: fixed; z-index: 51; right: 16px; bottom: 16px; display: block; height: 36px; padding: 0 16px; border: 0; border-radius: 99px;
                 background: rgba(239, 239, 239, .85); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
                 font: 500 14px/36px Inter, system-ui, sans-serif; color: var(--text); cursor: pointer; transition: scale .3s cubic-bezier(.34, 1.56, .64, 1); }
@@ -1584,9 +1584,9 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
   /* Le voile : c'est la page elle-même qui se floute et pâlit. Un calque fixe flouté s'arrêtait aux barres de Safari sur iPhone,
      alors que la page, elle, passe dessous. Le ::before reste, transparent, pour fermer au toucher. */
   .side::before { content: ""; position: fixed; z-index: 49; inset: 0; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
-  body > :not(.side, .side__menu, .sound-toggle, script) { transition: filter .3s, opacity .3s; }
+  body > :not(.side, .side__menu, .sound-toggle, .bottom-blur, script) { transition: filter .3s, opacity .3s; }
   /* Menu ouvert : la page elle-même se floute (6 px) et pâlit (40 %) ; elle passe aussi sous les barres de Safari */
-  .side-sheet body > :not(.side, .side__menu, .sound-toggle, script) { filter: blur(6px); opacity: .4; }
+  .side-sheet body > :not(.side, .side__menu, .sound-toggle, .bottom-blur, script) { filter: blur(6px); opacity: .4; }
   .side-sheet .side__panel, .side-sheet .side::before { opacity: 1; translate: none; visibility: visible; }
   /* À l'ouverture, visible tout de suite : le premier lien peut prendre le focus */
   .side-sheet .side__panel { transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
@@ -1716,3 +1716,14 @@ a.garage__title { text-decoration: none; }
 /* Téléphone : dans Experience, le poste passe sous l'entreprise plutôt que de se couper à côté des années */
 @media (max-width: 480px) { .about .garage__head .garage__short { display: block; margin-left: 0; } .about .garage__list--line { gap: 14px; } }
 
+
+/* Bande floutée du bas (mobile) : un élément de la page, collé en bas de l'écran par position: sticky.
+   Elle déborde de 120 px sous le bas de l'écran (bottom: -120px) : sur iPhone, cette partie passe sous les boutons de Safari,
+   comme le texte de la page. En fin de page elle prend sa place sous le bas de page (sans le recouvrir) et s'efface quand le menu s'ouvre */
+.bottom-blur { display: none; }
+@media (max-width: 1099px) {
+  .bottom-blur { display: block; position: sticky; z-index: 48; bottom: -120px; height: 300px; margin-top: -120px; pointer-events: none;
+                 background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+                 -webkit-mask-image: linear-gradient(to top, #000 120px, rgba(0, 0, 0, 1) 120px, rgba(0, 0, 0, 0.96) 152px, rgba(0, 0, 0, 0.86) 178px, rgba(0, 0, 0, 0.7) 201px, rgba(0, 0, 0, 0.5) 223px, rgba(0, 0, 0, 0.31) 242px, rgba(0, 0, 0, 0.16) 262px, rgba(0, 0, 0, 0.06) 280px, rgba(0, 0, 0, 0) 300px); mask-image: linear-gradient(to top, #000 120px, rgba(0, 0, 0, 1) 120px, rgba(0, 0, 0, 0.96) 152px, rgba(0, 0, 0, 0.86) 178px, rgba(0, 0, 0, 0.7) 201px, rgba(0, 0, 0, 0.5) 223px, rgba(0, 0, 0, 0.31) 242px, rgba(0, 0, 0, 0.16) 262px, rgba(0, 0, 0, 0.06) 280px, rgba(0, 0, 0, 0) 300px); transition: opacity .3s; }
+  .side-sheet .bottom-blur { opacity: 0; }
+}

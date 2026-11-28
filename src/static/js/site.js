@@ -1138,3 +1138,13 @@ document.querySelectorAll('[data-ds]').forEach(ds => {
     if (first) first.focus({ preventScroll: true });
   });
 })();
+
+/* Mobile : une bande floutée en bas, qui fait partie de la page (et non un calque fixe) pour passer sous les boutons de Safari.
+   Elle est ajoutée en dernier dans la page et reste collée en bas de l'écran (position: sticky, voir .bottom-blur) */
+(() => {
+  if (!document.querySelector('.side__menu')) return;
+  const band = document.createElement('div');
+  band.className = 'bottom-blur';
+  band.setAttribute('aria-hidden', 'true');
+  document.body.append(band);
+})();
