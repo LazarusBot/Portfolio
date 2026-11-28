@@ -1138,3 +1138,22 @@ document.querySelectorAll('[data-ds]').forEach(ds => {
     if (first) first.focus({ preventScroll: true });
   });
 })();
+
+/* Mobile : on descend, les boutons du bas s'effacent ; on remonte, ou on s'arrête un instant, ils reviennent.
+   Jamais quand le menu est ouvert, ni en haut de la page */
+(() => {
+  if (!document.querySelector('.side__menu')) return;
+  const root = document.documentElement, mobile = matchMedia('(max-width: 1099px)');
+  let last = scrollY, idle;
+  const show = () => root.classList.remove('ui-hide');
+  addEventListener('scroll', () => {
+    const y = scrollY, dy = y - last;
+    if (Math.abs(dy) < 6) return;
+    last = y;
+    if (mobile.matches && dy > 0 && y > 80 && !root.classList.contains('side-sheet')) root.classList.add('ui-hide');
+    else show();
+    clearTimeout(idle);
+    idle = setTimeout(show, 900);
+  }, { passive: true });
+})();
+
