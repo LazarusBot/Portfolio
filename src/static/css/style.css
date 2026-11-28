@@ -1589,9 +1589,9 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
   .side-sheet body > :not(.side, .side__menu, .sound-toggle, script) { filter: blur(6px); opacity: .4; transition: filter 0s .4s, opacity 0s .4s; }
   .side-sheet .side__panel, .side-sheet .side::before { opacity: 1; translate: none; visibility: visible; }
   /* Une bande floutée sous le son et « Menu », qui s'efface vers le haut ; à l'ouverture du menu, elle monte sur tout l'écran.
-     Sur iPhone, un calque collé en bas (bottom: 0) s'arrête au-dessus de la zone du bas de Safari. Le calque part donc du haut
-     et fait toute la hauteur de l'écran (100lvh) : son bas est le vrai bord. Seul son bas se voit, par un masque haut de --band */
-  .side::after { content: ""; position: fixed; z-index: 48; left: 0; right: 0; top: 0; height: 100lvh; pointer-events: none;
+     Collée au bas de la zone visible : sur iPhone elle reste juste au-dessus de la barre de Safari, au même endroit pendant le défilement
+     (avec top: 0 et 100lvh, son bas glissait derrière la barre quand elle réapparaissait). Seul son bas se voit, par un masque haut de --band */
+  .side::after { content: ""; position: fixed; z-index: 48; left: 0; right: 0; bottom: 0; height: 100dvh; pointer-events: none;
                  --band: calc(180px + env(safe-area-inset-bottom));
                  background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
                  /* fondu en courbe douce (pas de ligne visible) */
