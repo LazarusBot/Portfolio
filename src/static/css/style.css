@@ -1576,7 +1576,7 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
   /* Le bouton son se range à gauche de la pastille */
   .sound-toggle { right: 104px; bottom: 32px; }   /* plus haut et plus à gauche que le bord, comme « Menu » : plus facile à atteindre */
   /* Menu ouvert : pas de panneau, juste les liens alignés à droite au-dessus de « Close », sur le voile flouté */
-  .side__panel { position: fixed; z-index: 50; right: 36px; bottom: 80px; max-height: calc(100dvh - 96px); overflow-y: auto; padding: 0; text-align: right;   /* bord droit sur le texte de « Close » */
+  .side__panel { position: fixed; z-index: 50; right: 40px; bottom: 84px; max-height: calc(100dvh - 96px); overflow-y: auto; padding: 0; text-align: right;   /* bord droit sur le texte de « Close » */
                 
                  opacity: 0; translate: 0 12px; visibility: hidden; transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility .3s; }
   /* Le voile : c'est la page elle-même qui se floute et pâlit. Un calque fixe flouté s'arrêtait aux barres de Safari sur iPhone,
@@ -1718,14 +1718,11 @@ a.garage__title { text-decoration: none; }
 
 }
 
-/* Mobile : le son et « Menu » dans une seule pastille très légère (site.js les range dans .dock).
+/* Mobile : les deux boutons (son, « Menu ») gardent leur forme et leur gris, posés ensemble dans une pastille très légère (site.js les range dans .dock).
    Sur ordinateur, .dock ne compte pas (display: contents) : le bouton son reste seul en bas à droite */
 .dock { display: contents; }
 @media (max-width: 1099px) {
-  .dock { position: fixed; z-index: 51; right: 24px; bottom: 32px; display: flex; align-items: center; height: 36px; padding: 0 0 0 2px; border-radius: 99px;
-          background: rgba(240, 240, 240, .7); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-  .dock .sound-toggle, .dock .side__menu { position: static; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; }
-  .dock .sound-toggle { inset: auto; width: 34px; height: 34px; }
-  .dock .side__menu { position: relative; inset: auto; padding: 0 14px 0 10px; }
-  .dock .side__menu::before { content: ""; position: absolute; left: 0; top: 11px; bottom: 11px; width: 1px; background: rgba(0, 0, 0, .08); }   /* un filet entre les deux */
+  .dock { position: fixed; z-index: 51; right: 20px; bottom: 28px; display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 99px;
+          background: #f7f7f7; box-shadow: 0 0 0 .5px rgba(0, 0, 0, .06); }   /* gris très clair, opaque */
+  .dock .sound-toggle, .dock .side__menu { position: static; inset: auto; }
 }
