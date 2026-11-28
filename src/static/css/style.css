@@ -1588,16 +1588,21 @@ body:has(.testbar) { --side-top: 36px; }   /* hauteur réelle de la barre de tes
   /* Même flou que le haut de la bande : 6 px, et 40 % de la page sous 60 % de blanc */
   .side-sheet body > :not(.side, .side__menu, .sound-toggle, script) { filter: blur(6px); opacity: .4; transition: filter 0s .4s, opacity 0s .4s; }
   .side-sheet .side__panel, .side-sheet .side::before { opacity: 1; translate: none; visibility: visible; }
-  /* Une bande floutée sous le son et « Menu », qui s'efface vers le haut ; à l'ouverture du menu, elle monte sur tout l'écran */
-  .side::after { content: ""; position: fixed; z-index: 48; left: 0; right: 0; bottom: 0; height: calc(180px + env(safe-area-inset-bottom)); pointer-events: none;   /* jusqu'au vrai bord de l'écran (zone sûre de l'iPhone comprise) */
+  /* Une bande floutée sous le son et « Menu », qui s'efface vers le haut ; à l'ouverture du menu, elle monte sur tout l'écran.
+     Sur iPhone, un calque collé en bas (bottom: 0) s'arrête au-dessus de la zone du bas de Safari. Le calque part donc du haut
+     et fait toute la hauteur de l'écran (100lvh) : son bas est le vrai bord. Seul son bas se voit, par un masque haut de --band */
+  .side::after { content: ""; position: fixed; z-index: 48; left: 0; right: 0; top: 0; height: 100lvh; pointer-events: none;
+                 --band: calc(180px + env(safe-area-inset-bottom));
                  background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
                  /* fondu en courbe douce (pas de ligne visible) */
                  -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 18%, rgba(0, 0, 0, .86) 32%, rgba(0, 0, 0, .7) 45%, rgba(0, 0, 0, .5) 57%, rgba(0, 0, 0, .31) 68%, rgba(0, 0, 0, .16) 79%, rgba(0, 0, 0, .06) 89%, transparent); mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, .96) 18%, rgba(0, 0, 0, .86) 32%, rgba(0, 0, 0, .7) 45%, rgba(0, 0, 0, .5) 57%, rgba(0, 0, 0, .31) 68%, rgba(0, 0, 0, .16) 79%, rgba(0, 0, 0, .06) 89%, transparent);
-                 transition: height .4s cubic-bezier(.2, .8, .2, 1), opacity 0s; }
+                 -webkit-mask-size: 100% var(--band); mask-size: 100% var(--band);
+                 -webkit-mask-position: bottom; mask-position: bottom; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+                 transition: --band .4s cubic-bezier(.2, .8, .2, 1), opacity 0s; }
   /* La bande monte seule sur tout l'écran ; arrivée en haut, elle passe le relais à la page floutée dans la même image (même rendu, jamais de flou doublé).
      À la fermeture : la bande revient d'un coup en plein écran, la page redevient nette, et la bande redescend */
-  .side-sheet .side::after { height: 100lvh; opacity: 0; -webkit-mask-image: linear-gradient(to top, #000 100%, transparent); mask-image: linear-gradient(to top, #000 100%, transparent);
-                             transition: height .4s cubic-bezier(.2, .8, .2, 1), opacity 0s .4s; }
+  .side-sheet .side::after { --band: 100lvh; opacity: 0; -webkit-mask-image: linear-gradient(#000, #000); mask-image: linear-gradient(#000, #000);
+                             transition: --band .4s cubic-bezier(.2, .8, .2, 1), opacity 0s .4s; }
   /* À l'ouverture, visible tout de suite : le premier lien peut prendre le focus */
   .side-sheet .side__panel { transition: opacity .2s, translate .3s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
   .side__tree { font-size: 14px; line-height: 28px; }   /* même taille que « Close » */
@@ -1725,3 +1730,6 @@ a.garage__title { text-decoration: none; }
 .about__jobs { gap: 18px; }
 /* Téléphone : dans Experience, le poste passe sous l'entreprise plutôt que de se couper à côté des années */
 @media (max-width: 480px) { .about .garage__head .garage__short { display: block; margin-left: 0; } .about .garage__list--line { gap: 14px; } }
+
+/* La hauteur visible de la bande du menu mobile s'anime (voir .side::after) */
+@property --band { syntax: '<length>'; inherits: false; initial-value: 180px; }
